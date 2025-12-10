@@ -92,6 +92,45 @@
         /* Utility per nascondere scrollbar */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* STILI DI STAMPA */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                background-image: none !important;
+            }
+            .glass-panel {
+                background: white !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+            }
+            .glass-input {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                color: black !important;
+            }
+            /* Nascondi elementi UI non necessari */
+            .no-print, header, footer, button, nav, .toast-container, .input-group-ui {
+                display: none !important;
+            }
+            /* Forza visualizzazione colori di sfondo (per i grafici) */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            /* Layout */
+            .print-break-inside {
+                break-inside: avoid;
+            }
+            .print-full-width {
+                width: 100% !important;
+                max-width: none !important;
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
     </style>
 
     <script type="importmap">

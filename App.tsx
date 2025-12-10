@@ -30,7 +30,7 @@ export default function App() {
     <div className="flex flex-col min-h-screen">
       {/* Toast Notification */}
       <div 
-        className={`fixed z-[9999] left-1/2 bottom-[30px] -translate-x-1/2 glass-panel bg-slate-900/90 text-white px-6 py-4 rounded-xl flex items-center gap-3 transition-all duration-500 shadow-2xl ${toast.show ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}
+        className={`toast-container fixed z-[9999] left-1/2 bottom-[30px] -translate-x-1/2 glass-panel bg-slate-900/90 text-white px-6 py-4 rounded-xl flex items-center gap-3 transition-all duration-500 shadow-2xl ${toast.show ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}
       >
         <div className="bg-emerald-500/20 w-8 h-8 rounded-full flex items-center justify-center text-emerald-500 border border-emerald-500/30">
            <i className="fa-solid fa-check"></i>
@@ -38,7 +38,7 @@ export default function App() {
         <span className="font-medium text-sm">{toast.message}</span>
       </div>
 
-      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-slate-900/60">
+      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-slate-900/60 no-print">
         <div className="bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-blue-900/40 text-blue-300 text-[10px] font-bold text-center py-1.5 uppercase tracking-widest border-b border-white/5 shadow-sm">
             Versione Web
         </div>
@@ -96,7 +96,7 @@ export default function App() {
         </div>
       </main>
       
-      <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm flex flex-col items-center gap-4">
+      <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm flex flex-col items-center gap-4 no-print">
         <p className="text-slate-500 text-xs font-medium">&copy; 2024 ThermoSuite Web. Designed for performance.</p>
         <a href="https://app.netlify.com/projects/thermo-pro-calc-suite-v02/deploys" target="_blank" rel="noopener noreferrer">
           <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />

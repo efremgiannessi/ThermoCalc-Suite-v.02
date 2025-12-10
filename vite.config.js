@@ -4,9 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // 'base: "./"' è fondamentale per hosting condivisi come Aruba
-  // permette al sito di funzionare anche se caricato in una sottocartella
-  base: './',
+  // Configurazione standard per Netlify (root domain)
+  // Non impostare base: './' per Netlify se l'app è nella root
   build: {
     outDir: 'dist',
   }
