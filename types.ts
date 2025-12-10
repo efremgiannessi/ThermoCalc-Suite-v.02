@@ -1,4 +1,4 @@
-export type TabType = 'termica' | 'commerciale' | 'percentuali' | 'scientifica' | 'interpol' | 'pendenze' | 'pesi';
+export type TabType = 'termica' | 'commerciale' | 'percentuali' | 'scientifica' | 'interpol' | 'pendenze' | 'pesi' | 'montaggio' | 'trasporto';
 
 export interface ToastProps {
   message: string;

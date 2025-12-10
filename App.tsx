@@ -7,6 +7,8 @@ import Percentuali from './components/Percentuali';
 import Interpolazione from './components/Interpolazione';
 import Pendenze from './components/Pendenze';
 import Pesi from './components/Pesi';
+import Montaggio from './components/Montaggio';
+import Trasporto from './components/Trasporto';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('termica');
@@ -74,6 +76,8 @@ export default function App() {
             <button onClick={() => setActiveTab('interpol')} className={navClass('interpol')}><i className="fa-solid fa-chart-line"></i> Interpolazione</button>
             <button onClick={() => setActiveTab('pendenze')} className={navClass('pendenze')}><i className="fa-solid fa-ruler-triangle"></i> Pendenze</button>
             <button onClick={() => setActiveTab('pesi')} className={navClass('pesi')}><i className="fa-solid fa-weight-hanging"></i> Pesi</button>
+            <button onClick={() => setActiveTab('montaggio')} className={navClass('montaggio')}><i className="fa-solid fa-screwdriver-wrench"></i> Montaggio</button>
+            <button onClick={() => setActiveTab('trasporto')} className={navClass('trasporto')}><i className="fa-solid fa-truck-fast"></i> Trasporto</button>
           </nav>
         </div>
       </header>
@@ -87,6 +91,8 @@ export default function App() {
             {activeTab === 'interpol' && <Interpolazione showToast={showToast} />}
             {activeTab === 'pendenze' && <Pendenze showToast={showToast} />}
             {activeTab === 'pesi' && <Pesi showToast={showToast} />}
+            {activeTab === 'montaggio' && <Montaggio showToast={showToast} />}
+            {activeTab === 'trasporto' && <Trasporto showToast={showToast} />}
         </div>
       </main>
       
