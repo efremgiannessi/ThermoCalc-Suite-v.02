@@ -28,18 +28,60 @@ export default function Pesi({ showToast }: Props) {
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
 
   return (
-    <div className="max-w-2xl mx-auto bg-dark-800 rounded-2xl border border-dark-700 shadow-xl p-8 animate-[slideIn_0.3s]">
-        <h2 className="text-xl font-bold text-white mb-6"><i className="fa-solid fa-weight-hanging text-accent-500"></i> Pesi</h2>
-        <div className="flex gap-4 mb-4">
-            <div className="w-full"><select value={mat} onChange={e=>handleMatChange(e.target.value)} className="w-full bg-dark-input border border-dark-700 rounded-lg p-2 text-white text-sm"><option value="7850">Acciaio</option><option value="2500">CLS</option><option value="600">Legno</option><option value="2700">Alluminio</option><option value="custom">Custom</option></select></div>
-            <div className="w-1/3 relative"><input type="number" value={spec} onChange={e=>setSpec(e.target.value)} className="w-full bg-dark-input border border-dark-700 rounded-lg p-2 text-white text-sm"/><button onClick={()=>copy(spec)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+    <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-8 animate-slide-in">
+        <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <span className="bg-red-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-red-500 border border-red-500/20"><i className="fa-solid fa-weight-hanging"></i></span> 
+            Calcolo Peso Materiali
+        </h2>
+        
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <div className="w-full md:w-2/3">
+                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Materiale</label>
+                <div className="relative">
+                    <select value={mat} onChange={e=>handleMatChange(e.target.value)} className="w-full glass-input rounded-xl p-4 text-white text-sm outline-none appearance-none cursor-pointer">
+                        <option value="7850" className="bg-slate-800">Acciaio (7850 kg/m³)</option>
+                        <option value="2500" className="bg-slate-800">Calcestruzzo (2500 kg/m³)</option>
+                        <option value="600" className="bg-slate-800">Legno (600 kg/m³)</option>
+                        <option value="2700" className="bg-slate-800">Alluminio (2700 kg/m³)</option>
+                        <option value="custom" className="bg-slate-800">Personalizzato</option>
+                    </select>
+                    <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
+                </div>
+            </div>
+            <div className="w-full md:w-1/3">
+                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Peso Spec. (kg/m³)</label>
+                <div className="relative">
+                    <input type="number" value={spec} onChange={e=>setSpec(e.target.value)} className="w-full glass-input rounded-xl p-4 text-white font-mono text-center outline-none"/>
+                </div>
+            </div>
         </div>
-        <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="relative"><input type="number" value={dim.l} onChange={e=>setDim({...dim, l:e.target.value})} placeholder="L" className="w-full bg-dark-input p-2 text-white border border-dark-700 rounded"/><button onClick={()=>copy(dim.l)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
-            <div className="relative"><input type="number" value={dim.h} onChange={e=>setDim({...dim, h:e.target.value})} placeholder="H" className="w-full bg-dark-input p-2 text-white border border-dark-700 rounded"/><button onClick={()=>copy(dim.h)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
-            <div className="relative"><input type="number" value={dim.len} onChange={e=>setDim({...dim, len:e.target.value})} placeholder="Lungh" className="w-full bg-dark-input p-2 text-white border border-dark-700 rounded"/><button onClick={()=>copy(dim.len)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+
+        <div className="glass-input rounded-2xl p-6 bg-white/5 mb-8">
+            <label className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-4 block text-center">Dimensioni (metri)</label>
+            <div className="grid grid-cols-3 gap-4">
+                <div className="relative">
+                    <input type="number" value={dim.l} onChange={e=>setDim({...dim, l:e.target.value})} placeholder="0.00" className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white text-center outline-none focus:border-red-500/50"/>
+                    <span className="block text-center text-[10px] text-slate-500 mt-2 uppercase font-bold">Larghezza</span>
+                </div>
+                <div className="relative">
+                    <input type="number" value={dim.h} onChange={e=>setDim({...dim, h:e.target.value})} placeholder="0.00" className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white text-center outline-none focus:border-red-500/50"/>
+                    <span className="block text-center text-[10px] text-slate-500 mt-2 uppercase font-bold">Altezza</span>
+                </div>
+                <div className="relative">
+                    <input type="number" value={dim.len} onChange={e=>setDim({...dim, len:e.target.value})} placeholder="0.00" className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white text-center outline-none focus:border-red-500/50"/>
+                    <span className="block text-center text-[10px] text-slate-500 mt-2 uppercase font-bold">Lunghezza</span>
+                </div>
+            </div>
         </div>
-        <div className="bg-dark-900 rounded-xl p-6 text-center border border-dark-700"><div className="text-4xl font-bold text-accent-500 flex justify-center items-center gap-2"><span onClick={()=>copy(result)} className="cursor-pointer hover:text-accent-600">{result}</span> <span className="text-sm text-slate-400">kg</span></div></div>
+
+        <div className="bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-2xl p-8 text-center border border-white/10 shadow-2xl relative overflow-hidden cursor-pointer group hover:border-red-500/30 transition-all backdrop-blur-md" onClick={()=>copy(result)}>
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><i className="fa-solid fa-weight-scale text-8xl text-white"></i></div>
+            <div className="text-xs text-slate-400 font-bold uppercase tracking-[0.2em] mb-2 relative z-10">Peso Totale Stimato</div>
+            <div className="text-5xl font-bold text-white flex justify-center items-end gap-3 relative z-10 font-mono">
+                {result} <span className="text-lg text-red-500 font-sans mb-1">kg</span>
+            </div>
+            <div className="text-[10px] text-slate-600 mt-2 uppercase">Clicca per copiare</div>
+        </div>
     </div>
   );
 }

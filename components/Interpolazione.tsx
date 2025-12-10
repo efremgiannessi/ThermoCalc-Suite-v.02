@@ -26,21 +26,44 @@ export default function Interpolazione({ showToast }: Props) {
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
 
   return (
-    <div className="max-w-2xl mx-auto bg-dark-800 rounded-2xl border border-dark-700 shadow-xl p-8 animate-[slideIn_0.3s]">
-        <h2 className="text-xl font-bold text-white mb-6"><i className="fa-solid fa-chart-line text-accent-500"></i> Interpolazione</h2>
-        <div className="grid grid-cols-2 gap-6 mb-6">
-            <div className="bg-dark-900 p-4 rounded-xl border border-dark-700"><div className="text-xs text-accent-500 font-bold mb-2">P1</div>
-                <div className="relative mb-2"><input type="number" value={p1.x} onChange={e=>setP1({...p1, x:e.target.value})} className="w-full bg-dark-800 p-2 rounded text-sm text-white" placeholder="X1"/><button onClick={()=>copy(p1.x)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
-                <div className="relative"><input type="number" value={p1.y} onChange={e=>setP1({...p1, y:e.target.value})} className="w-full bg-dark-800 p-2 rounded text-sm text-white" placeholder="Y1"/><button onClick={()=>copy(p1.y)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+    <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-10 animate-slide-in shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)]">
+        <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <div className="bg-yellow-500/20 p-2 rounded-lg text-yellow-500 border border-yellow-500/20"><i className="fa-solid fa-chart-line"></i></div>
+            Interpolazione Lineare
+        </h2>
+        <div className="grid grid-cols-2 gap-8 mb-8 relative">
+            {/* Connecting Line Visual */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px bg-white/10"></div>
+
+            <div className="glass-input p-6 rounded-2xl bg-white/5">
+                <div className="text-xs text-yellow-500 font-bold mb-4 uppercase tracking-widest">Punto 1</div>
+                <div className="space-y-3">
+                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">X1</span><input type="number" value={p1.x} onChange={e=>setP1({...p1, x:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p1.x)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">Y1</span><input type="number" value={p1.y} onChange={e=>setP1({...p1, y:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p1.y)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+                </div>
             </div>
-            <div className="bg-dark-900 p-4 rounded-xl border border-dark-700"><div className="text-xs text-accent-500 font-bold mb-2">P2</div>
-                <div className="relative mb-2"><input type="number" value={p2.x} onChange={e=>setP2({...p2, x:e.target.value})} className="w-full bg-dark-800 p-2 rounded text-sm text-white" placeholder="X2"/><button onClick={()=>copy(p2.x)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
-                <div className="relative"><input type="number" value={p2.y} onChange={e=>setP2({...p2, y:e.target.value})} className="w-full bg-dark-800 p-2 rounded text-sm text-white" placeholder="Y2"/><button onClick={()=>copy(p2.y)} className="absolute right-2 top-2 text-slate-500 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+            <div className="glass-input p-6 rounded-2xl bg-white/5">
+                <div className="text-xs text-yellow-500 font-bold mb-4 uppercase tracking-widest">Punto 2</div>
+                <div className="space-y-3">
+                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">X2</span><input type="number" value={p2.x} onChange={e=>setP2({...p2, x:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p2.x)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">Y2</span><input type="number" value={p2.y} onChange={e=>setP2({...p2, y:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p2.y)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs"><i className="fa-regular fa-copy"></i></button></div>
+                </div>
             </div>
         </div>
-        <div className="bg-dark-700/30 p-6 rounded-xl border border-dark-700 flex items-center gap-6">
-            <div className="relative w-full"><input type="number" value={targetX} onChange={e=>setTargetX(e.target.value)} className="w-full bg-dark-input p-3 rounded text-white text-lg" placeholder="X target"/><button onClick={()=>copy(targetX)} className="absolute right-2 top-3 text-slate-500 hover:text-white"><i className="fa-regular fa-copy"></i></button></div>
-            <div className="flex items-center gap-2 min-w-[100px] justify-end"><div className="text-3xl font-bold text-accent-500">{result}</div><i onClick={()=>copy(result)} className="fa-regular fa-copy text-slate-500 hover:text-white cursor-pointer text-xl"></i></div>
+        
+        <div className="bg-black/20 p-8 rounded-2xl border border-white/10 flex items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md">
+            <div className="absolute top-0 left-0 w-1 h-full bg-accent-500 shadow-[0_0_15px_#3b82f6]"></div>
+            <div className="relative w-full">
+                <label className="text-[10px] text-slate-400 font-bold uppercase absolute -top-3 left-0">Valore X Target</label>
+                <input type="number" value={targetX} onChange={e=>setTargetX(e.target.value)} className="w-full glass-input p-4 rounded-xl text-white text-xl outline-none font-bold" placeholder="X?"/>
+            </div>
+            <div className="text-right min-w-[140px]">
+                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Risultato Y</div>
+                <div className="text-4xl font-bold text-accent-400 font-mono flex justify-end items-center gap-3 cursor-pointer group" onClick={()=>copy(result)}>
+                    {result} 
+                    <i className="fa-regular fa-copy text-lg text-slate-600 group-hover:text-white transition-colors"></i>
+                </div>
+            </div>
         </div>
     </div>
   );
