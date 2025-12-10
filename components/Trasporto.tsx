@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 interface Props {
   showToast: (msg: string) => void;
 }
 
-export default function Trasporto({ showToast }: Props) {
+export default function Trasporto(_: Props) {
   return (
     <div className="glass-panel rounded-2xl p-8 animate-slide-in flex flex-col items-center justify-center min-h-[400px] text-center relative overflow-hidden">
         {/* Decorazione sfondo */}
