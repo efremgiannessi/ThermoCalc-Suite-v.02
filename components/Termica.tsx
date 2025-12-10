@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const capoluoghiDB: Record<string, { z: string; n: string }> = { 
   "milano":{z:"E", n:"I-pad"}, "roma":{z:"D", n:"III"}, "torino":{z:"E", n:"I-pad"}, 

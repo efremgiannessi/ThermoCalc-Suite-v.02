@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TabType } from './types';
 import Termica from './components/Termica';
 import Scientifica from './components/Scientifica';
