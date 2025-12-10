@@ -90,8 +90,11 @@ export default function App() {
         </div>
       </main>
       
-      <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm">
+      <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm flex flex-col items-center gap-4">
         <p className="text-slate-500 text-xs font-medium">&copy; 2024 ThermoSuite Web. Designed for performance.</p>
+        <a href="https://app.netlify.com/projects/thermo-pro-calc-suite-v02/deploys" target="_blank" rel="noopener noreferrer">
+          <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />
+        </a>
       </footer>
     </div>
   );
