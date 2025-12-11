@@ -61,6 +61,14 @@ const ECCEZIONALI_ROWS = [
 type OrdinariType = 'norm' | 'p240' | 'p300' | 'p320' | 'p350';
 type EccezionaliType = 'u16' | 'u19' | 'u23' | 'u27' | 'u31' | 'o31';
 
+interface TransportItem {
+  id: string;
+  typeLabel: string;
+  details: string;
+  cost: number;
+  weight: number; // Quintali
+}
+
 export default function Trasporto({ showToast }: Props) {
   const [activeTab, setActiveTab] = useState<'logistica' | 'ordinari' | 'eccezionali'>('logistica');
 
@@ -86,6 +94,7 @@ export default function Trasporto({ showToast }: Props) {
   const [ordSpecWeight, setOrdSpecWeight] = useState<string>('2500'); // kg/mc
   const [ordTotalCost, setOrdTotalCost] = useState<number>(0);
   const [ordRate, setOrdRate] = useState<number>(0);
+  const [ordList, setOrdList] = useState<TransportItem[]>([]);
 
   // --- ECCEZIONALI STATE ---
   const [excMc, setExcMc] = useState<string>('');
@@ -94,6 +103,60 @@ export default function Trasporto({ showToast }: Props) {
   const [excSpecWeight, setExcSpecWeight] = useState<string>('2500'); // kg/mc
   const [excTotalCost, setExcTotalCost] = useState<number>(0);
   const [excRate, setExcRate] = useState<number>(0);
+  const [excList, setExcList] = useState<TransportItem[]>([]);
+
+  // Persistence
+  useEffect(() => {
+    const saved = localStorage.getItem('trasportoData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.km) setKm(d.km);
+            if(d.rateKm) setRateKm(d.rateKm);
+            if(d.trips) setTrips(d.trips);
+            if(d.waitHours) setWaitHours(d.waitHours);
+            if(d.waitRate) setWaitRate(d.waitRate);
+            if(d.extraCost) setExtraCost(d.extraCost);
+            if(d.avgSpeed) setAvgSpeed(d.avgSpeed);
+            if(d.ordMc) setOrdMc(d.ordMc);
+            if(d.ordKm) setOrdKm(d.ordKm);
+            if(d.ordType) setOrdType(d.ordType);
+            if(d.ordSpecWeight) setOrdSpecWeight(d.ordSpecWeight);
+            if(d.ordList) setOrdList(d.ordList);
+            if(d.excMc) setExcMc(d.excMc);
+            if(d.excKm) setExcKm(d.excKm);
+            if(d.excType) setExcType(d.excType);
+            if(d.excSpecWeight) setExcSpecWeight(d.excSpecWeight);
+            if(d.excList) setExcList(d.excList);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { km, rateKm, trips, waitHours, waitRate, extraCost, avgSpeed, ordMc, ordKm, ordType, ordSpecWeight, ordList, excMc, excKm, excType, excSpecWeight, excList };
+      localStorage.setItem('trasportoData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      let text = 'Report Trasporto\n';
+      if(activeTab === 'logistica') {
+          text += `Logistica: Totale € ${total.toFixed(2)}`;
+      } else if(activeTab === 'ordinari') {
+          const listTotal = ordList.reduce((acc, item) => acc + item.cost, 0);
+          text += `Ordinari: Totale Riepilogo € ${listTotal.toFixed(2)} (${ordList.length} voci)`;
+      } else {
+          const listTotal = excList.reduce((acc, item) => acc + item.cost, 0);
+          text += `Eccezionali: Totale Riepilogo € ${listTotal.toFixed(2)} (${excList.length} voci)`;
+      }
+      
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Trasporto', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
 
   // --- LOGISTICA EFFECTS ---
   useEffect(() => {
@@ -173,13 +236,69 @@ export default function Trasporto({ showToast }: Props) {
     setExcTotalCost(cost);
   }, [excMc, excKm, excType, excSpecWeight]);
 
+  // --- LIST HELPERS ---
+  const getOrdTypeLabel = (t: OrdinariType) => {
+      switch(t) {
+          case 'norm': return 'Normali';
+          case 'p240': return 'Pareti h 240';
+          case 'p300': return 'Pareti h 300';
+          case 'p320': return 'Pareti h 320';
+          case 'p350': return 'Pareti h 350';
+          default: return t;
+      }
+  };
+
+  const getExcTypeLabel = (t: EccezionaliType) => {
+      switch(t) {
+          case 'u16': return 'Fino 16m';
+          case 'u19': return 'Fino 19m';
+          case 'u23': return 'Fino 23m';
+          case 'u27': return 'Fino 27m';
+          case 'u31': return 'Fino 31m';
+          case 'o31': return 'Oltre 31m';
+          default: return t;
+      }
+  };
+
+  const addOrdItem = () => {
+      if(ordTotalCost <= 0) return;
+      const weightQle = ((parseFloat(ordMc) || 0) * (parseFloat(ordSpecWeight) || 0) / 100);
+      const newItem: TransportItem = {
+          id: Date.now().toString(),
+          typeLabel: getOrdTypeLabel(ordType),
+          details: `${ordKm} km - ${weightQle.toFixed(1)} q.li`,
+          cost: ordTotalCost,
+          weight: weightQle
+      };
+      setOrdList([...ordList, newItem]);
+      showToast('Aggiunto al riepilogo');
+  };
+
+  const addExcItem = () => {
+      if(excTotalCost <= 0) return;
+      const weightQle = ((parseFloat(excMc) || 0) * (parseFloat(excSpecWeight) || 0) / 100);
+      const newItem: TransportItem = {
+          id: Date.now().toString(),
+          typeLabel: getExcTypeLabel(excType),
+          details: `${excKm} km - ${weightQle.toFixed(1)} q.li`,
+          cost: excTotalCost,
+          weight: weightQle
+      };
+      setExcList([...excList, newItem]);
+      showToast('Aggiunto al riepilogo');
+  };
+
+  const removeListItem = (listType: 'ord' | 'exc', id: string) => {
+      if(listType === 'ord') {
+          setOrdList(ordList.filter(i => i.id !== id));
+      } else {
+          setExcList(excList.filter(i => i.id !== id));
+      }
+  };
+
   const copy = (txt: string) => {
     navigator.clipboard.writeText(txt);
     showToast('Copiato!');
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   return (
@@ -216,13 +335,19 @@ export default function Trasporto({ showToast }: Props) {
             </div>
         </div>
 
+      <div className="flex justify-end gap-2 mb-2 no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+
         {/* ==================== SEZIONE LOGISTICA (EXISTING) ==================== */}
         {activeTab === 'logistica' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 {/* INPUTS */}
                 <div className="lg:col-span-8 space-y-6">
                     {/* Sezione Viaggio */}
-                    <div className="glass-panel rounded-2xl p-6">
+                    <div className="glass-panel rounded-2xl p-6 print-break-inside">
                         <h3 className="text-sm font-bold text-amber-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Parametri Viaggio</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
@@ -261,7 +386,7 @@ export default function Trasporto({ showToast }: Props) {
                     </div>
 
                     {/* Sezione Extra e Tempi */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print-break-inside">
                         <div className="glass-panel rounded-2xl p-6">
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i className="fa-regular fa-clock"></i> Tempi & Attese</h3>
                             <div className="space-y-4">
@@ -355,10 +480,6 @@ export default function Trasporto({ showToast }: Props) {
                             {(total / (parseFloat(km) || 1)).toLocaleString('it-IT', {minimumFractionDigits: 2})} €/km complessivi
                         </div>
                     </div>
-
-                    <button onClick={handlePrint} className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl border border-white/10 transition-colors no-print">
-                        <i className="fa-solid fa-print mr-2"></i> Stampa Preventivo
-                    </button>
                     </div>
 
                     {/* Info Box */}
@@ -382,7 +503,7 @@ export default function Trasporto({ showToast }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 {/* CALCOLATORE */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-indigo-500">
+                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-indigo-500 print-break-inside">
                          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                              <i className="fa-solid fa-calculator text-indigo-500"></i> Calcolo Ordinari
                          </h3>
@@ -470,6 +591,42 @@ export default function Trasporto({ showToast }: Props) {
                                  {((parseFloat(ordMc) || 0) * (parseFloat(ordSpecWeight) || 0) / 100).toFixed(1)} Quintali Totali
                              </div>
                          </div>
+
+                         {/* Add to List Button */}
+                         <button 
+                            onClick={addOrdItem}
+                            className="w-full mt-4 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 font-bold py-3 rounded-xl border border-indigo-500/30 transition-all flex justify-center items-center gap-2 no-print"
+                         >
+                             <i className="fa-solid fa-plus-circle"></i> Aggiungi al Riepilogo
+                         </button>
+
+                         {/* List Summary Section */}
+                         {ordList.length > 0 && (
+                             <div className="mt-6 border-t border-white/10 pt-4 animate-fade-in">
+                                 <div className="flex justify-between items-center mb-3">
+                                     <h4 className="text-xs font-bold text-slate-300 uppercase">Riepilogo Conteggi</h4>
+                                     <button onClick={() => setOrdList([])} className="text-[10px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
+                                 </div>
+                                 <div className="space-y-2 max-h-60 overflow-auto custom-scrollbar mb-4">
+                                     {ordList.map((item) => (
+                                         <div key={item.id} className="bg-black/20 p-3 rounded-lg flex justify-between items-center border border-white/5">
+                                             <div>
+                                                 <div className="text-xs font-bold text-white">{item.typeLabel}</div>
+                                                 <div className="text-[10px] text-slate-500">{item.details}</div>
+                                             </div>
+                                             <div className="flex items-center gap-3">
+                                                 <span className="font-mono text-sm text-indigo-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                                 <button onClick={() => removeListItem('ord', item.id)} className="text-slate-600 hover:text-red-400 transition-colors no-print"><i className="fa-solid fa-trash-can text-xs"></i></button>
+                                             </div>
+                                         </div>
+                                     ))}
+                                 </div>
+                                 <div className="bg-indigo-500/10 p-4 rounded-xl border border-indigo-500/20 flex justify-between items-center">
+                                     <span className="text-xs font-bold text-indigo-400 uppercase">Totale Complessivo</span>
+                                     <span className="text-xl font-bold text-white font-mono">€ {ordList.reduce((acc, i) => acc + i.cost, 0).toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                 </div>
+                             </div>
+                         )}
                     </div>
                 </div>
 
@@ -516,7 +673,7 @@ export default function Trasporto({ showToast }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 {/* CALCOLATORE */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-red-500">
+                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-red-500 print-break-inside">
                          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                              <i className="fa-solid fa-calculator text-red-500"></i> Calcolo Eccezionali
                          </h3>
@@ -605,6 +762,42 @@ export default function Trasporto({ showToast }: Props) {
                                  {((parseFloat(excMc) || 0) * (parseFloat(excSpecWeight) || 0) / 100).toFixed(1)} Quintali Totali
                              </div>
                          </div>
+
+                         {/* Add to List Button */}
+                         <button 
+                            onClick={addExcItem}
+                            className="w-full mt-4 bg-red-600/20 hover:bg-red-600/40 text-red-300 font-bold py-3 rounded-xl border border-red-500/30 transition-all flex justify-center items-center gap-2 no-print"
+                         >
+                             <i className="fa-solid fa-plus-circle"></i> Aggiungi al Riepilogo
+                         </button>
+
+                         {/* List Summary Section */}
+                         {excList.length > 0 && (
+                             <div className="mt-6 border-t border-white/10 pt-4 animate-fade-in">
+                                 <div className="flex justify-between items-center mb-3">
+                                     <h4 className="text-xs font-bold text-slate-300 uppercase">Riepilogo Conteggi</h4>
+                                     <button onClick={() => setExcList([])} className="text-[10px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
+                                 </div>
+                                 <div className="space-y-2 max-h-60 overflow-auto custom-scrollbar mb-4">
+                                     {excList.map((item) => (
+                                         <div key={item.id} className="bg-black/20 p-3 rounded-lg flex justify-between items-center border border-white/5">
+                                             <div>
+                                                 <div className="text-xs font-bold text-white">{item.typeLabel}</div>
+                                                 <div className="text-[10px] text-slate-500">{item.details}</div>
+                                             </div>
+                                             <div className="flex items-center gap-3">
+                                                 <span className="font-mono text-sm text-red-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                                 <button onClick={() => removeListItem('exc', item.id)} className="text-slate-600 hover:text-red-400 transition-colors no-print"><i className="fa-solid fa-trash-can text-xs"></i></button>
+                                             </div>
+                                         </div>
+                                     ))}
+                                 </div>
+                                 <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/20 flex justify-between items-center">
+                                     <span className="text-xs font-bold text-red-400 uppercase">Totale Complessivo</span>
+                                     <span className="text-xl font-bold text-white font-mono">€ {excList.reduce((acc, i) => acc + i.cost, 0).toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                 </div>
+                             </div>
+                         )}
                     </div>
                 </div>
 

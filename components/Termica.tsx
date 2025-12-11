@@ -38,6 +38,23 @@ export default function Termica({ showToast }: Props) {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
 
+  // Load Saved Data
+  useEffect(() => {
+    const saved = localStorage.getItem('termicaData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.mapInfo) setMapInfo(d.mapInfo);
+            if(d.zone) setZone(d.zone);
+            if(d.alt) setAlt(d.alt);
+            if(d.snowZone) setSnowZone(d.snowZone);
+            if(d.isoLambda) setIsoLambda(d.isoLambda);
+            if(d.isoTarget) setIsoTarget(d.isoTarget);
+            if(d.isoR) setIsoR(d.isoR);
+        } catch(e) { console.error("Error loading data", e); }
+    }
+  }, []);
+
   // Initialize Map
   useEffect(() => {
     if (!document.getElementById('mappaComune') || mapRef.current) return;
@@ -132,11 +149,36 @@ export default function Termica({ showToast }: Props) {
     }
   };
 
+  // --- ACTIONS ---
+  const handleSave = () => {
+      const data = { mapInfo, zone, alt, snowZone, isoLambda, isoTarget, isoR };
+      localStorage.setItem('termicaData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      const text = `ThermoCalc Report - Termica\nLocalità: ${mapInfo.name}\nZona: ${zone}\nNeve: ${snowLoad} kN/mq\nIsolante: ${isoThickness} cm`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'ThermoCalc Termica', text }); } catch {}
+      } else {
+          copy(text);
+          showToast('Report copiato negli appunti');
+      }
+  };
+
   return (
     <div className="space-y-8 animate-slide-in">
+      
+      {/* Toolbar */}
+      <div className="flex justify-end gap-2 no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Map & Search */}
-        <div className="lg:col-span-5 flex flex-col gap-6">
+        <div className="lg:col-span-5 flex flex-col gap-6 print-break-inside">
           <div className="glass-panel rounded-2xl p-6 relative z-20">
             <label className="text-[11px] text-accent-400 font-bold uppercase tracking-widest mb-3 block">Ricerca Località</label>
             <div className="relative group">
@@ -164,7 +206,7 @@ export default function Termica({ showToast }: Props) {
             {/* Rimosso grayscale e opacity ridotta per avere la mappa a colori vivida */}
             <div id="mappaComune" className="h-[400px] w-full rounded-xl transition-all duration-700"></div>
             {mapInfo.name !== '--' && (
-              <div className="absolute bottom-4 left-4 right-4 glass-panel bg-slate-900/80 rounded-xl p-4 z-[400] flex justify-between items-center backdrop-blur-md">
+              <div className="absolute bottom-4 left-4 right-4 glass-panel bg-slate-900/80 rounded-xl p-4 z-[400] flex justify-between items-center backdrop-blur-md border border-white/10">
                 <div>
                   <div className="text-[10px] text-accent-400 font-bold uppercase tracking-wider mb-1">Posizione</div>
                   <div className="text-white font-bold text-lg leading-none">{mapInfo.name}</div>
@@ -179,7 +221,7 @@ export default function Termica({ showToast }: Props) {
         </div>
 
         {/* Parameters */}
-        <div className="lg:col-span-7 glass-panel rounded-2xl p-8">
+        <div className="lg:col-span-7 glass-panel rounded-2xl p-8 print-break-inside">
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-3">
                 <span className="bg-accent-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-accent-500 text-sm border border-accent-500/20"><i className="fa-solid fa-file-contract"></i></span>
@@ -266,7 +308,7 @@ export default function Termica({ showToast }: Props) {
         </div>
       </div>
 
-      <div className="glass-panel rounded-2xl p-8">
+      <div className="glass-panel rounded-2xl p-8 print-break-inside">
         <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
             <span className="bg-orange-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-orange-500 text-sm border border-orange-500/20"><i className="fa-solid fa-layer-group"></i></span>
             Calcolatore Spessore Isolante
@@ -299,7 +341,7 @@ export default function Termica({ showToast }: Props) {
             <input type="number" value={isoR} onChange={(e) => setIsoR(parseFloat(e.target.value))} step="0.01" className="w-full glass-input rounded-xl p-3 text-sm font-mono text-center"/>
           </div>
           <div className="md:col-span-3">
-            <button onClick={calcIso} className="w-full bg-accent-600 hover:bg-accent-500 text-white font-bold px-6 py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all hover:scale-[1.02] active:scale-95 border border-white/10">Calcola Spessore</button>
+            <button onClick={calcIso} className="w-full bg-accent-600 hover:bg-accent-500 text-white font-bold px-6 py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all hover:scale-[1.02] active:scale-95 border border-white/10 no-print">Calcola Spessore</button>
           </div>
         </div>
         {isoThickness !== '--' && (
@@ -308,7 +350,7 @@ export default function Termica({ showToast }: Props) {
              <div className="flex items-center gap-3 cursor-pointer group" onClick={() => copy(isoThickness)}>
                 <span className="text-3xl font-bold text-accent-400 font-mono drop-shadow-md">{isoThickness}</span> 
                 <span className="text-sm text-slate-400">cm</span>
-                <i className="fa-regular fa-copy text-slate-600 group-hover:text-white transition-colors"></i>
+                <i className="fa-regular fa-copy text-slate-600 group-hover:text-white transition-colors no-print"></i>
              </div>
           </div>
         )}

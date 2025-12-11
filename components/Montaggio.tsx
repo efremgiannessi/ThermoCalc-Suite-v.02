@@ -80,6 +80,52 @@ export default function Montaggio({ showToast }: Props) {
   const [platOffset, setPlatOffset] = useState<string>('0');
   const [surface, setSurface] = useState<string>('');
 
+  // Persistence
+  useEffect(() => {
+    const saved = localStorage.getItem('montaggioData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.tegA) setTegA(d.tegA);
+            if(d.tegD) setTegD(d.tegD);
+            if(d.tegH) setTegH(d.tegH);
+            if(d.tegQI) setTegQI(d.tegQI);
+            if(d.capA) setCapA(d.capA);
+            if(d.capB) setCapB(d.capB);
+            if(d.capC) setCapC(d.capC);
+            if(d.capH) setCapH(d.capH);
+            if(d.capL) setCapL(d.capL);
+            if(d.capQI) setCapQI(d.capQI);
+            if(d.quantities) setQuantities(d.quantities);
+            if(d.isXL) setIsXL(d.isXL);
+            if(d.manualOffset) setManualOffset(d.manualOffset);
+            if(d.platOffset) setPlatOffset(d.platOffset);
+            if(d.surface) setSurface(d.surface);
+            if(d.notes) setNotes(d.notes);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { tegA, tegD, tegH, tegQI, capA, capB, capC, capH, capL, capQI, quantities, isXL, manualOffset, platOffset, surface, notes };
+      localStorage.setItem('montaggioData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      let text = 'Report Montaggio\n';
+      if(mode === 'tegolo') text += `Tegolo Alare: H=${tegResH}m, Peso=${tegResW} QI`;
+      else if(mode === 'capriata') text += `Capriata: H=${capResH}m, Peso=${capResW} QI`;
+      else text += `Costi: Totale € ${costResults.total.toLocaleString()} - ${costResults.days}gg`;
+      
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Montaggio', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
+
   // Calcolo Tegolo
   useEffect(() => {
     const a = parseFloat(tegA) || 0;
@@ -194,10 +240,6 @@ export default function Montaggio({ showToast }: Props) {
 
   const categories = Array.from(new Set(MOUNTING_DATA.map(d => d.cat)));
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="max-w-5xl mx-auto space-y-6 animate-slide-in">
       
@@ -211,26 +253,34 @@ export default function Montaggio({ showToast }: Props) {
         </h2>
         
         {/* Tab Switcher */}
-        <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto max-w-full">
-            <button 
-                onClick={() => setMode('tegolo')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'tegolo' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-            >
-                Alare
-            </button>
-            <button 
-                onClick={() => setMode('capriata')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'capriata' ? 'bg-indigo-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-            >
-                Capriata
-            </button>
-            <button 
-                onClick={() => setMode('costi')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'costi' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-            >
-                Costo Montaggio
-            </button>
+        <div className="flex gap-2">
+            <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto max-w-full">
+                <button 
+                    onClick={() => setMode('tegolo')}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'tegolo' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    Alare
+                </button>
+                <button 
+                    onClick={() => setMode('capriata')}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'capriata' ? 'bg-indigo-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    Capriata
+                </button>
+                <button 
+                    onClick={() => setMode('costi')}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'costi' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    Costo Montaggio
+                </button>
+            </div>
         </div>
+      </div>
+
+       <div className="flex justify-end gap-2 mb-2 no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
@@ -238,7 +288,7 @@ export default function Montaggio({ showToast }: Props) {
         {/* === ALARE SECTION === */}
         {mode === 'tegolo' && (
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in print-full-width">
-            <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6">
+            <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6 print-break-inside">
                 <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Alare</h3>
                 <div className="space-y-5">
                     <div className="relative group">
@@ -272,7 +322,7 @@ export default function Montaggio({ showToast }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 print-break-inside">
                 {/* SVG Tegolo */}
                 <div className="glass-panel rounded-2xl p-6 relative flex items-center justify-center bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[250px]">
                     <svg viewBox="0 0 400 250" className="w-full h-full drop-shadow-lg">
@@ -322,7 +372,7 @@ export default function Montaggio({ showToast }: Props) {
         {/* === CAPRIATA SECTION === */}
         {mode === 'capriata' && (
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in print-full-width">
-            <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6">
+            <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6 print-break-inside">
                 <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Capriata</h3>
                 <div className="space-y-4">
                     <div className="relative group">
@@ -366,7 +416,7 @@ export default function Montaggio({ showToast }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 print-break-inside">
                 {/* SVG Capriata */}
                 <div className="glass-panel rounded-2xl p-6 relative flex items-center justify-center bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[250px]">
                     <svg viewBox="0 0 400 250" className="w-full h-full drop-shadow-lg">
@@ -594,10 +644,6 @@ export default function Montaggio({ showToast }: Props) {
                            <p className="text-sm whitespace-pre-wrap">{notes}</p>
                        </div>
                    )}
-
-                   <button onClick={handlePrint} className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl border border-white/10 transition-colors no-print">
-                       <i className="fa-solid fa-print mr-2"></i> Stampa Report
-                   </button>
                 </div>
              </div>
 

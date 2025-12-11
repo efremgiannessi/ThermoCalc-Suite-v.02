@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -90,6 +90,37 @@ export default function Manufatti({ showToast }: Props) {
   const [category, setCategory] = useState<Category>('Alare');
   const [search, setSearch] = useState('');
 
+  // Persistence for authenticated state and last search
+  useEffect(() => {
+    const saved = localStorage.getItem('manufattiData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.auth) setIsAuthenticated(true);
+            if(d.category) setCategory(d.category);
+            if(d.search) setSearch(d.search);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { auth: isAuthenticated, category, search };
+      localStorage.setItem('manufattiData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      // Share current filter or list
+      const count = filteredData.length;
+      const text = `Manufatti (${category}): ${count} elementi trovati per "${search}"`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Database Manufatti', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
+
   const checkPassword = () => {
     if (password === '5575741') {
       setIsAuthenticated(true);
@@ -144,6 +175,12 @@ export default function Manufatti({ showToast }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-slide-in">
+        <div className="flex justify-end gap-2 mb-2 no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <h2 className="text-2xl font-bold text-white flex items-center gap-3">
           <span className="bg-fuchsia-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-fuchsia-500 border border-fuchsia-500/20">
@@ -152,7 +189,7 @@ export default function Manufatti({ showToast }: Props) {
           Database Manufatti
         </h2>
         
-        <div className="relative w-full md:w-64">
+        <div className="relative w-full md:w-64 no-print">
            <input 
              type="text" 
              value={search} 
@@ -165,7 +202,7 @@ export default function Manufatti({ showToast }: Props) {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
+      <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide no-print">
         {(Object.keys(DATA) as Category[]).map(cat => (
           <button
             key={cat}
@@ -181,7 +218,7 @@ export default function Manufatti({ showToast }: Props) {
         ))}
       </div>
 
-      <div className="glass-panel rounded-2xl overflow-hidden border border-white/10">
+      <div className="glass-panel rounded-2xl overflow-hidden border border-white/10 print-break-inside">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -207,13 +244,13 @@ export default function Manufatti({ showToast }: Props) {
                   <td className="p-4 text-sm text-slate-300">{item.desc}</td>
                   {/* Tipo Column */}
                   {category !== 'Alare' && category !== 'Canali' && (
-                     <td className="p-4 text-sm text-slate-400 text-center">{'type' in item ? item.type : '-'}</td>
+                     <td className="p-4 text-sm text-slate-400 text-center">{'type' in item ? String(item.type) : '-'}</td>
                   )}
                   <td className="p-4 text-sm text-slate-300 text-center font-mono">{String(item.h)}</td>
                   {/* Anima/Gamba Column */}
                   {(category !== 'Alare') && (
                     <td className="p-4 text-sm text-slate-300 text-center font-mono">
-                      {category === 'Tegoli' && 'gamba' in item ? item.gamba : ('anima' in item ? item.anima : '-')}
+                      {category === 'Tegoli' && 'gamba' in item ? String(item.gamba) : ('anima' in item ? String(item.anima) : '-')}
                     </td>
                   )}
                   <td className="p-4 text-sm text-white text-center font-mono font-bold bg-white/5">{String(item.kg_ml)}</td>

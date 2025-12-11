@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -15,6 +15,42 @@ export default function Percentuali({ showToast }: Props) {
   const [delta, setDelta] = useState({ val: '-- %', isPos: true });
 
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
+
+  // Persistence
+  useEffect(() => {
+    const saved = localStorage.getItem('percentualiData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.val) setVal(d.val);
+            if(d.rate) setRate(d.rate);
+            if(d.dStart) setDStart(d.dStart);
+            if(d.dEnd) setDEnd(d.dEnd);
+            // Re-calc triggers in next render via useEffect dependency on inputs? No, explicit call or effect
+            // Actually simpler to just set state and let effects handle if we had them, 
+            // but calc is in onChange. Let's trigger it manually or extract calc logic.
+            // For simplicity in this structure:
+            if(d.val && d.rate) calcPerc(d.val, d.rate);
+            if(d.dStart && d.dEnd) calcDelta(d.dStart, d.dEnd);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { val, rate, dStart, dEnd };
+      localStorage.setItem('percentualiData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      const text = `Report Percentuali\nValore: ${val} (+${rate}% = ${resAdd})\nVariazione: ${dStart} -> ${dEnd} (${delta.val})`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'ThermoCalc Percentuali', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
 
   const calcPerc = (v: string, r: string) => {
     setVal(v); setRate(r);
@@ -42,8 +78,15 @@ export default function Percentuali({ showToast }: Props) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto animate-slide-in">
-        <div className="glass-panel rounded-2xl p-8 flex flex-col justify-between">
+    <div className="animate-slide-in">
+        <div className="flex justify-end gap-2 mb-6 max-w-5xl mx-auto no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="glass-panel rounded-2xl p-8 flex flex-col justify-between print-break-inside">
             <div>
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
                     <span className="bg-pink-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-pink-500 border border-pink-500/20"><i className="fa-solid fa-arrow-trend-up"></i></span> 
@@ -76,7 +119,7 @@ export default function Percentuali({ showToast }: Props) {
             </div>
         </div>
 
-        <div className="glass-panel rounded-2xl p-8">
+        <div className="glass-panel rounded-2xl p-8 print-break-inside">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
                 <span className="bg-blue-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-blue-500 border border-blue-500/20"><i className="fa-solid fa-percent"></i></span> 
                 Variazione Delta
@@ -94,9 +137,10 @@ export default function Percentuali({ showToast }: Props) {
             <div className="mt-auto p-6 bg-black/30 rounded-2xl text-center border border-white/5 relative group cursor-pointer hover:bg-black/40 transition-colors shadow-inner" onClick={()=>copy(delta.val)}>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Risultato Variazione</div>
                 <span className={`text-4xl font-bold font-mono ${delta.isPos ? 'text-emerald-400' : 'text-red-400'} drop-shadow-lg`}>{delta.val}</span>
-                <i className="fa-regular fa-copy absolute top-4 right-4 text-slate-600 group-hover:text-white transition-colors"></i>
+                <i className="fa-regular fa-copy absolute top-4 right-4 text-slate-600 group-hover:text-white transition-colors no-print"></i>
             </div>
         </div>
+    </div>
     </div>
   );
 }

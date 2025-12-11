@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -12,6 +12,40 @@ export default function Pendenze({ showToast }: Props) {
   const [resPerc, setResPerc] = useState('-- %');
   const [percInput, setPercInput] = useState('');
   const [resDeg, setResDeg] = useState('-- °');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('pendenzeData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.h) setH(d.h);
+            if(d.l) setL(d.l);
+            if(d.degInput) setDegInput(d.degInput);
+            if(d.percInput) setPercInput(d.percInput);
+            
+            // Trigger calcs
+            if(d.h && d.l) calcHL(d.h, d.l);
+            if(d.degInput) calcDegToPerc(d.degInput);
+            if(d.percInput) calcPercToDeg(d.percInput);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { h, l, degInput, percInput };
+      localStorage.setItem('pendenzeData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      const text = `Report Pendenze\nH: ${h}, L: ${l} -> ${resHL}`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Pendenze', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
 
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
 
@@ -38,9 +72,15 @@ export default function Pendenze({ showToast }: Props) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto glass-panel rounded-[2rem] p-10 animate-slide-in relative overflow-hidden">
+    <div className="animate-slide-in">
+        <div className="flex justify-end gap-2 mb-6 max-w-4xl mx-auto no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+    <div className="max-w-4xl mx-auto glass-panel rounded-[2rem] p-10 relative overflow-hidden print-break-inside">
         {/* Decorative background element */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none no-print"></div>
 
         <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3 relative z-10">
             <span className="bg-cyan-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-cyan-500 border border-cyan-500/20"><i className="fa-solid fa-ruler-triangle"></i></span> 
@@ -64,7 +104,7 @@ export default function Pendenze({ showToast }: Props) {
             </div>
             <div className="flex-none w-full md:w-auto">
                 <div className="bg-accent-600/20 border border-accent-500/30 shadow-[0_0_20px_rgba(37,99,235,0.2)] px-6 py-3 rounded-xl text-white font-mono font-bold flex items-center justify-center gap-3 h-[48px] cursor-pointer hover:bg-accent-500/40 transition-colors backdrop-blur-md" onClick={()=>copy(resHL)}>
-                    {resHL} <i className="fa-regular fa-copy text-xs opacity-70"></i>
+                    {resHL} <i className="fa-regular fa-copy text-xs opacity-70 no-print"></i>
                 </div>
             </div>
         </div>
@@ -92,6 +132,7 @@ export default function Pendenze({ showToast }: Props) {
                 </div>
             </div>
         </div>
+    </div>
     </div>
   );
 }

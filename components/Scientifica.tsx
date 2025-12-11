@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -11,6 +11,35 @@ export default function Scientifica({ showToast }: Props) {
   const [preview, setPreview] = useState("");
 
   const formatNumber = (num: number) => parseFloat(num.toPrecision(12)).toString();
+
+  // Persistence
+  useEffect(() => {
+    const saved = localStorage.getItem('scientificaData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.history) setHistory(d.history);
+            if(d.currentExp) setCurrentExp(d.currentExp);
+            if(d.calcMode) setCalcMode(d.calcMode);
+        } catch(e) {}
+    }
+  }, []);
+
+  const handleSave = () => {
+      const data = { history, currentExp, calcMode };
+      localStorage.setItem('scientificaData', JSON.stringify(data));
+      showToast('Cronologia salvata!');
+  };
+
+  const handleShare = async () => {
+      const text = `Risultato Scientifica: ${currentExp} = ${preview || '...'}`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Calcolatrice', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
 
   const factorial = (n: number): number => (n !== 1) ? n * factorial(n - 1) : 1;
   const calc_sin = (x: number) => Math.sin(calcMode === 'deg' ? x * Math.PI / 180 : x);
@@ -92,7 +121,7 @@ export default function Scientifica({ showToast }: Props) {
         const res = evaluateExpression(currentExp);
         if (isNaN(res) || !isFinite(res)) throw new Error("Err");
         const formatted = formatNumber(res);
-        setHistory(prev => [currentExp + " = " + formatted, ...prev.slice(0, 2)]);
+        setHistory(prev => [currentExp + " = " + formatted, ...prev.slice(0, 5)]); // Save last 5
         setCurrentExp(formatted);
         setPreview("");
     } catch (e) { setPreview("Errore"); }
@@ -112,15 +141,22 @@ export default function Scientifica({ showToast }: Props) {
   };
 
   return (
-    <div className="max-w-lg mx-auto glass-panel rounded-[2rem] p-8 animate-slide-in shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]">
+    <div className="animate-slide-in">
+        <div className="flex justify-end gap-2 mb-6 max-w-lg mx-auto no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+
+    <div className="max-w-lg mx-auto glass-panel rounded-[2rem] p-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] print-break-inside">
       <div className="glass-input rounded-2xl p-6 mb-6 shadow-inner flex flex-col relative overflow-hidden h-[160px] border border-white/10">
         <button 
             onClick={() => { setCalcMode(m => m === 'deg' ? 'rad' : 'deg'); tryEval(currentExp); }} 
-            className={`absolute top-4 left-4 text-[10px] font-bold px-2 py-1 rounded-lg cursor-pointer transition-colors uppercase tracking-wider backdrop-blur-md ${calcMode === 'deg' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}
+            className={`absolute top-4 left-4 text-[10px] font-bold px-2 py-1 rounded-lg cursor-pointer transition-colors uppercase tracking-wider backdrop-blur-md ${calcMode === 'deg' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'} no-print`}
         >
             {calcMode}
         </button>
-        <div className="text-[11px] text-slate-500 h-10 overflow-hidden text-right mb-1 leading-5 opacity-60 font-mono">
+        <div className="text-[11px] text-slate-500 h-auto overflow-hidden text-right mb-1 leading-5 opacity-60 font-mono">
             {history.map((h, i) => <div key={i}>{h}</div>)}
         </div>
         <div className="text-xl text-slate-500 text-right h-8 overflow-hidden font-mono mb-1">{preview}</div>
@@ -128,10 +164,10 @@ export default function Scientifica({ showToast }: Props) {
             {currentExp || '0'}
             <span className="w-[3px] h-[1.2em] bg-accent-500 inline-block ml-1 animate-pulse rounded-full shadow-[0_0_8px_#3b82f6]"></span>
         </div>
-        <button onClick={copyResult} className="absolute bottom-3 left-3 text-slate-600 hover:text-slate-300 transition-colors p-2"><i className="fa-regular fa-copy"></i></button>
+        <button onClick={copyResult} className="absolute bottom-3 left-3 text-slate-600 hover:text-slate-300 transition-colors p-2 no-print"><i className="fa-regular fa-copy"></i></button>
       </div>
 
-      <div className="grid grid-cols-5 gap-3">
+      <div className="grid grid-cols-5 gap-3 no-print">
         <Btn type="fn" label="sin" onClick={() => sciFunc('sin')} />
         <Btn type="fn" label="cos" onClick={() => sciFunc('cos')} />
         <Btn type="fn" label="tan" onClick={() => sciFunc('tan')} />
@@ -174,6 +210,7 @@ export default function Scientifica({ showToast }: Props) {
         <Btn type="fn" label="%" onClick={calcPercent} />
         <Btn type="eq" label="=" onClick={calculate} extraClass="rounded-br-xl" />
       </div>
+    </div>
     </div>
   );
 }

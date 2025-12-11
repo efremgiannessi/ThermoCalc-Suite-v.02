@@ -11,6 +11,18 @@ export default function Pesi({ showToast }: Props) {
   const [result, setResult] = useState('0.00');
 
   useEffect(() => {
+    const saved = localStorage.getItem('pesiData');
+    if (saved) {
+        try {
+            const d = JSON.parse(saved);
+            if(d.mat) setMat(d.mat);
+            if(d.spec) setSpec(d.spec);
+            if(d.dim) setDim(d.dim);
+        } catch(e) {}
+    }
+  }, []);
+
+  useEffect(() => {
     const s = parseFloat(spec);
     const l = parseFloat(dim.l) || 0;
     const h = parseFloat(dim.h) || 0;
@@ -27,8 +39,30 @@ export default function Pesi({ showToast }: Props) {
 
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
 
+  const handleSave = () => {
+      const data = { mat, spec, dim };
+      localStorage.setItem('pesiData', JSON.stringify(data));
+      showToast('Dati salvati!');
+  };
+
+  const handleShare = async () => {
+      const text = `Calcolo Peso: ${result} kg\nDimensioni: ${dim.l}x${dim.h}x${dim.len}m`;
+      if (navigator.share) {
+          try { await navigator.share({ title: 'Peso Materiali', text }); } catch {}
+      } else {
+          navigator.clipboard.writeText(text);
+          showToast('Copiato negli appunti');
+      }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-8 animate-slide-in">
+    <div className="animate-slide-in">
+        <div className="flex justify-end gap-2 mb-6 max-w-2xl mx-auto no-print">
+          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
+          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
+          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      </div>
+    <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-8 print-break-inside">
         <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
             <span className="bg-red-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-red-500 border border-red-500/20"><i className="fa-solid fa-weight-hanging"></i></span> 
             Calcolo Peso Materiali
@@ -45,7 +79,7 @@ export default function Pesi({ showToast }: Props) {
                         <option value="2700" className="bg-slate-800">Alluminio (2700 kg/m³)</option>
                         <option value="custom" className="bg-slate-800">Personalizzato</option>
                     </select>
-                    <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
+                    <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover:text-white"></i>
                 </div>
             </div>
             <div className="w-full md:w-1/3">
@@ -80,8 +114,9 @@ export default function Pesi({ showToast }: Props) {
             <div className="text-5xl font-bold text-white flex justify-center items-end gap-3 relative z-10 font-mono">
                 {result} <span className="text-lg text-red-500 font-sans mb-1">kg</span>
             </div>
-            <div className="text-[10px] text-slate-600 mt-2 uppercase">Clicca per copiare</div>
+            <div className="text-[10px] text-slate-600 mt-2 uppercase no-print">Clicca per copiare</div>
         </div>
+    </div>
     </div>
   );
 }

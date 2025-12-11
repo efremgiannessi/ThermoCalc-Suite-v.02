@@ -37,7 +37,7 @@
                         },
                         slideIn: {
                             '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                            '100%': { opacity: '1' },
                         }
                     }
                 }
@@ -93,42 +93,108 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* STILI DI STAMPA */
+        /* STILI DI STAMPA PROFESSIONALE */
         @media print {
-            body {
-                background: white !important;
-                color: black !important;
-                background-image: none !important;
+            @page {
+                size: A4;
+                margin: 1cm;
             }
-            .glass-panel {
+            
+            html, body {
+                background: white !important;
+                color: #1a1a1a !important;
+                background-image: none !important;
+                font-family: 'Inter', sans-serif !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                height: auto !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+
+            /* Reset Glassmorphism for Print readability */
+            .glass-panel, .glass-input {
                 background: white !important;
                 backdrop-filter: none !important;
                 box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                color: black !important;
+                border: 1px solid #e5e7eb !important;
+                color: #1a1a1a !important;
+                border-radius: 8px !important;
             }
+
             .glass-input {
-                background: white !important;
-                border: 1px solid #ccc !important;
-                color: black !important;
+                border-bottom: 1px solid #ccc !important;
+                padding-left: 0 !important;
+                background: transparent !important;
             }
-            /* Nascondi elementi UI non necessari */
-            .no-print, header, footer, button, nav, .toast-container, .input-group-ui {
-                display: none !important;
-            }
-            /* Forza visualizzazione colori di sfondo (per i grafici) */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            /* Layout */
+
+            /* Layout adjustments */
             .print-break-inside {
                 break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+                display: block !important;
+                overflow: visible !important;
             }
+            
             .print-full-width {
                 width: 100% !important;
                 max-width: none !important;
-                grid-template-columns: 1fr 1fr !important;
+                display: block !important;
+            }
+
+            /* Reset Overflows specifically for print */
+            .overflow-hidden, .overflow-auto, .overflow-x-auto, .overflow-y-auto {
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            /* Reset Flexbox structure that might clip content */
+            #root, main, .flex-col, .min-h-screen {
+                display: block !important;
+                min-height: 0 !important;
+                height: auto !important;
+            }
+
+            /* Colori testi per risparmio inchiostro ma leggibilità */
+            .text-white, .text-slate-200, .text-slate-300 { color: #000 !important; }
+            .text-slate-400, .text-slate-500 { color: #4b5563 !important; }
+            .text-accent-400, .text-accent-500, .text-emerald-400, .text-orange-400 { color: #000 !important; font-weight: bold !important; }
+            
+            /* Nascondi elementi UI non necessari */
+            .no-print, header, footer, button, nav, .toast-container, .input-group-ui, .fa-solid, .fa-regular {
+                display: none !important;
+            }
+
+            /* Specific fix for Maps if they are Canvas based */
+            .leaflet-container {
+                width: 100% !important;
+                height: 400px !important;
+                display: block !important;
+                border: 1px solid #ccc;
+            }
+
+            /* Header di stampa */
+            body::before {
+                content: "ThermoCalc Suite Professional Report";
+                display: block;
+                text-align: center;
+                font-size: 18pt;
+                font-weight: bold;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #333;
+                padding-bottom: 10px;
+            }
+            
+            body::after {
+                content: "Generato da ThermoCalc Suite Web";
+                display: block;
+                text-align: center;
+                font-size: 8pt;
+                color: #666;
+                margin-top: 20px;
+                border-top: 1px solid #ccc;
+                padding-top: 10px;
             }
         }
     </style>
