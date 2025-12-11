@@ -182,17 +182,6 @@ export default function Trasporto({ showToast }: Props) {
     window.print();
   };
 
-  const getExcTypeLabel = (t: EccezionaliType) => {
-    switch(t) {
-        case 'u16': return 'Fino a 16m';
-        case 'u19': return 'Fino a 19m';
-        case 'u23': return 'Fino a 23m';
-        case 'u27': return 'Fino a 27m';
-        case 'u31': return 'Fino a 31m';
-        case 'o31': return 'Oltre 31m';
-    }
-  };
-
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-slide-in">
         

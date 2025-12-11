@@ -209,21 +209,21 @@ export default function Manufatti({ showToast }: Props) {
                   {category !== 'Alare' && category !== 'Canali' && (
                      <td className="p-4 text-sm text-slate-400 text-center">{'type' in item ? item.type : '-'}</td>
                   )}
-                  <td className="p-4 text-sm text-slate-300 text-center font-mono">{item.h}</td>
+                  <td className="p-4 text-sm text-slate-300 text-center font-mono">{String(item.h)}</td>
                   {/* Anima/Gamba Column */}
                   {(category !== 'Alare') && (
                     <td className="p-4 text-sm text-slate-300 text-center font-mono">
                       {category === 'Tegoli' && 'gamba' in item ? item.gamba : ('anima' in item ? item.anima : '-')}
                     </td>
                   )}
-                  <td className="p-4 text-sm text-white text-center font-mono font-bold bg-white/5">{item.kg_ml}</td>
+                  <td className="p-4 text-sm text-white text-center font-mono font-bold bg-white/5">{String(item.kg_ml)}</td>
                   <td 
                     onClick={() => copy(item.mc_ml)}
                     className="p-4 text-sm text-yellow-400 text-center font-mono font-bold bg-yellow-500/5 cursor-pointer hover:bg-yellow-500/20 border-x border-white/5 transition-colors relative"
                   >
-                    {item.mc_ml}
+                    {String(item.mc_ml)}
                   </td>
-                  <td className="p-4 text-sm text-slate-300 text-center font-mono">{item.r}</td>
+                  <td className="p-4 text-sm text-slate-300 text-center font-mono">{String(item.r)}</td>
                 </tr>
               ))}
               {filteredData.length === 0 && (
