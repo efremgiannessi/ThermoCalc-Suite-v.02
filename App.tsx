@@ -9,6 +9,7 @@ import Pendenze from './components/Pendenze';
 import Pesi from './components/Pesi';
 import Montaggio from './components/Montaggio';
 import Trasporto from './components/Trasporto';
+import Manufatti from './components/Manufatti';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('termica');
@@ -20,7 +21,7 @@ export default function App() {
   };
 
   const navClass = (tab: TabType) => 
-    `flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border whitespace-nowrap cursor-pointer select-none backdrop-blur-md ${
+    `flex items-center gap-2 px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 border whitespace-nowrap cursor-pointer select-none backdrop-blur-md ${
       activeTab === tab 
         ? 'bg-accent-600/20 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] border-accent-500/50' 
         : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border-white/5 hover:border-white/10'
@@ -68,7 +69,7 @@ export default function App() {
             </div>
           </div>
           
-          <nav className="flex overflow-x-auto gap-3 pb-2 no-scrollbar scrollbar-hide mask-linear-fade">
+          <nav className="flex flex-wrap justify-center gap-2 pb-2">
             <button onClick={() => setActiveTab('termica')} className={navClass('termica')}><i className="fa-solid fa-temperature-half"></i> Termica</button>
             <button onClick={() => setActiveTab('commerciale')} className={navClass('commerciale')}><i className="fa-solid fa-shop"></i> Commerciale</button>
             <button onClick={() => setActiveTab('percentuali')} className={navClass('percentuali')}><i className="fa-solid fa-percent"></i> %</button>
@@ -78,6 +79,7 @@ export default function App() {
             <button onClick={() => setActiveTab('pesi')} className={navClass('pesi')}><i className="fa-solid fa-weight-hanging"></i> Pesi</button>
             <button onClick={() => setActiveTab('montaggio')} className={navClass('montaggio')}><i className="fa-solid fa-screwdriver-wrench"></i> Montaggio</button>
             <button onClick={() => setActiveTab('trasporto')} className={navClass('trasporto')}><i className="fa-solid fa-truck-fast"></i> Trasporto</button>
+            <button onClick={() => setActiveTab('manufatti')} className={navClass('manufatti')}><i className="fa-solid fa-shapes"></i> Manufatti</button>
           </nav>
         </div>
       </header>
@@ -93,6 +95,7 @@ export default function App() {
             {activeTab === 'pesi' && <Pesi showToast={showToast} />}
             {activeTab === 'montaggio' && <Montaggio showToast={showToast} />}
             {activeTab === 'trasporto' && <Trasporto showToast={showToast} />}
+            {activeTab === 'manufatti' && <Manufatti showToast={showToast} />}
         </div>
       </main>
       
