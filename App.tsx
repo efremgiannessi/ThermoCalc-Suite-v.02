@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TabType } from './types';
 import Termica from './components/Termica';
 import Scientifica from './components/Scientifica';
@@ -14,6 +14,23 @@ import Manufatti from './components/Manufatti';
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('termica');
   const [toast, setToast] = useState({ show: false, message: '' });
+
+  // SEO: Update document title based on active tab
+  useEffect(() => {
+    const titles: Record<TabType, string> = {
+        termica: "Calcolo Termico & Zone Climatiche",
+        commerciale: "Calcoli Commerciali & Parcella",
+        percentuali: "Calcolo Percentuali & Variazioni",
+        scientifica: "Calcolatrice Scientifica",
+        interpol: "Interpolazione Lineare",
+        pendenze: "Calcolo Pendenze & Gradi",
+        pesi: "Calcolo Pesi Materiali",
+        montaggio: "Preventivo Montaggio Edile",
+        trasporto: "Preventivo Trasporti & Logistica",
+        manufatti: "Database Manufatti & Travi"
+    };
+    document.title = `ThermoCalc | ${titles[activeTab]}`;
+  }, [activeTab]);
 
   const showToast = (msg: string) => {
     setToast({ show: true, message: msg });
@@ -40,10 +57,24 @@ export default function App() {
       </div>
 
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-slate-900/60 no-print">
-        <div className="bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-blue-900/40 text-blue-300 text-[10px] font-bold text-center py-1.5 uppercase tracking-widest border-b border-white/5 shadow-sm">
-            Versione Web
+        {/* Banner Efrem Giannessi */}
+        <div className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-slate-300 text-xs md:text-sm font-medium text-center py-2.5 border-b border-white/10 relative overflow-hidden shadow-md">
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-30"></div>
+            <p className="flex justify-center items-center gap-1.5 flex-wrap px-4">
+              <i className="fa-solid fa-code text-indigo-400 text-[10px]"></i>
+              Software progettato e sviluppato da 
+              <a 
+                href="https://www.efremgiannessi.org" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-white font-bold hover:text-indigo-400 transition-all duration-300 underline decoration-indigo-500/50 underline-offset-2 hover:decoration-indigo-400 decoration-1"
+              >
+                Efrem Giannessi
+              </a>
+            </p>
         </div>
-        <div className="max-w-7xl mx-auto px-4 py-4">
+
+        <div className="w-[95%] max-w-[1800px] mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
             <div className="flex items-center gap-4">
               <div className="relative group">
@@ -84,7 +115,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow container max-w-7xl mx-auto px-4 py-8">
+      <main className="flex-grow w-[95%] max-w-[1800px] mx-auto px-4 py-8">
         <div className="transition-all duration-500 ease-in-out animate-fade-in">
             {activeTab === 'termica' && <Termica showToast={showToast} />}
             {activeTab === 'commerciale' && <Commerciale showToast={showToast} />}

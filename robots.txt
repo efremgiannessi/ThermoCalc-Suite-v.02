@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://thermocalc-suite.netlify.app/sitemap.xml
