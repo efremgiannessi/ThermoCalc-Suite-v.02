@@ -121,25 +121,6 @@ export default function Montaggio({ showToast }: Props) {
       showToast('Dati salvati!');
   };
 
-  const handleReset = () => {
-      if (window.confirm("Sei sicuro di voler resettare tutti i dati di questa sezione? Le quantità e i costi personalizzati verranno persi.")) {
-          localStorage.removeItem('montaggioData');
-          // Ripristino valori default
-          setTegA('9.00'); setTegD('24.00'); setTegH('5.00'); setTegQI('6.60');
-          setCapA('10.00'); setCapB('1.70'); setCapC('15.20'); setCapH('5.00'); setCapL('19.20'); setCapQI('6.25');
-          setQuantities({});
-          setIsXL({});
-          setManualOffset('0');
-          setPlatOffset('0');
-          setSurface('');
-          setNotes('');
-          setDailyCraneCost('2650');
-          setDailyPlatformCost('200');
-          
-          showToast('Dati ripristinati ai valori di fabbrica');
-      }
-  };
-
   const handleShare = async () => {
       let text = 'Report Montaggio\n';
       if(mode === 'tegolo') text += `Tegolo Alare: H=${tegResH}m, Peso=${tegResW} QI`;
@@ -307,7 +288,6 @@ export default function Montaggio({ showToast }: Props) {
       </div>
 
        <div className="flex justify-end gap-2 mb-2 no-print">
-          <button onClick={handleReset} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-red-500/10 flex items-center gap-2"><i className="fa-solid fa-rotate-right"></i> Reset</button>
           <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
           <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
           <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
