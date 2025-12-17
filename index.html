@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <!-- Primary Meta Tags -->
-    <title>ThermoCalc Suite - Strumenti Professionali per Edilizia e Termotecnica</title>
-    <meta name="title" content="ThermoCalc Suite - Strumenti Professionali per Edilizia e Termotecnica">
-    <meta name="description" content="Suite gratuita di calcolatori professionali: termica, preventivi edili, trasporti eccezionali, pesi materiali e calcoli scientifici. Ottimizzato per ingegneri e geometri.">
-    <meta name="keywords" content="calcolo termico, preventivo edile, calcolo trasporto, peso materiali, zona climatica, calcolatrice scientifica, edilizia, ingegneria">
-    <meta name="author" content="ThermoCalc Team">
+    <title>OmniCalc Suite - Strumenti Professionali per Edilizia e Logistica</title>
+    <meta name="title" content="OmniCalc Suite - Strumenti Professionali per Edilizia e Logistica">
+    <meta name="description" content="Suite completa di calcolatori professionali: termica, preventivi edili, trasporti eccezionali, pesi materiali e calcoli scientifici. Progettato da Efrem Giannessi.">
+    <meta name="keywords" content="calcolo termico, preventivo edile, calcolo trasporto, peso materiali, zona climatica, calcolatrice scientifica, edilizia, ingegneria, logistica">
+    <meta name="author" content="Efrem Giannessi">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://thermocalc-suite.netlify.app/">
-    <meta property="og:title" content="ThermoCalc Suite - Strumenti Professionali">
-    <meta property="og:description" content="Suite gratuita di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
+    <meta property="og:title" content="OmniCalc Suite - Strumenti Professionali">
+    <meta property="og:description" content="Suite completa di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
     <meta property="og:image" content="https://thermocalc-suite.netlify.app/og-image.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://thermocalc-suite.netlify.app/">
-    <meta property="twitter:title" content="ThermoCalc Suite - Strumenti Professionali">
-    <meta property="twitter:description" content="Suite gratuita di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
+    <meta property="twitter:title" content="OmniCalc Suite - Strumenti Professionali">
+    <meta property="twitter:description" content="Suite completa di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
     <meta property="twitter:image" content="https://thermocalc-suite.netlify.app/og-image.jpg">
     
     <!-- Google Fonts -->
@@ -41,11 +41,16 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "ThermoCalc Suite",
+      "name": "OmniCalc Suite",
       "url": "https://thermocalc-suite.netlify.app/",
-      "description": "Suite di strumenti di calcolo per professionisti dell'edilizia.",
+      "description": "Suite di strumenti di calcolo per professionisti dell'edilizia e della logistica.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web Browser",
+      "author": {
+          "@type": "Person",
+          "name": "Efrem Giannessi",
+          "url": "https://www.efremgiannessi.org"
+      },
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -132,108 +137,110 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Utility per stampa */
+        .print-only { display: none !important; }
+
         /* STILI DI STAMPA PROFESSIONALE */
         @media print {
             @page {
                 size: A4;
-                margin: 1cm;
+                margin: 0.8cm;
             }
             
+            .print-only { display: block !important; }
+            .no-print { display: none !important; }
+
             html, body {
                 background: white !important;
-                color: #1a1a1a !important;
                 background-image: none !important;
+                color: #000 !important;
                 font-family: 'Inter', sans-serif !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                height: auto !important;
-                overflow: visible !important;
-                display: block !important;
+                font-size: 11pt;
+                width: 100%;
+                margin: 0;
+                padding: 0;
             }
 
-            /* Reset Glassmorphism for Print readability */
-            .glass-panel, .glass-input {
+            /* Trasforma i pannelli glass in box puliti */
+            .glass-panel {
                 background: white !important;
-                backdrop-filter: none !important;
+                border: 1px solid #ccc !important;
                 box-shadow: none !important;
-                border: 1px solid #e5e7eb !important;
-                color: #1a1a1a !important;
-                border-radius: 8px !important;
+                border-radius: 4px !important;
+                margin-bottom: 20px !important;
+                backdrop-filter: none !important;
+                color: #000 !important;
+                break-inside: avoid;
             }
 
-            .glass-input {
-                border-bottom: 1px solid #ccc !important;
-                padding-left: 0 !important;
+            /* Trasforma gli input in testo leggibile */
+            .glass-input, input, select, textarea {
                 background: transparent !important;
+                border: none !important;
+                border-bottom: 1px solid #ddd !important;
+                color: #000 !important;
+                border-radius: 0 !important;
+                padding-left: 0 !important;
+                box-shadow: none !important;
+                font-weight: bold;
             }
 
-            /* Layout adjustments */
+            /* Gestione colori testi per la stampa */
+            .text-white { color: #000 !important; }
+            .text-slate-300, .text-slate-400, .text-slate-500 { color: #444 !important; }
+            
+            /* Mantieni i colori semantici ma rendili stampabili */
+            .text-accent-400, .text-accent-500, .text-blue-400 { color: #2563eb !important; } /* Blue */
+            .text-emerald-400, .text-emerald-500 { color: #059669 !important; } /* Green */
+            .text-red-400, .text-red-500 { color: #dc2626 !important; } /* Red */
+            .text-orange-400, .text-orange-500 { color: #d97706 !important; } /* Orange */
+
+            /* Gestione Layout Stampa */
+            #root, main, .min-h-screen {
+                display: block !important;
+                height: auto !important;
+                min-height: 0 !important;
+            }
+
+            /* Forza la larghezza per evitare tagli */
+            .container, .max-w-7xl, .w-\[95\%\] {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Gestione Interruzioni Pagina */
+            h1, h2, h3 { 
+                page-break-after: avoid; 
+                break-after: avoid;
+                color: #000 !important;
+                border-bottom: 1px solid #000;
+                padding-bottom: 5px;
+            }
+            
             .print-break-inside {
                 break-inside: avoid;
                 page-break-inside: avoid;
-                margin-bottom: 20px;
-                display: block !important;
-                overflow: visible !important;
-            }
-            
-            .print-full-width {
-                width: 100% !important;
-                max-width: none !important;
-                display: block !important;
             }
 
-            /* Reset Overflows specifically for print */
-            .overflow-hidden, .overflow-auto, .overflow-x-auto, .overflow-y-auto {
-                overflow: visible !important;
-                height: auto !important;
-            }
-
-            /* Reset Flexbox structure that might clip content */
-            #root, main, .flex-col, .min-h-screen {
-                display: block !important;
-                min-height: 0 !important;
-                height: auto !important;
-            }
-
-            /* Colori testi per risparmio inchiostro ma leggibilità */
-            .text-white, .text-slate-200, .text-slate-300 { color: #000 !important; }
-            .text-slate-400, .text-slate-500 { color: #4b5563 !important; }
-            .text-accent-400, .text-accent-500, .text-emerald-400, .text-orange-400 { color: #000 !important; font-weight: bold !important; }
-            
-            /* Nascondi elementi UI non necessari */
-            .no-print, header, footer, button, nav, .toast-container, .input-group-ui, .fa-solid, .fa-regular {
-                display: none !important;
-            }
-
-            /* Specific fix for Maps if they are Canvas based */
+            /* Specifiche per Mappe */
             .leaflet-container {
-                width: 100% !important;
-                height: 400px !important;
-                display: block !important;
-                border: 1px solid #ccc;
-            }
-
-            /* Header di stampa */
-            body::before {
-                content: "ThermoCalc Suite Professional Report";
-                display: block;
-                text-align: center;
-                font-size: 18pt;
-                font-weight: bold;
-                margin-bottom: 20px;
-                border-bottom: 2px solid #333;
-                padding-bottom: 10px;
+                border: 1px solid #000;
+                height: 350px !important;
             }
             
-            body::after {
-                content: "Generato da ThermoCalc Suite Web";
-                display: block;
-                text-align: center;
-                font-size: 8pt;
-                color: #666;
-                margin-top: 20px;
-                border-top: 1px solid #ccc;
-                padding-top: 10px;
+            /* Nascondi icone puramente decorative se danno fastidio, o falle nere */
+            i.fa-solid, i.fa-regular {
+                color: #444 !important;
+            }
+
+            /* Assicura che i grafici a barre colorate si vedano */
+            .bg-emerald-500, .bg-blue-500, .bg-orange-500, .bg-red-500 {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>

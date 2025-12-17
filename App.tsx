@@ -29,7 +29,7 @@ export default function App() {
         trasporto: "Preventivo Trasporti & Logistica",
         manufatti: "Database Manufatti & Travi"
     };
-    document.title = `ThermoCalc | ${titles[activeTab]}`;
+    document.title = `OmniCalc | ${titles[activeTab]}`;
   }, [activeTab]);
 
   const showToast = (msg: string) => {
@@ -44,8 +44,30 @@ export default function App() {
         : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border-white/5 hover:border-white/10'
     }`;
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex flex-col min-h-screen">
+      
+      {/* --- PRINT ONLY HEADER --- */}
+      <div className="print-only hidden w-full border-b-2 border-black pb-4 mb-6">
+        <div className="flex justify-between items-start">
+            <div className="flex items-center gap-3">
+                <i className="fa-solid fa-cube text-3xl"></i>
+                <div>
+                    <h1 className="text-3xl font-bold leading-none">OmniCalc Suite</h1>
+                    <p className="text-sm text-gray-600 mt-1">Professional Technical Reports</p>
+                </div>
+            </div>
+            <div className="text-right">
+                <p className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-1">Software progettato e sviluppato da</p>
+                <p className="text-lg font-bold">Efrem Giannessi</p>
+                <p className="text-xl font-bold text-blue-700 underline mt-1">https://www.efremgiannessi.org/</p>
+            </div>
+        </div>
+      </div>
+      {/* ------------------------- */}
+
       {/* Toast Notification */}
       <div 
         className={`toast-container fixed z-[9999] left-1/2 bottom-[30px] -translate-x-1/2 glass-panel bg-slate-900/90 text-white px-6 py-4 rounded-xl flex items-center gap-3 transition-all duration-500 shadow-2xl ${toast.show ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}
@@ -85,9 +107,9 @@ export default function App() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold tracking-tight text-white leading-none">
-                  Thermo<span className="text-accent-500">Suite</span>
+                  Omni<span className="text-accent-500">Calc</span>
                 </h1>
-                <span className="text-xs text-slate-400 font-medium tracking-wide">Professional Tools v11.0</span>
+                <span className="text-xs text-slate-400 font-medium tracking-wide">Professional Suite v11.0</span>
               </div>
             </div>
             
@@ -130,12 +152,27 @@ export default function App() {
         </div>
       </main>
       
+      {/* --- WEB FOOTER --- */}
       <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm flex flex-col items-center gap-4 no-print">
-        <p className="text-slate-500 text-xs font-medium">&copy; 2024 ThermoSuite Web. Designed for performance.</p>
+        <p className="text-slate-500 text-xs font-medium">&copy; {currentYear} OmniCalc Web. Designed for performance.</p>
         <a href="https://app.netlify.com/projects/thermo-pro-calc-suite-v02/deploys" target="_blank" rel="noopener noreferrer">
           <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />
         </a>
       </footer>
+
+      {/* --- PRINT ONLY FOOTER --- */}
+      <div className="print-only hidden w-full border-t border-black pt-4 mt-8">
+          <div className="text-center space-y-2">
+              <p className="font-bold text-sm uppercase">Copyright © {currentYear} Efrem Giannessi. Tutti i diritti riservati.</p>
+              <p className="text-xs text-gray-600 px-10">
+                  Il presente report è stato generato automaticamente tramite il software <strong>OmniCalc Suite</strong>. 
+                  È severamente vietata la riproduzione, distribuzione, modifica o ingegneria inversa del software senza autorizzazione esplicita. 
+                  L'utilizzo dei dati e dei calcoli contenuti in questo documento è a totale discrezione e responsabilità dell'utente professionale. 
+                  L'autore non si assume responsabilità per eventuali errori o imprecisioni nei calcoli automatici.
+              </p>
+              <p className="font-bold text-xs pt-2">https://www.efremgiannessi.org/</p>
+          </div>
+      </div>
     </div>
   );
 }
