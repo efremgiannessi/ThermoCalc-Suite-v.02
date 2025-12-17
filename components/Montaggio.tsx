@@ -79,6 +79,8 @@ export default function Montaggio({ showToast }: Props) {
   const [manualOffset, setManualOffset] = useState<string>('0');
   const [platOffset, setPlatOffset] = useState<string>('0');
   const [surface, setSurface] = useState<string>('');
+  const [dailyCraneCost, setDailyCraneCost] = useState<string>('2650');
+  const [dailyPlatformCost, setDailyPlatformCost] = useState<string>('200');
 
   // Persistence
   useEffect(() => {
@@ -102,14 +104,40 @@ export default function Montaggio({ showToast }: Props) {
             if(d.platOffset) setPlatOffset(d.platOffset);
             if(d.surface) setSurface(d.surface);
             if(d.notes) setNotes(d.notes);
+            if(d.dailyCraneCost) setDailyCraneCost(d.dailyCraneCost);
+            if(d.dailyPlatformCost) setDailyPlatformCost(d.dailyPlatformCost);
         } catch(e) {}
     }
   }, []);
 
   const handleSave = () => {
-      const data = { tegA, tegD, tegH, tegQI, capA, capB, capC, capH, capL, capQI, quantities, isXL, manualOffset, platOffset, surface, notes };
+      const data = { 
+        tegA, tegD, tegH, tegQI, 
+        capA, capB, capC, capH, capL, capQI, 
+        quantities, isXL, manualOffset, platOffset, surface, notes,
+        dailyCraneCost, dailyPlatformCost 
+      };
       localStorage.setItem('montaggioData', JSON.stringify(data));
       showToast('Dati salvati!');
+  };
+
+  const handleReset = () => {
+      if (window.confirm("Sei sicuro di voler resettare tutti i dati di questa sezione? Le quantità e i costi personalizzati verranno persi.")) {
+          localStorage.removeItem('montaggioData');
+          // Ripristino valori default
+          setTegA('9.00'); setTegD('24.00'); setTegH('5.00'); setTegQI('6.60');
+          setCapA('10.00'); setCapB('1.70'); setCapC('15.20'); setCapH('5.00'); setCapL('19.20'); setCapQI('6.25');
+          setQuantities({});
+          setIsXL({});
+          setManualOffset('0');
+          setPlatOffset('0');
+          setSurface('');
+          setNotes('');
+          setDailyCraneCost('2650');
+          setDailyPlatformCost('200');
+          
+          showToast('Dati ripristinati ai valori di fabbrica');
+      }
   };
 
   const handleShare = async () => {
@@ -187,9 +215,9 @@ export default function Montaggio({ showToast }: Props) {
     const avgElementsPerDay = finalCraneDays > 0 ? totalPieces / finalCraneDays : 0;
 
     // Tariffe
-    const dailyCrane = 2650;
-    const dailyPlatform = 200;
-    const dailyTravel = 250; // Onere trasferta
+    const dailyCrane = parseFloat(dailyCraneCost) || 0;
+    const dailyPlatform = parseFloat(dailyPlatformCost) || 0;
+    const dailyTravel = 250; // Onere trasferta (fisso per ora o si potrebbe rendere editabile)
     
     // Calcolo Totali
     const costCrane = finalCraneDays * dailyCrane;
@@ -197,7 +225,7 @@ export default function Montaggio({ showToast }: Props) {
     const costTravel = finalCraneDays * dailyTravel; // La trasferta segue i giorni della squadra/gru
     
     // Trasferta/Setup (1 giorno extra andata/ritorno dei mezzi)
-    // Nota: questo è il costo fisso di mobilitazione, diverso dall'onere giornaliero di trasferta
+    // Nota: questo è il costo fisso di mobilitazione, basato sulle tariffe giornaliere
     const costSetup = dailyCrane + dailyPlatform;
 
     const totalCost = costCrane + costPlatform + costTravel + costSetup;
@@ -220,9 +248,10 @@ export default function Montaggio({ showToast }: Props) {
       total: totalCost,
       perSqm: costPerSqm,
       avgEl: avgElementsPerDay,
-      chart: { pCrane, pPlat, pTravel }
+      chart: { pCrane, pPlat, pTravel },
+      rates: { dailyCrane, dailyPlatform, dailyTravel }
     };
-  }, [quantities, isXL, manualOffset, platOffset, surface]);
+  }, [quantities, isXL, manualOffset, platOffset, surface, dailyCraneCost, dailyPlatformCost]);
 
   const updateQty = (id: string, val: string) => {
     const v = parseInt(val) || 0;
@@ -278,6 +307,7 @@ export default function Montaggio({ showToast }: Props) {
       </div>
 
        <div className="flex justify-end gap-2 mb-2 no-print">
+          <button onClick={handleReset} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-red-500/10 flex items-center gap-2"><i className="fa-solid fa-rotate-right"></i> Reset</button>
           <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
           <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
           <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
@@ -544,6 +574,33 @@ export default function Montaggio({ showToast }: Props) {
                            />
                        </div>
 
+                        {/* Parametri Economici */}
+                        <div className="mb-6 border-t border-white/5 pt-4">
+                            <label className="text-[10px] text-emerald-500 font-bold uppercase tracking-wider mb-3 block">Parametri Economici</label>
+                            <div className="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Tariffa Gru €/gg</label>
+                                    <input 
+                                        type="number"
+                                        placeholder="2650"
+                                        value={dailyCraneCost} 
+                                        onChange={(e) => setDailyCraneCost(e.target.value)} 
+                                        className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Tariffa Piattaf. €/gg</label>
+                                    <input 
+                                        type="number"
+                                        placeholder="200"
+                                        value={dailyPlatformCost} 
+                                        onChange={(e) => setDailyPlatformCost(e.target.value)} 
+                                        className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                        {/* Input Adjustments */}
                        <div className="grid grid-cols-2 gap-3 mb-4">
                            <div>
@@ -593,7 +650,7 @@ export default function Montaggio({ showToast }: Props) {
                       </div>
                       <div className="h-px bg-white/10 my-2"></div>
                       <div className="flex justify-between items-center">
-                         <span className="text-xs text-slate-400 uppercase tracking-wider">Gru (2650€/gg)</span>
+                         <span className="text-xs text-slate-400 uppercase tracking-wider">Gru ({costResults.rates.dailyCrane}€/gg)</span>
                          <span className="font-mono text-slate-200">€ {costResults.crane.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -601,7 +658,7 @@ export default function Montaggio({ showToast }: Props) {
                          <span className="font-mono text-slate-200">€ {costResults.plat.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                         <span className="text-xs text-slate-400 uppercase tracking-wider">Trasferta (250€/gg)</span>
+                         <span className="text-xs text-slate-400 uppercase tracking-wider">Trasferta ({costResults.rates.dailyTravel}€/gg)</span>
                          <span className="font-mono text-slate-200">€ {costResults.travel.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center">
