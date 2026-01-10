@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { TabType } from './types';
 import Termica from './components/Termica';
@@ -133,6 +134,16 @@ export default function App() {
             <button onClick={() => setActiveTab('montaggio')} className={navClass('montaggio')}><i className="fa-solid fa-screwdriver-wrench"></i> Montaggio</button>
             <button onClick={() => setActiveTab('trasporto')} className={navClass('trasporto')}><i className="fa-solid fa-truck-fast"></i> Trasporto</button>
             <button onClick={() => setActiveTab('manufatti')} className={navClass('manufatti')}><i className="fa-solid fa-shapes"></i> Manufatti</button>
+            
+            {/* Pulsante Esterno Sister App */}
+            <a 
+              href="https://excelinsight-pro.netlify.app/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:text-white hover:border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)] whitespace-nowrap cursor-pointer select-none no-print"
+            >
+              <i className="fa-solid fa-file-excel"></i> ExcelInsight Pro
+            </a>
           </nav>
         </div>
       </header>
@@ -153,11 +164,48 @@ export default function App() {
       </main>
       
       {/* --- WEB FOOTER --- */}
-      <footer className="mt-12 py-8 text-center border-t border-white/5 bg-black/20 backdrop-blur-sm flex flex-col items-center gap-4 no-print">
-        <p className="text-slate-500 text-xs font-medium">&copy; {currentYear} OmniCalc Web. Designed for performance.</p>
-        <a href="https://app.netlify.com/projects/thermo-pro-calc-suite-v02/deploys" target="_blank" rel="noopener noreferrer">
-          <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />
-        </a>
+      <footer className="mt-12 py-12 px-6 border-t border-white/5 bg-black/40 backdrop-blur-md no-print">
+        <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
+          
+          <div className="flex flex-col items-center gap-3">
+             <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                <i className="fa-solid fa-shield-halved text-blue-400 text-xl"></i>
+             </div>
+             <span className="text-[10px] font-bold text-blue-400 tracking-[0.3em] uppercase">Proprietà Intellettuale & Sviluppo</span>
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-xl md:text-2xl font-bold text-white">
+              Software progettato e sviluppato da <span className="text-blue-500">Efrem Giannessi</span>
+            </h2>
+            <p className="text-slate-400 italic text-sm md:text-base font-medium">
+              Specialized Engineering Solutions for Precast Concrete Structures
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center items-center gap-6 text-[11px] font-bold text-slate-500 tracking-wider">
+            <span className="flex items-center gap-2">
+               <i className="fa-regular fa-copyright"></i> 2024-2025 ALL RIGHTS RESERVED
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+            <a href="https://www.efremgiannessi.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
+               <i className="fa-solid fa-globe"></i> EFREMGIANNESSI.ORG
+            </a>
+          </div>
+
+          <div className="pt-2">
+            <a href="https://app.netlify.com/projects/thermocalc-suite/deploys" target="_blank" rel="noopener noreferrer">
+              <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />
+            </a>
+          </div>
+
+          <div className="w-full mt-8 p-6 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm">
+             <p className="text-[10px] md:text-[11px] leading-relaxed text-slate-500 uppercase font-bold tracking-tight text-center">
+                AVVISO LEGALE: QUESTO SOFTWARE E GLI ALGORITMI DI CALCOLO CONTENUTI SONO DI PROPRIETÀ ESCLUSIVA DI EFREM GIANNESSI. 
+                QUALSIASI RIPRODUZIONE, DISTRIBUZIONE O UTILIZZO NON AUTORIZZATO DEL CODICE SORGENTE O DELLE LOGICHE TECNICHE È SEVERAMENTE VIETATO.
+             </p>
+          </div>
+        </div>
       </footer>
 
       {/* --- PRINT ONLY FOOTER --- */}
