@@ -1,15 +1,17 @@
+
 import { useState, useEffect, useRef } from 'react';
 
-const capoluoghiDB: Record<string, { z: string; n: string }> = { 
-  "milano":{z:"E", n:"I-pad"}, "roma":{z:"D", n:"III"}, "torino":{z:"E", n:"I-pad"}, 
-  "napoli":{z:"C", n:"II"}, "palermo":{z:"B", n:"II"}, "genova":{z:"D", n:"II"}, 
-  "bologna":{z:"E", n:"I-pad"}, "firenze":{z:"D", n:"II"}, "bari":{z:"C", n:"II"}, "catania":{z:"B", n:"II"} 
+const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
+  "milano":{z:"E", n:"I-pad", s:"4"}, "roma":{z:"D", n:"III", s:"2B"}, "torino":{z:"E", n:"I-pad", s:"4"}, 
+  "napoli":{z:"C", n:"II", s:"2"}, "palermo":{z:"B", n:"II", s:"2"}, "genova":{z:"D", n:"II", s:"3"}, 
+  "bologna":{z:"E", n:"I-pad", s:"3"}, "firenze":{z:"D", n:"II", s:"2"}, "bari":{z:"C", n:"II", s:"3"}, "catania":{z:"B", n:"II", s:"2"} 
 };
 
+// Valori aggiornati secondo Requisiti Minimi DM 2018/21 (nZEB)
 const trasmittanze = [ 
-  {zone:"A",win:3.0,hor:0.35,vert:0.43}, {zone:"B",win:3.0,hor:0.35,vert:0.43}, 
-  {zone:"C",win:2.2,hor:0.33,vert:0.34}, {zone:"D",win:1.8,hor:0.26,vert:0.29}, 
-  {zone:"E",win:1.4,hor:0.22,vert:0.26}, {zone:"F",win:1.1,hor:0.20,vert:0.24} 
+  {zone:"A",win:3.00,hor:0.32,vert:0.40}, {zone:"B",win:3.00,hor:0.32,vert:0.40}, 
+  {zone:"C",win:2.00,hor:0.32,vert:0.32}, {zone:"D",win:1.67,hor:0.24,vert:0.26}, 
+  {zone:"E",win:1.30,hor:0.21,vert:0.23}, {zone:"F",win:1.00,hor:0.19,vert:0.22} 
 ];
 
 interface Props {
@@ -24,6 +26,7 @@ export default function Termica({ showToast }: Props) {
   const [zone, setZone] = useState('E');
   const [alt, setAlt] = useState(0);
   const [snowZone, setSnowZone] = useState('I-med');
+  const [seismicZone, setSeismicZone] = useState('2');
   const [coeffCe, setCoeffCe] = useState(1);
   const [coeffCt, setCoeffCt] = useState(1);
   const [limits, setLimits] = useState({ vert: 0, hor: 0, win: 0 });
@@ -48,6 +51,7 @@ export default function Termica({ showToast }: Props) {
             if(d.zone) setZone(d.zone);
             if(d.alt) setAlt(d.alt);
             if(d.snowZone) setSnowZone(d.snowZone);
+            if(d.seismicZone) setSeismicZone(d.seismicZone);
             if(d.isoLambda) setIsoLambda(d.isoLambda);
             if(d.isoTarget) setIsoTarget(d.isoTarget);
             if(d.isoR) setIsoR(d.isoR);
@@ -65,7 +69,6 @@ export default function Termica({ showToast }: Props) {
 
     mapRef.current = L.map('mappaComune', { zoomControl: false }).setView([41.9028, 12.4964], 5);
     
-    // CAMBIO MAPPA: Usa OpenStreetMap standard a colori
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
       attribution: '© OpenStreetMap contributors', maxZoom: 18 
     }).addTo(mapRef.current);
@@ -134,6 +137,7 @@ export default function Termica({ showToast }: Props) {
     if(capoluoghiDB[cityKey]) {
       setZone(capoluoghiDB[cityKey].z);
       setSnowZone(capoluoghiDB[cityKey].n === "I-pad" ? "II" : capoluoghiDB[cityKey].n);
+      setSeismicZone(capoluoghiDB[cityKey].s);
     }
   };
 
@@ -151,13 +155,13 @@ export default function Termica({ showToast }: Props) {
 
   // --- ACTIONS ---
   const handleSave = () => {
-      const data = { mapInfo, zone, alt, snowZone, isoLambda, isoTarget, isoR };
+      const data = { mapInfo, zone, alt, snowZone, seismicZone, isoLambda, isoTarget, isoR };
       localStorage.setItem('termicaData', JSON.stringify(data));
       showToast('Dati salvati!');
   };
 
   const handleShare = async () => {
-      const text = `ThermoCalc Report - Termica\nLocalità: ${mapInfo.name}\nZona: ${zone}\nNeve: ${snowLoad} kN/mq\nIsolante: ${isoThickness} cm`;
+      const text = `ThermoCalc Report - Termica\nLocalità: ${mapInfo.name}\nZona Clim.: ${zone}\nZona Sism.: ${seismicZone}\nNeve: ${snowLoad} kN/mq\nIsolante: ${isoThickness} cm`;
       if (navigator.share) {
           try { await navigator.share({ title: 'ThermoCalc Termica', text }); } catch {}
       } else {
@@ -203,7 +207,6 @@ export default function Termica({ showToast }: Props) {
             </div>
           </div>
           <div className="glass-panel rounded-2xl p-1 flex-grow relative z-10 min-h-[400px]">
-            {/* Rimosso grayscale e opacity ridotta per avere la mappa a colori vivida */}
             <div id="mappaComune" className="h-[400px] w-full rounded-xl transition-all duration-700"></div>
             {mapInfo.name !== '--' && (
               <div className="absolute bottom-4 left-4 right-4 glass-panel bg-slate-900/80 rounded-xl p-4 z-[400] flex justify-between items-center backdrop-blur-md border border-white/10">
@@ -225,7 +228,7 @@ export default function Termica({ showToast }: Props) {
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-3">
                 <span className="bg-accent-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-accent-500 text-sm border border-accent-500/20"><i className="fa-solid fa-file-contract"></i></span>
-                Report Climatico
+                Report Climatico e Sismico
             </h2>
             <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">AUTOMATICO</span>
           </div>
@@ -247,6 +250,19 @@ export default function Termica({ showToast }: Props) {
                 <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Altitudine (m)</label>
                 <div className="relative">
                   <input type="number" value={alt} onChange={(e) => setAlt(parseFloat(e.target.value))} className="w-full glass-input rounded-xl p-4 text-sm font-mono font-bold" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Zona Sismica</label>
+                <div className="relative group">
+                  <select value={seismicZone} onChange={(e) => setSeismicZone(e.target.value)} className="w-full glass-input rounded-xl p-4 text-sm appearance-none cursor-pointer">
+                    <option value="1" className="bg-slate-800">Zona 1 (Sismicità alta)</option>
+                    <option value="2" className="bg-slate-800">Zona 2 (Sismicità media)</option>
+                    <option value="2B" className="bg-slate-800">Zona 2B</option>
+                    <option value="3" className="bg-slate-800">Zona 3 (Sismicità bassa)</option>
+                    <option value="4" className="bg-slate-800">Zona 4 (Sismicità molto bassa)</option>
+                  </select>
+                  <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover:text-white transition-colors"></i>
                 </div>
               </div>
             </div>
@@ -277,7 +293,7 @@ export default function Termica({ showToast }: Props) {
 
           <div className="mt-8 bg-black/20 rounded-2xl p-6 border border-white/5 shadow-inner">
              <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-5">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Limiti Trasmittanza (DM 2015)</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Limiti Trasmittanza (DM 2018/21)</span>
              </div>
              <div className="grid grid-cols-3 gap-4 text-center mb-8">
                 {[
@@ -293,15 +309,19 @@ export default function Termica({ showToast }: Props) {
                 ))}
              </div>
 
-             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 border-b border-white/5 pb-3">Carichi Ambientali</div>
-             <div className="grid grid-cols-2 gap-6">
-                 <div className="glass-input bg-emerald-500/5 border-emerald-500/10 rounded-xl p-4 flex justify-between items-center group cursor-pointer hover:bg-emerald-500/10" onClick={() => copy(snowLoad)}>
-                    <span className="text-xs text-emerald-400/70 font-bold uppercase">Carico Neve (kN/m²)</span>
-                    <span className="text-2xl font-bold text-emerald-400 font-mono group-hover:scale-110 transition-transform">{snowLoad}</span>
+             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 border-b border-white/5 pb-3">Carichi Ambientali & Sismica</div>
+             <div className="grid grid-cols-3 gap-4">
+                 <div className="glass-input bg-emerald-500/5 border-emerald-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-emerald-500/10" onClick={() => copy(snowLoad)}>
+                    <span className="text-[9px] text-emerald-400/70 font-bold uppercase mb-1">Neve (kN/m²)</span>
+                    <span className="text-xl font-bold text-emerald-400 font-mono group-hover:scale-110 transition-transform">{snowLoad}</span>
                  </div>
-                 <div className="glass-input bg-blue-500/5 border-blue-500/10 rounded-xl p-4 flex justify-between items-center group cursor-pointer hover:bg-blue-500/10" onClick={() => copy(zone)}>
-                    <span className="text-xs text-blue-400/70 font-bold uppercase">Zona Climatica</span>
-                    <span className="text-2xl font-bold text-blue-400 font-mono group-hover:scale-110 transition-transform">{zone}</span>
+                 <div className="glass-input bg-blue-500/5 border-blue-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-blue-500/10" onClick={() => copy(zone)}>
+                    <span className="text-[9px] text-blue-400/70 font-bold uppercase mb-1">Zona Climatica</span>
+                    <span className="text-xl font-bold text-blue-400 font-mono group-hover:scale-110 transition-transform">{zone}</span>
+                 </div>
+                 <div className="glass-input bg-red-500/5 border-red-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-red-500/10" onClick={() => copy(seismicZone)}>
+                    <span className="text-[9px] text-red-400/70 font-bold uppercase mb-1">Zona Sismica</span>
+                    <span className="text-xl font-bold text-red-400 font-mono group-hover:scale-110 transition-transform">{seismicZone}</span>
                  </div>
              </div>
           </div>
@@ -319,11 +339,29 @@ export default function Termica({ showToast }: Props) {
              <div className="relative group">
                 <select onChange={(e) => setIsoLambda(parseFloat(e.target.value))} className="w-full glass-input rounded-xl p-3 text-sm appearance-none cursor-pointer">
                 <option value="" className="bg-slate-800">Seleziona materiale...</option>
-                <option value="0.035" className="bg-slate-800">EPS/XPS (0.035)</option>
-                <option value="0.040" className="bg-slate-800">Lana di Roccia (0.040)</option>
-                <option value="0.022" className="bg-slate-800">Poliuretano (0.022)</option>
-                <option value="0.045" className="bg-slate-800">Sughero (0.045)</option>
-                <option value="0.25" className="bg-slate-800">Muratura Poroton (0.25)</option>
+                <optgroup label="Isolanti Sintetici" className="bg-slate-900 text-accent-400">
+                  <option value="0.035" className="bg-slate-800">EPS Standard (0.035)</option>
+                  <option value="0.030" className="bg-slate-800">EPS con Grafite (0.030)</option>
+                  <option value="0.035" className="bg-slate-800">XPS (0.035)</option>
+                  <option value="0.022" className="bg-slate-800">Poliuretano PIR/PUR (0.022)</option>
+                </optgroup>
+                <optgroup label="Isolanti Minerali" className="bg-slate-900 text-accent-400">
+                  <option value="0.040" className="bg-slate-800">Lana di Roccia (0.040)</option>
+                  <option value="0.035" className="bg-slate-800">Lana di Vetro (0.035)</option>
+                  <option value="0.042" className="bg-slate-800">Vetro Cellulare (0.042)</option>
+                  <option value="0.015" className="bg-slate-800">Aerogel (0.015)</option>
+                </optgroup>
+                <optgroup label="Isolanti Naturali" className="bg-slate-900 text-accent-400">
+                  <option value="0.045" className="bg-slate-800">Sughero (0.045)</option>
+                  <option value="0.040" className="bg-slate-800">Fibra di Legno (0.040)</option>
+                  <option value="0.045" className="bg-slate-800">Fibra di Canapa (0.045)</option>
+                </optgroup>
+                <optgroup label="Strutturali / Altri" className="bg-slate-900 text-accent-400">
+                  <option value="0.12" className="bg-slate-800">Calcestruzzo Aerato (0.12)</option>
+                  <option value="0.25" className="bg-slate-800">Muratura Poroton (0.25)</option>
+                  <option value="0.70" className="bg-slate-800">Mattoni Pieni (0.70)</option>
+                  <option value="0.06" className="bg-slate-800">Intonaco Termico (0.06)</option>
+                </optgroup>
                 </select>
                 <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
              </div>
