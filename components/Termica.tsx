@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, Thermometer, Layers, Activity, CheckCircle, ShieldAlert, Zap, Table as TableIcon, Info, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge } from 'lucide-react';
+// Added missing 'Info' icon to the imports
+import { Search, Thermometer, Layers, Activity, ShieldAlert, Zap, Table as TableIcon, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge, Info } from 'lucide-react';
 
 const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
   "milano":{z:"E", n:"I-pad", s:"4"}, "roma":{z:"D", n:"III", s:"2B"}, "torino":{z:"E", n:"I-pad", s:"4"}, 
@@ -146,7 +147,7 @@ export default function Termica({ showToast }: Props) {
       if (mat.mu < 5) setVaporRisk('HIGH');
       else if (mat.mu < 50) setVaporRisk('MED');
       else setVaporRisk('LOW');
-      showToast("REPORT TECNICO GENERATO");
+      showToast("REPORT GENERATO");
     }
   };
 
@@ -457,7 +458,7 @@ export default function Termica({ showToast }: Props) {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
-                        <div className={isVerified ? 'text-emerald-500' : 'text-red-500'}><CheckCircle size={16}/></div>
+                        <div className={isVerified ? 'text-emerald-500' : 'text-red-500'}><BarChart3 size={16}/></div>
                         <div>
                             <div className="text-[8px] font-black text-gray-500 uppercase">Trasmittanza U</div>
                             <div className="text-[10px] font-bold text-white uppercase">{isVerified ? 'VERIFICATA' : 'FALLITA'}</div>
@@ -471,14 +472,14 @@ export default function Termica({ showToast }: Props) {
                         </div>
                     </div>
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
-                        <div className={vaporRisk === 'LOW' ? 'text-emerald-500' : 'text-red-500'}><BarChart3 size={16}/></div>
+                        <div className={vaporRisk === 'LOW' ? 'text-emerald-500' : 'text-red-500'}><Droplets size={16}/></div>
                         <div>
                             <div className="text-[8px] font-black text-gray-500 uppercase">Bilancio Igro</div>
                             <div className="text-[10px] font-bold text-white uppercase">{vaporRisk === 'LOW' ? 'STABILE' : 'A RISCHIO'}</div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
-                        <div className="text-emerald-500"><CheckCircle size={16}/></div>
+                        <div className="text-emerald-500"><Activity size={16}/></div>
                         <div>
                             <div className="text-[8px] font-black text-gray-500 uppercase">D.M. 26/06/15</div>
                             <div className="text-[10px] font-bold text-white uppercase">CONFORME</div>

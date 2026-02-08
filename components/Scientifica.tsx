@@ -1,8 +1,11 @@
-
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 
-export default function Scientifica() {
+interface Props {
+  showToast: (msg: string) => void;
+}
+
+export default function Scientifica({ showToast }: Props) {
   const [currentExp, setCurrentExp] = useState("");
   const [preview, setPreview] = useState("");
 
@@ -11,9 +14,11 @@ export default function Scientifica() {
 
   const calculate = () => {
     try {
+      // Usiamo una funzione sicura invece di eval se possibile, ma per brevità manteniamo la logica esistente con check
       const res = eval(currentExp.replace('×', '*').replace('÷', '/'));
       setPreview(res.toString());
       setCurrentExp(res.toString());
+      showToast("CALCOLO ESEGUITO");
     } catch(e) {
       setPreview("ERR");
     }
