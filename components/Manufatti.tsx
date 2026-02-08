@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -34,17 +35,15 @@ const DATA = {
 export default function Manufatti({ showToast }: Props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
   const [category, setCategory] = useState<Category>('Alare');
   const [search, setSearch] = useState('');
 
   const checkPassword = () => {
     if (password === '5575741') {
       setIsAuthenticated(true);
-      setError(false);
     } else {
-      setError(true);
       setPassword('');
+      showToast('Password Errata');
     }
   };
 

@@ -1,5 +1,6 @@
+
 import { useState, useEffect, useRef } from 'react';
-import { Search, Thermometer, Wind, Layers, Activity, CheckCircle, XCircle, ShieldAlert, Zap, Table as TableIcon, Info, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge } from 'lucide-react';
+import { Search, Thermometer, Layers, Activity, CheckCircle, ShieldAlert, Zap, Table as TableIcon, Info, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge } from 'lucide-react';
 
 const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
   "milano":{z:"E", n:"I-pad", s:"4"}, "roma":{z:"D", n:"III", s:"2B"}, "torino":{z:"E", n:"I-pad", s:"4"}, 
@@ -171,7 +172,7 @@ export default function Termica({ showToast }: Props) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <span className="industrial-label text-orange-600">MODULO_01_DINAMICA_TERMICA_SISMICA_PROFESSIONAL</span>
+          <span className="industrial-label text-orange-600">MODULO_01_DINAMICA_TERMICA_SISMICA_V12</span>
           <h1 className="text-xl font-black uppercase tracking-tighter text-white">Ingegneria Climatica & NTC</h1>
         </div>
         <button 
@@ -450,7 +451,10 @@ export default function Termica({ showToast }: Props) {
 
             {/* Matrice di Verifica Finale */}
             <div className="lg:col-span-12 glass-card rounded-2xl p-6 border-emerald-500/20 bg-emerald-950/5">
-                <span className="industrial-label mb-4 flex items-center gap-2 text-emerald-500"><ClipboardCheck size={12}/> Matrice di Validazione Requisiti Minimi</span>
+                <div className="flex justify-between items-center mb-4">
+                    <span className="industrial-label !mb-0 flex items-center gap-2 text-emerald-500"><ClipboardCheck size={12}/> Matrice di Validazione Requisiti Minimi</span>
+                    <span className="text-[8px] font-mono text-gray-500 uppercase">LOCALITÀ_REF: {mapInfo.name}</span>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
                         <div className={isVerified ? 'text-emerald-500' : 'text-red-500'}><CheckCircle size={16}/></div>
@@ -460,14 +464,14 @@ export default function Termica({ showToast }: Props) {
                         </div>
                     </div>
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
-                        <div className={thermalLag > 8 ? 'text-emerald-500' : 'text-amber-500'}><CheckCircle size={16}/></div>
+                        <div className={thermalLag > 8 ? 'text-emerald-500' : 'text-amber-500'}><TrendingUp size={16}/></div>
                         <div>
                             <div className="text-[8px] font-black text-gray-500 uppercase">Sfasamento Estivo</div>
                             <div className="text-[10px] font-bold text-white uppercase">{thermalLag > 8 ? 'ECCELLENTE' : 'MINIMO'}</div>
                         </div>
                     </div>
                     <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
-                        <div className={vaporRisk === 'LOW' ? 'text-emerald-500' : 'text-red-500'}><CheckCircle size={16}/></div>
+                        <div className={vaporRisk === 'LOW' ? 'text-emerald-500' : 'text-red-500'}><BarChart3 size={16}/></div>
                         <div>
                             <div className="text-[8px] font-black text-gray-500 uppercase">Bilancio Igro</div>
                             <div className="text-[10px] font-bold text-white uppercase">{vaporRisk === 'LOW' ? 'STABILE' : 'A RISCHIO'}</div>
@@ -494,7 +498,7 @@ export default function Termica({ showToast }: Props) {
                 </div>
                 <div className="flex gap-2 no-print">
                     <button onClick={() => window.print()} className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-900/20 flex items-center gap-2">
-                        <Printer size={12}/> Esporta Documento
+                        <FileText size={12}/> Esporta Documento
                     </button>
                 </div>
             </div>
@@ -503,6 +507,3 @@ export default function Termica({ showToast }: Props) {
     </div>
   );
 }
-
-// Icona Printer mancante negli import di lucide-react, la aggiungo simbolicamente qui se non presente
-const Printer = ({ size }: { size: number }) => <FileText size={size} />;

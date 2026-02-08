@@ -1,10 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { TabType } from './types';
 import { 
   Thermometer, 
   Calculator, 
   Percent, 
-  TrendingUp, 
   LineChart, 
   Ruler, 
   Scale, 

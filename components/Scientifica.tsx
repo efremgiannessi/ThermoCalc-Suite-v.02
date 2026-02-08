@@ -1,11 +1,8 @@
+
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 
-interface Props {
-  showToast: (msg: string) => void;
-}
-
-export default function Scientifica({ showToast }: Props) {
+export default function Scientifica() {
   const [currentExp, setCurrentExp] = useState("");
   const [preview, setPreview] = useState("");
 
