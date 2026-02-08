@@ -1,6 +1,24 @@
-
 import { useState, useEffect } from 'react';
 import { TabType } from './types';
+import { 
+  Thermometer, 
+  Calculator, 
+  Percent, 
+  TrendingUp, 
+  LineChart, 
+  Ruler, 
+  Scale, 
+  Wrench, 
+  Truck, 
+  Shapes, 
+  LayoutDashboard,
+  ShieldCheck,
+  Printer,
+  ChevronRight,
+  Menu,
+  Activity
+} from 'lucide-react';
+
 import Termica from './components/Termica';
 import Scientifica from './components/Scientifica';
 import Commerciale from './components/Commerciale';
@@ -15,22 +33,22 @@ import Manufatti from './components/Manufatti';
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('termica');
   const [toast, setToast] = useState({ show: false, message: '' });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // SEO: Update document title based on active tab
   useEffect(() => {
     const titles: Record<TabType, string> = {
-        termica: "Calcolo Termico & Zone Climatiche",
-        commerciale: "Calcoli Commerciali & Parcella",
-        percentuali: "Calcolo Percentuali & Variazioni",
-        scientifica: "Calcolatrice Scientifica",
-        interpol: "Interpolazione Lineare",
-        pendenze: "Calcolo Pendenze & Gradi",
-        pesi: "Calcolo Pesi Materiali",
-        montaggio: "Preventivo Montaggio Edile",
-        trasporto: "Preventivo Trasporti & Logistica",
-        manufatti: "Database Manufatti & Travi"
+        termica: "Thermal Engineering",
+        commerciale: "Commercial Analysis",
+        percentuali: "Percent Calculations",
+        scientifica: "Precision Math",
+        interpol: "Linear Interpolation",
+        pendenze: "Slopes & Degrees",
+        pesi: "Material Mass",
+        montaggio: "Mounting Budget",
+        trasporto: "Logistics",
+        manufatti: "Component DB"
     };
-    document.title = `OmniCalc | ${titles[activeTab]}`;
+    document.title = `OMNICALC | ${titles[activeTab].toUpperCase()}`;
   }, [activeTab]);
 
   const showToast = (msg: string) => {
@@ -38,118 +56,105 @@ export default function App() {
     setTimeout(() => setToast({ show: false, message: '' }), 2500);
   };
 
-  const navClass = (tab: TabType) => 
-    `flex items-center gap-2 px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 border whitespace-nowrap cursor-pointer select-none backdrop-blur-md ${
-      activeTab === tab 
-        ? 'bg-accent-600/20 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] border-accent-500/50' 
-        : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border-white/5 hover:border-white/10'
-    }`;
-
-  const currentYear = new Date().getFullYear();
+  const navItems: { id: TabType; label: string; icon: any }[] = [
+    { id: 'termica', label: 'Thermal Dynamics', icon: Thermometer },
+    { id: 'scientifica', label: 'Scientific Math', icon: Calculator },
+    { id: 'commerciale', label: 'Commercial Dashboard', icon: LayoutDashboard },
+    { id: 'percentuali', label: 'Variazioni %', icon: Percent },
+    { id: 'interpol', label: 'Interpolazione', icon: LineChart },
+    { id: 'pendenze', label: 'Pendenze e Gradi', icon: Ruler },
+    { id: 'pesi', label: 'Pesi Materiali', icon: Scale },
+    { id: 'montaggio', label: 'Preventivo Montaggio', icon: Wrench },
+    { id: 'trasporto', label: 'Logistica / Trasporto', icon: Truck },
+    { id: 'manufatti', label: 'Database Manufatti', icon: Shapes },
+  ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen bg-app-bg text-gray-200">
       
-      {/* --- PRINT ONLY HEADER --- */}
-      <div className="print-only hidden w-full border-b-2 border-black pb-4 mb-6">
-        <div className="flex justify-between items-start">
-            <div className="flex items-center gap-3">
-                <i className="fa-solid fa-cube text-3xl"></i>
-                <div>
-                    <h1 className="text-3xl font-bold leading-none">OmniCalc Suite</h1>
-                    <p className="text-sm text-gray-600 mt-1">Professional Technical Reports</p>
-                </div>
+      {/* Sidebar */}
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-app-panel border-r border-app-border transition-all duration-300 flex flex-col no-print z-50`}>
+        <div className="p-6 flex items-center gap-3 border-b border-app-border">
+          <div className="bg-orange-600 p-2 rounded-xl shadow-lg shadow-orange-900/20">
+            <ShieldCheck size={20} className="text-white" />
+          </div>
+          {isSidebarOpen && (
+            <div className="flex flex-col">
+              <span className="text-white font-black uppercase tracking-tighter text-xl">OmniCalc</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.3em] text-orange-500">v11.0 Industrial</span>
             </div>
-            <div className="text-right">
-                <p className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-1">Software progettato e sviluppato da</p>
-                <p className="text-lg font-bold">Efrem Giannessi</p>
-                <p className="text-xl font-bold text-blue-700 underline mt-1">https://www.efremgiannessi.org/</p>
-            </div>
-        </div>
-      </div>
-      {/* ------------------------- */}
-
-      {/* Toast Notification */}
-      <div 
-        className={`toast-container fixed z-[9999] left-1/2 bottom-[30px] -translate-x-1/2 glass-panel bg-slate-900/90 text-white px-6 py-4 rounded-xl flex items-center gap-3 transition-all duration-500 shadow-2xl ${toast.show ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95 pointer-events-none'}`}
-      >
-        <div className="bg-emerald-500/20 w-8 h-8 rounded-full flex items-center justify-center text-emerald-500 border border-emerald-500/30">
-           <i className="fa-solid fa-check"></i>
-        </div>
-        <span className="font-medium text-sm">{toast.message}</span>
-      </div>
-
-      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-slate-900/60 no-print">
-        {/* Banner Efrem Giannessi */}
-        <div className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-slate-300 text-xs md:text-sm font-medium text-center py-2.5 border-b border-white/10 relative overflow-hidden shadow-md">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-30"></div>
-            <p className="flex justify-center items-center gap-1.5 flex-wrap px-4">
-              <i className="fa-solid fa-code text-indigo-400 text-[10px]"></i>
-              Software progettato e sviluppato da 
-              <a 
-                href="https://www.efremgiannessi.org" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-white font-bold hover:text-indigo-400 transition-all duration-300 underline decoration-indigo-500/50 underline-offset-2 hover:decoration-indigo-400 decoration-1"
-              >
-                Efrem Giannessi
-              </a>
-            </p>
+          )}
         </div>
 
-        <div className="w-[95%] max-w-[1800px] mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
-            <div className="flex items-center gap-4">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-40 group-hover:opacity-75 transition duration-200"></div>
-                <div className="relative bg-slate-900 border border-white/10 w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-xl">
-                    <i className="fa-solid fa-cube text-xl bg-gradient-to-br from-blue-400 to-indigo-400 text-transparent bg-clip-text"></i>
-                </div>
+        <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-1 custom-scrollbar">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group ${
+                activeTab === item.id 
+                  ? 'bg-orange-600 text-white shadow-xl shadow-orange-900/30' 
+                  : 'text-gray-500 hover:bg-gray-800/50 hover:text-gray-300'
+              }`}
+            >
+              <item.icon size={18} className={activeTab === item.id ? 'text-white' : 'text-gray-500 group-hover:text-orange-500'} />
+              {isSidebarOpen && <span className="text-[10px] font-black uppercase tracking-widest truncate">{item.label}</span>}
+            </button>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t border-app-border">
+          <a href="https://www.efremgiannessi.org" target="_blank" className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 group transition-all">
+             <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center group-hover:bg-orange-600 transition-colors">
+                <ChevronRight size={14} className="text-gray-500 group-hover:text-white" />
+             </div>
+             {isSidebarOpen && (
+               <div className="flex flex-col">
+                 <span className="industrial-label !mb-0 text-gray-600">Developer</span>
+                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-white transition-colors">Efrem Giannessi</span>
+               </div>
+             )}
+          </a>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        {/* Header */}
+        <header className="h-16 border-b border-app-border bg-app-panel/60 backdrop-blur-md flex items-center justify-between px-8 no-print shrink-0">
+          <div className="flex items-center gap-6">
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-500 hover:text-orange-500">
+              <Menu size={20} />
+            </button>
+            <div className="flex items-center gap-4 border-l border-app-border pl-6">
+              <h2 className="text-white font-black uppercase tracking-tighter text-sm">
+                System_Node: <span className="text-orange-500 ml-1">{activeTab.toUpperCase()}</span>
+              </h2>
+              <div className="flex gap-1">
+                {[1,2,3].map(i => <div key={i} className="w-4 h-1 bg-orange-600 rounded-full opacity-50"></div>)}
               </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-white leading-none">
-                  Omni<span className="text-accent-500">Calc</span>
-                </h1>
-                <span className="text-xs text-slate-400 font-medium tracking-wide">Professional Suite v11.0</span>
-              </div>
-            </div>
-            
-            <div className="hidden md:block text-right">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Stato Sistema</div>
-                <div className="flex items-center gap-2 justify-end">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></span>
-                    <span className="text-xs text-slate-300">Online & Ready</span>
-                </div>
             </div>
           </div>
           
-          <nav className="flex flex-wrap justify-center gap-2 pb-2">
-            <button onClick={() => setActiveTab('termica')} className={navClass('termica')}><i className="fa-solid fa-temperature-half"></i> Termica</button>
-            <button onClick={() => setActiveTab('commerciale')} className={navClass('commerciale')}><i className="fa-solid fa-shop"></i> Commerciale</button>
-            <button onClick={() => setActiveTab('percentuali')} className={navClass('percentuali')}><i className="fa-solid fa-percent"></i> %</button>
-            <button onClick={() => setActiveTab('scientifica')} className={navClass('scientifica')}><i className="fa-solid fa-calculator"></i> Scientifica</button>
-            <button onClick={() => setActiveTab('interpol')} className={navClass('interpol')}><i className="fa-solid fa-chart-line"></i> Interpolazione</button>
-            <button onClick={() => setActiveTab('pendenze')} className={navClass('pendenze')}><i className="fa-solid fa-ruler-triangle"></i> Pendenze</button>
-            <button onClick={() => setActiveTab('pesi')} className={navClass('pesi')}><i className="fa-solid fa-weight-hanging"></i> Pesi</button>
-            <button onClick={() => setActiveTab('montaggio')} className={navClass('montaggio')}><i className="fa-solid fa-screwdriver-wrench"></i> Montaggio</button>
-            <button onClick={() => setActiveTab('trasporto')} className={navClass('trasporto')}><i className="fa-solid fa-truck-fast"></i> Trasporto</button>
-            <button onClick={() => setActiveTab('manufatti')} className={navClass('manufatti')}><i className="fa-solid fa-shapes"></i> Manufatti</button>
-            
-            {/* Pulsante Esterno Sister App */}
-            <a 
-              href="https://excelinsight-pro.netlify.app/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:text-white hover:border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)] whitespace-nowrap cursor-pointer select-none no-print"
-            >
-              <i className="fa-solid fa-file-excel"></i> ExcelInsight Pro
-            </a>
-          </nav>
-        </div>
-      </header>
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-end">
+                <span className="industrial-label !mb-0">Status</span>
+                <span className="text-[10px] font-mono font-bold text-emerald-500 flex items-center gap-1.5">
+                  <Activity size={10} /> CORE_SYNC_OK
+                </span>
+              </div>
+            </div>
+            <button onClick={() => window.print()} className="bg-gray-800 hover:bg-orange-600 text-white p-2.5 rounded-xl transition-all border border-gray-700 shadow-md">
+              <Printer size={16} />
+            </button>
+          </div>
+        </header>
 
-      <main className="flex-grow w-[95%] max-w-[1800px] mx-auto px-4 py-8">
-        <div className="transition-all duration-500 ease-in-out animate-fade-in">
+        {/* Viewport */}
+        <section className="flex-1 overflow-y-auto p-8 bg-app-bg custom-scrollbar relative">
+          <div className="max-w-7xl mx-auto animate-fade-in pb-12">
             {activeTab === 'termica' && <Termica showToast={showToast} />}
             {activeTab === 'commerciale' && <Commerciale showToast={showToast} />}
             {activeTab === 'percentuali' && <Percentuali showToast={showToast} />}
@@ -160,66 +165,23 @@ export default function App() {
             {activeTab === 'montaggio' && <Montaggio showToast={showToast} />}
             {activeTab === 'trasporto' && <Trasporto showToast={showToast} />}
             {activeTab === 'manufatti' && <Manufatti showToast={showToast} />}
+          </div>
+        </section>
+
+        {/* Toast Notification */}
+        <div 
+          className={`fixed z-[9999] right-8 bottom-8 glass-card p-4 rounded-2xl flex items-center gap-4 transition-all duration-500 shadow-2xl border-orange-500/20 ${toast.show ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+        >
+          <div className="bg-emerald-500 p-1.5 rounded-lg text-white">
+            <ShieldCheck size={16} />
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-widest text-white">{toast.message}</span>
         </div>
       </main>
-      
-      {/* --- WEB FOOTER --- */}
-      <footer className="mt-12 py-12 px-6 border-t border-white/5 bg-black/40 backdrop-blur-md no-print">
-        <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
-          
-          <div className="flex flex-col items-center gap-3">
-             <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                <i className="fa-solid fa-shield-halved text-blue-400 text-xl"></i>
-             </div>
-             <span className="text-[10px] font-bold text-blue-400 tracking-[0.3em] uppercase">Proprietà Intellettuale & Sviluppo</span>
-          </div>
 
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-bold text-white">
-              Software progettato e sviluppato da <span className="text-blue-500">Efrem Giannessi</span>
-            </h2>
-            <p className="text-slate-400 italic text-sm md:text-base font-medium">
-              Specialized Engineering Solutions for Precast Concrete Structures
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center items-center gap-6 text-[11px] font-bold text-slate-500 tracking-wider">
-            <span className="flex items-center gap-2">
-               <i className="fa-regular fa-copyright"></i> 2024-2025 ALL RIGHTS RESERVED
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
-            <a href="https://www.efremgiannessi.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-blue-400 transition-colors">
-               <i className="fa-solid fa-globe"></i> EFREMGIANNESSI.ORG
-            </a>
-          </div>
-
-          <div className="pt-2">
-            <a href="https://app.netlify.com/projects/thermocalc-suite/deploys" target="_blank" rel="noopener noreferrer">
-              <img src="https://api.netlify.com/api/v1/badges/e58a0b7e-e2bc-4230-a89a-1b88bb346d93/deploy-status" alt="Netlify Status" />
-            </a>
-          </div>
-
-          <div className="w-full mt-8 p-6 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm">
-             <p className="text-[10px] md:text-[11px] leading-relaxed text-slate-500 uppercase font-bold tracking-tight text-center">
-                AVVISO LEGALE: QUESTO SOFTWARE E GLI ALGORITMI DI CALCOLO CONTENUTI SONO DI PROPRIETÀ ESCLUSIVA DI EFREM GIANNESSI. 
-                QUALSIASI RIPRODUZIONE, DISTRIBUZIONE O UTILIZZO NON AUTORIZZATO DEL CODICE SORGENTE O DELLE LOGICHE TECNICHE È SEVERAMENTE VIETATO.
-             </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* --- PRINT ONLY FOOTER --- */}
-      <div className="print-only hidden w-full border-t border-black pt-4 mt-8">
-          <div className="text-center space-y-2">
-              <p className="font-bold text-sm uppercase">Copyright © {currentYear} Efrem Giannessi. Tutti i diritti riservati.</p>
-              <p className="text-xs text-gray-600 px-10">
-                  Il presente report è stato generato automaticamente tramite il software <strong>OmniCalc Suite</strong>. 
-                  È severamente vietata la riproduzione, distribuzione, modifica o ingegneria inversa del software senza autorizzazione esplicita. 
-                  L'utilizzo dei dati e dei calcoli contenuti in questo documento è a totale discrezione e responsabilità dell'utente professionale. 
-                  L'autore non si assume responsabilità per eventuali errori o imprecisioni nei calcoli automatici.
-              </p>
-              <p className="font-bold text-xs pt-2">https://www.efremgiannessi.org/</p>
-          </div>
+      {/* Print Footer Elements */}
+      <div className="print-only hidden print:block fixed bottom-0 left-0 right-0 p-8 border-t border-gray-300 text-center text-[10px] text-gray-500">
+        OMNICALC ENGINEERING SUITE v11.0 - DEVELOPED BY EFREM GIANNESSI - WWW.EFREMGIANNESSI.ORG
       </div>
     </div>
   );

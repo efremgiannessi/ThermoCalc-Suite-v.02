@@ -1,5 +1,5 @@
-
 import { useState, useEffect, useRef } from 'react';
+import { Search, MapPin, Thermometer, Wind, Zap, Layers, Activity } from 'lucide-react';
 
 const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
   "milano":{z:"E", n:"I-pad", s:"4"}, "roma":{z:"D", n:"III", s:"2B"}, "torino":{z:"E", n:"I-pad", s:"4"}, 
@@ -7,7 +7,6 @@ const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = {
   "bologna":{z:"E", n:"I-pad", s:"3"}, "firenze":{z:"D", n:"II", s:"2"}, "bari":{z:"C", n:"II", s:"3"}, "catania":{z:"B", n:"II", s:"2"} 
 };
 
-// Valori aggiornati secondo Requisiti Minimi DM 2018/21 (nZEB)
 const trasmittanze = [ 
   {zone:"A",win:3.00,hor:0.32,vert:0.40}, {zone:"B",win:3.00,hor:0.32,vert:0.40}, 
   {zone:"C",win:2.00,hor:0.32,vert:0.32}, {zone:"D",win:1.67,hor:0.24,vert:0.26}, 
@@ -41,44 +40,15 @@ export default function Termica({ showToast }: Props) {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
 
-  // Load Saved Data
-  useEffect(() => {
-    const saved = localStorage.getItem('termicaData');
-    if (saved) {
-        try {
-            const d = JSON.parse(saved);
-            if(d.mapInfo) setMapInfo(d.mapInfo);
-            if(d.zone) setZone(d.zone);
-            if(d.alt) setAlt(d.alt);
-            if(d.snowZone) setSnowZone(d.snowZone);
-            if(d.seismicZone) setSeismicZone(d.seismicZone);
-            if(d.isoLambda) setIsoLambda(d.isoLambda);
-            if(d.isoTarget) setIsoTarget(d.isoTarget);
-            if(d.isoR) setIsoR(d.isoR);
-        } catch(e) { console.error("Error loading data", e); }
-    }
-  }, []);
-
-  // Initialize Map
   useEffect(() => {
     if (!document.getElementById('mappaComune') || mapRef.current) return;
-    
-    // @ts-ignore
     const L = window.L;
     if(!L) return;
-
     mapRef.current = L.map('mappaComune', { zoomControl: false }).setView([41.9028, 12.4964], 5);
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-      attribution: '© OpenStreetMap contributors', maxZoom: 18 
-    }).addTo(mapRef.current);
-    
-    L.control.zoom({ position: 'bottomright' }).addTo(mapRef.current);
-
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapRef.current);
     setTimeout(() => mapRef.current?.invalidateSize(), 200);
   }, []);
 
-  // Update Calculations
   useEffect(() => {
     const d = trasmittanze.find(x => x.zone === zone);
     if(d) setLimits({ vert: d.vert, hor: d.hor, win: d.win });
@@ -93,7 +63,6 @@ export default function Termica({ showToast }: Props) {
     const mu1 = 0.8; 
     const qs = qsk * mu1 * coeffCe * coeffCt;
     setSnowLoad(qs.toFixed(2));
-
   }, [zone, alt, snowZone, coeffCe, coeffCt]);
 
   const handleSearch = async (query: string) => {
@@ -104,7 +73,7 @@ export default function Termica({ showToast }: Props) {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&countrycodes=it&limit=5`);
       const data = await res.json();
       setResults(data);
-    } catch(e) { console.error(e); }
+    } catch(e) {}
     setLoading(false);
   };
 
@@ -115,7 +84,6 @@ export default function Termica({ showToast }: Props) {
     const lat = parseFloat(item.lat);
     const lon = parseFloat(item.lon);
     
-    // @ts-ignore
     const L = window.L;
     if(mapRef.current && L) {
       if(markerRef.current) mapRef.current.removeLayer(markerRef.current);
@@ -141,11 +109,6 @@ export default function Termica({ showToast }: Props) {
     }
   };
 
-  const copy = (txt: string | number) => {
-    navigator.clipboard.writeText(txt.toString());
-    showToast('Copiato!');
-  };
-
   const calcIso = () => {
     if(isoLambda && isoTarget) {
       const val = Math.max(0, (1/isoTarget - isoR) * isoLambda * 100);
@@ -153,245 +116,186 @@ export default function Termica({ showToast }: Props) {
     }
   };
 
-  // --- ACTIONS ---
-  const handleSave = () => {
-      const data = { mapInfo, zone, alt, snowZone, seismicZone, isoLambda, isoTarget, isoR };
-      localStorage.setItem('termicaData', JSON.stringify(data));
-      showToast('Dati salvati!');
-  };
-
-  const handleShare = async () => {
-      const text = `ThermoCalc Report - Termica\nLocalità: ${mapInfo.name}\nZona Clim.: ${zone}\nZona Sism.: ${seismicZone}\nNeve: ${snowLoad} kN/mq\nIsolante: ${isoThickness} cm`;
-      if (navigator.share) {
-          try { await navigator.share({ title: 'ThermoCalc Termica', text }); } catch {}
-      } else {
-          copy(text);
-          showToast('Report copiato negli appunti');
-      }
-  };
-
   return (
-    <div className="space-y-8 animate-slide-in">
+    <div className="space-y-8">
       
-      {/* Toolbar */}
-      <div className="flex justify-end gap-2 no-print">
-          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
-          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
-          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+      {/* Module Title */}
+      <div className="flex flex-col gap-1">
+        <span className="industrial-label">01_Climatic_Parameters_Module</span>
+        <h1 className="text-4xl font-black uppercase tracking-tighter text-white">Thermal Dynamics</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Map & Search */}
-        <div className="lg:col-span-5 flex flex-col gap-6 print-break-inside">
-          <div className="glass-panel rounded-2xl p-6 relative z-20">
-            <label className="text-[11px] text-accent-400 font-bold uppercase tracking-widest mb-3 block">Ricerca Località</label>
-            <div className="relative group">
+        {/* Left Col: Map/Search */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="glass-card rounded-3xl p-6 border-orange-500/10">
+            <span className="industrial-label">Geospatial Search</span>
+            <div className="relative">
               <input 
                 type="text" 
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
-                placeholder="Digita il comune..." 
-                className="w-full glass-input rounded-xl pl-11 pr-4 py-4 text-sm" 
+                placeholder="LOCALITÀ / COMUNE..." 
+                className="w-full industrial-input rounded-2xl p-4 pl-12 text-xs" 
               />
-              <i className="fa-solid fa-magnifying-glass absolute left-4 top-4.5 text-slate-400 group-focus-within:text-accent-500 transition-colors"></i>
-              {loading && <i className="fa-solid fa-spinner fa-spin absolute right-4 top-4.5 text-accent-500"></i>}
+              <Search className="absolute left-4 top-3.5 text-gray-500" size={16} />
+              {loading && <div className="absolute right-4 top-4 animate-spin text-orange-500"><Activity size={16} /></div>}
+              
               {results.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 glass-panel bg-slate-900/95 rounded-xl overflow-hidden z-50 animate-fade-in">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-app-panel border border-app-border rounded-2xl overflow-hidden z-[100] shadow-2xl">
                   {results.map((r, i) => (
-                    <div key={i} onClick={() => selectComune(r)} className="p-3 hover:bg-accent-600/30 cursor-pointer text-sm text-slate-200 border-b border-white/5 last:border-0 transition-colors flex items-center gap-2">
-                      <i className="fa-solid fa-location-dot text-slate-500 text-xs"></i> {r.display_name}
-                    </div>
+                    <button key={i} onClick={() => selectComune(r)} className="w-full text-left p-4 hover:bg-orange-600/10 text-[10px] font-bold uppercase tracking-widest border-b border-app-border last:border-0 transition-colors">
+                      {r.display_name}
+                    </button>
                   ))}
                 </div>
               )}
             </div>
           </div>
-          <div className="glass-panel rounded-2xl p-1 flex-grow relative z-10 min-h-[400px]">
-            <div id="mappaComune" className="h-[400px] w-full rounded-xl transition-all duration-700"></div>
+
+          <div className="glass-card rounded-3xl p-1 overflow-hidden min-h-[350px] relative">
+            <div id="mappaComune" className="h-[350px] w-full rounded-[20px] grayscale brightness-50 opacity-50 hover:grayscale-0 hover:brightness-100 hover:opacity-100 transition-all duration-700"></div>
             {mapInfo.name !== '--' && (
-              <div className="absolute bottom-4 left-4 right-4 glass-panel bg-slate-900/80 rounded-xl p-4 z-[400] flex justify-between items-center backdrop-blur-md border border-white/10">
+              <div className="absolute bottom-4 left-4 right-4 bg-app-panel/90 backdrop-blur-md border border-app-border p-4 rounded-2xl flex justify-between items-center">
                 <div>
-                  <div className="text-[10px] text-accent-400 font-bold uppercase tracking-wider mb-1">Posizione</div>
-                  <div className="text-white font-bold text-lg leading-none">{mapInfo.name}</div>
+                  <span className="industrial-label !mb-0">Selected Node</span>
+                  <div className="text-white font-black uppercase tracking-tighter">{mapInfo.name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[10px] text-slate-400 mb-1 uppercase">Altitudine</div>
-                  <div className="text-2xl font-mono text-white leading-none">{mapInfo.alt} <span className="text-sm text-slate-500 font-sans">m</span></div>
+                  <span className="industrial-label !mb-0">Elevation</span>
+                  <div className="text-orange-500 font-mono font-bold">{mapInfo.alt} <span className="text-[10px] text-gray-500">M</span></div>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Parameters */}
-        <div className="lg:col-span-7 glass-panel rounded-2xl p-8 print-break-inside">
-          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-            <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <span className="bg-accent-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-accent-500 text-sm border border-accent-500/20"><i className="fa-solid fa-file-contract"></i></span>
-                Report Climatico e Sismico
-            </h2>
-            <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">AUTOMATICO</span>
-          </div>
+        {/* Right Col: Parameters */}
+        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <div>
-                <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Zona Climatica</label>
-                <div className="relative group">
-                  <select value={zone} onChange={(e) => setZone(e.target.value)} className="w-full glass-input rounded-xl p-4 text-sm appearance-none cursor-pointer">
-                    <option value="A" className="bg-slate-800">Zona A</option><option value="B" className="bg-slate-800">Zona B</option>
-                    <option value="C" className="bg-slate-800">Zona C</option><option value="D" className="bg-slate-800">Zona D</option>
-                    <option value="E" className="bg-slate-800">Zona E</option><option value="F" className="bg-slate-800">Zona F</option>
-                  </select>
-                  <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover:text-white transition-colors"></i>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Altitudine (m)</label>
-                <div className="relative">
-                  <input type="number" value={alt} onChange={(e) => setAlt(parseFloat(e.target.value))} className="w-full glass-input rounded-xl p-4 text-sm font-mono font-bold" />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Zona Sismica</label>
-                <div className="relative group">
-                  <select value={seismicZone} onChange={(e) => setSeismicZone(e.target.value)} className="w-full glass-input rounded-xl p-4 text-sm appearance-none cursor-pointer">
-                    <option value="1" className="bg-slate-800">Zona 1 (Sismicità alta)</option>
-                    <option value="2" className="bg-slate-800">Zona 2 (Sismicità media)</option>
-                    <option value="2B" className="bg-slate-800">Zona 2B</option>
-                    <option value="3" className="bg-slate-800">Zona 3 (Sismicità bassa)</option>
-                    <option value="4" className="bg-slate-800">Zona 4 (Sismicità molto bassa)</option>
-                  </select>
-                  <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover:text-white transition-colors"></i>
-                </div>
-              </div>
+          {/* Card: Climate */}
+          <div className="glass-card rounded-3xl p-8 border-orange-500/10 flex flex-col justify-between">
+            <div className="flex items-center gap-3 mb-8">
+               <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
+                <Thermometer size={18} />
+               </div>
+               <h3 className="text-white font-black uppercase tracking-widest text-xs">Climatic Zone Data</h3>
             </div>
             
-            <div className="space-y-6 md:pl-8 md:border-l border-white/5">
+            <div className="space-y-6">
               <div>
-                <label className="text-xs text-slate-400 block mb-2 font-medium ml-1 uppercase tracking-wide">Zona Neve</label>
-                <div className="relative group">
-                  <select value={snowZone} onChange={(e) => setSnowZone(e.target.value)} className="w-full glass-input rounded-xl p-4 text-sm appearance-none cursor-pointer">
-                    <option value="I-med" className="bg-slate-800">I - Mediterranea</option><option value="I-alp" className="bg-slate-800">I - Alpina</option>
-                    <option value="II" className="bg-slate-800">Zona II</option><option value="III" className="bg-slate-800">Zona III</option>
-                  </select>
-                  <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover:text-white transition-colors"></i>
-                </div>
+                <span className="industrial-label">Zona Climatica</span>
+                <select value={zone} onChange={(e) => setZone(e.target.value)} className="w-full industrial-input rounded-2xl p-4 text-xs">
+                  <option value="A">ZONA A</option><option value="B">ZONA B</option>
+                  <option value="C">ZONA C</option><option value="D">ZONA D</option>
+                  <option value="E">ZONA E</option><option value="F">ZONA F</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] text-slate-500 mb-1 block uppercase font-bold">Coeff Ce</label>
-                  <input type="number" value={coeffCe} onChange={(e) => setCoeffCe(parseFloat(e.target.value))} className="w-full glass-input rounded-lg p-3 text-sm text-center"/>
+                  <span className="industrial-label">Altitudine</span>
+                  <input type="number" value={alt} onChange={(e) => setAlt(parseFloat(e.target.value))} className="w-full industrial-input rounded-2xl p-4 text-xs" />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-500 mb-1 block uppercase font-bold">Coeff Ct</label>
-                  <input type="number" value={coeffCt} onChange={(e) => setCoeffCt(parseFloat(e.target.value))} className="w-full glass-input rounded-lg p-3 text-sm text-center"/>
+                  <span className="industrial-label">Sismica</span>
+                  <select value={seismicZone} onChange={(e) => setSeismicZone(e.target.value)} className="w-full industrial-input rounded-2xl p-4 text-xs">
+                    <option value="1">CL_1 (High)</option><option value="2">CL_2 (Med)</option>
+                    <option value="3">CL_3 (Low)</option><option value="4">CL_4 (Neg)</option>
+                  </select>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 bg-black/20 rounded-2xl p-6 border border-white/5 shadow-inner">
-             <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-5">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Limiti Trasmittanza (DM 2018/21)</span>
-             </div>
-             <div className="grid grid-cols-3 gap-4 text-center mb-8">
-                {[
-                    { l: 'Verticali', v: limits.vert },
-                    { l: 'Orizzontali', v: limits.hor },
-                    { l: 'Trasparenti', v: limits.win }
-                ].map((item, idx) => (
-                    <div key={idx} className="bg-white/5 rounded-xl p-4 border border-white/5 relative group hover:bg-white/10 transition-all cursor-pointer shadow-lg" onClick={() => copy(item.v)}>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">{item.l}</div>
-                        <div className="text-2xl font-bold text-white font-mono">{item.v}</div>
-                        <div className="absolute inset-0 border border-accent-500/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-                ))}
-             </div>
+          {/* Card: Snow Load */}
+          <div className="glass-card rounded-3xl p-8 border-orange-500/10 flex flex-col justify-between">
+            <div className="flex items-center gap-3 mb-8">
+               <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
+                <Wind size={18} />
+               </div>
+               <h3 className="text-white font-black uppercase tracking-widest text-xs">Snow & Wind Loads</h3>
+            </div>
 
-             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 border-b border-white/5 pb-3">Carichi Ambientali & Sismica</div>
-             <div className="grid grid-cols-3 gap-4">
-                 <div className="glass-input bg-emerald-500/5 border-emerald-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-emerald-500/10" onClick={() => copy(snowLoad)}>
-                    <span className="text-[9px] text-emerald-400/70 font-bold uppercase mb-1">Neve (kN/m²)</span>
-                    <span className="text-xl font-bold text-emerald-400 font-mono group-hover:scale-110 transition-transform">{snowLoad}</span>
-                 </div>
-                 <div className="glass-input bg-blue-500/5 border-blue-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-blue-500/10" onClick={() => copy(zone)}>
-                    <span className="text-[9px] text-blue-400/70 font-bold uppercase mb-1">Zona Climatica</span>
-                    <span className="text-xl font-bold text-blue-400 font-mono group-hover:scale-110 transition-transform">{zone}</span>
-                 </div>
-                 <div className="glass-input bg-red-500/5 border-red-500/10 rounded-xl p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-red-500/10" onClick={() => copy(seismicZone)}>
-                    <span className="text-[9px] text-red-400/70 font-bold uppercase mb-1">Zona Sismica</span>
-                    <span className="text-xl font-bold text-red-400 font-mono group-hover:scale-110 transition-transform">{seismicZone}</span>
-                 </div>
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="glass-panel rounded-2xl p-8 print-break-inside">
-        <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-3">
-            <span className="bg-orange-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-orange-500 text-sm border border-orange-500/20"><i className="fa-solid fa-layer-group"></i></span>
-            Calcolatore Spessore Isolante
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-          <div className="md:col-span-3">
-             <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-2 ml-1">Materiale</label>
-             <div className="relative group">
-                <select onChange={(e) => setIsoLambda(parseFloat(e.target.value))} className="w-full glass-input rounded-xl p-3 text-sm appearance-none cursor-pointer">
-                <option value="" className="bg-slate-800">Seleziona materiale...</option>
-                <optgroup label="Isolanti Sintetici" className="bg-slate-900 text-accent-400">
-                  <option value="0.035" className="bg-slate-800">EPS Standard (0.035)</option>
-                  <option value="0.030" className="bg-slate-800">EPS con Grafite (0.030)</option>
-                  <option value="0.035" className="bg-slate-800">XPS (0.035)</option>
-                  <option value="0.022" className="bg-slate-800">Poliuretano PIR/PUR (0.022)</option>
-                </optgroup>
-                <optgroup label="Isolanti Minerali" className="bg-slate-900 text-accent-400">
-                  <option value="0.040" className="bg-slate-800">Lana di Roccia (0.040)</option>
-                  <option value="0.035" className="bg-slate-800">Lana di Vetro (0.035)</option>
-                  <option value="0.042" className="bg-slate-800">Vetro Cellulare (0.042)</option>
-                  <option value="0.015" className="bg-slate-800">Aerogel (0.015)</option>
-                </optgroup>
-                <optgroup label="Isolanti Naturali" className="bg-slate-900 text-accent-400">
-                  <option value="0.045" className="bg-slate-800">Sughero (0.045)</option>
-                  <option value="0.040" className="bg-slate-800">Fibra di Legno (0.040)</option>
-                  <option value="0.045" className="bg-slate-800">Fibra di Canapa (0.045)</option>
-                </optgroup>
-                <optgroup label="Strutturali / Altri" className="bg-slate-900 text-accent-400">
-                  <option value="0.12" className="bg-slate-800">Calcestruzzo Aerato (0.12)</option>
-                  <option value="0.25" className="bg-slate-800">Muratura Poroton (0.25)</option>
-                  <option value="0.70" className="bg-slate-800">Mattoni Pieni (0.70)</option>
-                  <option value="0.06" className="bg-slate-800">Intonaco Termico (0.06)</option>
-                </optgroup>
+            <div className="space-y-6">
+              <div>
+                <span className="industrial-label">Zona Neve</span>
+                <select value={snowZone} onChange={(e) => setSnowZone(e.target.value)} className="w-full industrial-input rounded-2xl p-4 text-xs">
+                  <option value="I-med">CAT_I - Med</option><option value="I-alp">CAT_I - Alp</option>
+                  <option value="II">CAT_II</option><option value="III">CAT_III</option>
                 </select>
-                <i className="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
-             </div>
+              </div>
+              <div className="bg-app-input border border-app-border rounded-2xl p-5 flex justify-between items-center group hover:border-orange-600/50 transition-all cursor-pointer">
+                <div>
+                  <span className="industrial-label !mb-0">Calculated Snow Load</span>
+                  <div className="text-2xl font-mono font-black text-white">{snowLoad}</div>
+                </div>
+                <div className="text-orange-500 font-bold text-[10px]">kN/m²</div>
+              </div>
+            </div>
           </div>
-          <div className="md:col-span-2">
-            <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-2 ml-1">Lambda (λ)</label>
-            <input type="number" value={isoLambda} onChange={(e) => setIsoLambda(parseFloat(e.target.value))} placeholder="0.035" step="0.001" className="w-full glass-input rounded-xl p-3 text-sm font-mono text-center"/>
+
+          {/* Transmittance Limits */}
+          <div className="glass-card rounded-3xl p-8 md:col-span-2 border-orange-500/10">
+            <div className="flex items-center justify-between mb-8">
+               <div className="flex items-center gap-3">
+                 <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
+                  <Layers size={18} />
+                 </div>
+                 <h3 className="text-white font-black uppercase tracking-widest text-xs">Thermal Limits (DM 2018/21)</h3>
+               </div>
+               <div className="text-[8px] font-black text-orange-500 bg-orange-600/10 px-3 py-1 rounded-full border border-orange-500/20 tracking-[0.2em]">CORE_V11</div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               {[
+                 { label: 'Verticali', val: limits.vert, icon: '||' },
+                 { label: 'Orizzontali', val: limits.hor, icon: '=' },
+                 { label: 'Infissi', val: limits.win, icon: '[]' }
+               ].map((item, idx) => (
+                 <div key={idx} className="bg-app-input border border-app-border rounded-2xl p-6 text-center hover:scale-[1.02] transition-all">
+                    <span className="industrial-label">{item.label}</span>
+                    <div className="text-3xl font-mono font-black text-white">{item.val}</div>
+                    <span className="text-[10px] text-gray-500 mt-2 block">W/m²K</span>
+                 </div>
+               ))}
+            </div>
           </div>
-          <div className="md:col-span-2">
-            <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-2 ml-1">U Target</label>
-            <input type="number" value={isoTarget} onChange={(e) => setIsoTarget(parseFloat(e.target.value))} placeholder="0.25" step="0.01" className="w-full glass-input rounded-xl p-3 text-sm font-mono text-center"/>
-          </div>
-          <div className="md:col-span-2">
-            <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-2 ml-1">R Esistente</label>
-            <input type="number" value={isoR} onChange={(e) => setIsoR(parseFloat(e.target.value))} step="0.01" className="w-full glass-input rounded-xl p-3 text-sm font-mono text-center"/>
-          </div>
-          <div className="md:col-span-3">
-            <button onClick={calcIso} className="w-full bg-accent-600 hover:bg-accent-500 text-white font-bold px-6 py-3 rounded-xl shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all hover:scale-[1.02] active:scale-95 border border-white/10 no-print">Calcola Spessore</button>
+
+          {/* Insulation Calc */}
+          <div className="glass-card rounded-3xl p-8 md:col-span-2 border-orange-500/10 bg-gradient-to-br from-gray-800/40 to-app-panel/40">
+            <span className="industrial-label">Module: Insulation_Thickness_Calculator</span>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end mt-4">
+               <div>
+                  <span className="industrial-label">Lambda (λ)</span>
+                  <input type="number" value={isoLambda} onChange={(e) => setIsoLambda(parseFloat(e.target.value))} placeholder="0.035" className="w-full industrial-input rounded-2xl p-4 text-xs text-center" />
+               </div>
+               <div>
+                  <span className="industrial-label">U Target</span>
+                  <input type="number" value={isoTarget} onChange={(e) => setIsoTarget(parseFloat(e.target.value))} placeholder="0.25" className="w-full industrial-input rounded-2xl p-4 text-xs text-center" />
+               </div>
+               <div>
+                  <span className="industrial-label">R Resistente</span>
+                  <input type="number" value={isoR} onChange={(e) => setIsoR(parseFloat(e.target.value))} className="w-full industrial-input rounded-2xl p-4 text-xs text-center" />
+               </div>
+               <button onClick={calcIso} className="bg-orange-600 hover:bg-orange-700 text-white font-black uppercase tracking-widest text-[9px] py-4 rounded-2xl shadow-xl shadow-orange-900/20 transition-all active:scale-95">
+                  Execute Calculation
+               </button>
+            </div>
+            
+            {isoThickness !== '--' && (
+              <div className="mt-8 pt-8 border-t border-app-border flex items-center justify-between">
+                 <div>
+                    <span className="industrial-label !mb-0">Spessore Isolante Richiesto</span>
+                    <div className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Calculated_Thickness_Output</div>
+                 </div>
+                 <div className="flex items-end gap-3">
+                    <div className="text-5xl font-mono font-black text-white">{isoThickness}</div>
+                    <div className="text-xl font-black text-orange-500 mb-2">CM</div>
+                 </div>
+              </div>
+            )}
           </div>
         </div>
-        {isoThickness !== '--' && (
-          <div className="mt-6 border-t border-white/5 pt-6 flex items-center justify-between bg-white/5 rounded-xl p-4 animate-slide-in">
-             <span className="text-slate-300 font-medium">Spessore Minimo Consigliato:</span>
-             <div className="flex items-center gap-3 cursor-pointer group" onClick={() => copy(isoThickness)}>
-                <span className="text-3xl font-bold text-accent-400 font-mono drop-shadow-md">{isoThickness}</span> 
-                <span className="text-sm text-slate-400">cm</span>
-                <i className="fa-regular fa-copy text-slate-600 group-hover:text-white transition-colors no-print"></i>
-             </div>
-          </div>
-        )}
       </div>
     </div>
   );

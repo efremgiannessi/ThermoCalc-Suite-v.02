@@ -3,263 +3,116 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>OmniCalc Engineering Suite</title>
     
-    <!-- Primary Meta Tags -->
-    <title>OmniCalc Suite - Strumenti Professionali per Edilizia e Logistica</title>
-    <meta name="title" content="OmniCalc Suite - Strumenti Professionali per Edilizia e Logistica">
-    <meta name="description" content="Suite completa di calcolatori professionali: termica, preventivi edili, trasporti eccezionali, pesi materiali e calcoli scientifici. Progettato da Efrem Giannessi.">
-    <meta name="keywords" content="calcolo termico, preventivo edile, calcolo trasporto, peso materiali, zona climatica, calcolatrice scientifica, edilizia, ingegneria, logistica">
-    <meta name="author" content="Efrem Giannessi">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://thermocalc-suite.netlify.app/">
-    <meta property="og:title" content="OmniCalc Suite - Strumenti Professionali">
-    <meta property="og:description" content="Suite completa di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
-    <meta property="og:image" content="https://thermocalc-suite.netlify.app/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://thermocalc-suite.netlify.app/">
-    <meta property="twitter:title" content="OmniCalc Suite - Strumenti Professionali">
-    <meta property="twitter:description" content="Suite completa di calcolatori professionali: termica, preventivi, trasporti e calcoli scientifici.">
-    <meta property="twitter:image" content="https://thermocalc-suite.netlify.app/og-image.jpg">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-    
-    <!-- Font Awesome -->
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "OmniCalc Suite",
-      "url": "https://thermocalc-suite.netlify.app/",
-      "description": "Suite di strumenti di calcolo per professionisti dell'edilizia e della logistica.",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web Browser",
-      "author": {
-          "@type": "Person",
-          "name": "Efrem Giannessi",
-          "url": "https://www.efremgiannessi.org"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR"
-      }
-    }
-    </script>
-
-    <!-- Tailwind CSS -->
+    <!-- Tailwind Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'], 
+                        mono: ['JetBrains Mono', 'monospace'] 
+                    },
                     colors: {
-                        accent: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
+                        orange: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
                         },
-                        slideIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1' },
+                        app: {
+                            bg: '#111827',
+                            panel: '#0a0f1d',
+                            input: '#070b14',
+                            border: '#1f2937'
                         }
+                    },
+                    letterSpacing: {
+                        'industrial': '0.2em',
                     }
                 }
             }
         }
     </script>
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
     <style>
         body {
-            /* Sfondo profondo con gradienti per esaltare il glassmorphism */
-            background-color: #0f172a;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            background-attachment: fixed;
+            background-color: #111827;
             color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Classe Utility Glassmorphism */
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.4);
+        /* Industrial Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+        .industrial-label {
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .glass-card {
+            background: rgba(31, 41, 55, 0.3);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.2);
         }
 
-        .glass-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(4px);
+        .industrial-input {
+            background: #070b14;
+            border: 1px solid #1f2937;
             color: white;
-            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s ease;
         }
-        
-        .glass-input:focus {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: rgba(59, 130, 246, 0.5);
+
+        .industrial-input:focus {
+            border-color: #ea580c;
             outline: none;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1);
         }
 
-        /* Scrollbar personalizzata */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        
-        /* Utility per nascondere scrollbar */
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Utility per stampa */
-        .print-only { display: none !important; }
-
-        /* STILI DI STAMPA PROFESSIONALE */
         @media print {
-            @page {
-                size: A4;
-                margin: 0.8cm;
-            }
-            
-            .print-only { display: block !important; }
             .no-print { display: none !important; }
-
-            html, body {
-                background: white !important;
-                background-image: none !important;
-                color: #000 !important;
-                font-family: 'Inter', sans-serif !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                font-size: 11pt;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            /* Trasforma i pannelli glass in box puliti */
-            .glass-panel {
-                background: white !important;
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
-                border-radius: 4px !important;
-                margin-bottom: 20px !important;
-                backdrop-filter: none !important;
-                color: #000 !important;
-                break-inside: avoid;
-            }
-
-            /* Trasforma gli input in testo leggibile */
-            .glass-input, input, select, textarea {
-                background: transparent !important;
-                border: none !important;
-                border-bottom: 1px solid #ddd !important;
-                color: #000 !important;
-                border-radius: 0 !important;
-                padding-left: 0 !important;
-                box-shadow: none !important;
-                font-weight: bold;
-            }
-
-            /* Gestione colori testi per la stampa */
-            .text-white { color: #000 !important; }
-            .text-slate-300, .text-slate-400, .text-slate-500 { color: #444 !important; }
-            
-            /* Mantieni i colori semantici ma rendili stampabili */
-            .text-accent-400, .text-accent-500, .text-blue-400 { color: #2563eb !important; } /* Blue */
-            .text-emerald-400, .text-emerald-500 { color: #059669 !important; } /* Green */
-            .text-red-400, .text-red-500 { color: #dc2626 !important; } /* Red */
-            .text-orange-400, .text-orange-500 { color: #d97706 !important; } /* Orange */
-
-            /* Gestione Layout Stampa */
-            #root, main, .min-h-screen {
-                display: block !important;
-                height: auto !important;
-                min-height: 0 !important;
-            }
-
-            /* Forza la larghezza per evitare tagli */
-            .container, .max-w-7xl, .w-\[95\%\] {
-                width: 100% !important;
-                max-width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            /* Gestione Interruzioni Pagina */
-            h1, h2, h3 { 
-                page-break-after: avoid; 
-                break-after: avoid;
-                color: #000 !important;
-                border-bottom: 1px solid #000;
-                padding-bottom: 5px;
-            }
-            
-            .print-break-inside {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-
-            /* Specifiche per Mappe */
-            .leaflet-container {
-                border: 1px solid #000;
-                height: 350px !important;
-            }
-            
-            /* Nascondi icone puramente decorative se danno fastidio, o falle nere */
-            i.fa-solid, i.fa-regular {
-                color: #444 !important;
-            }
-
-            /* Assicura che i grafici a barre colorate si vedano */
-            .bg-emerald-500, .bg-blue-500, .bg-orange-500, .bg-red-500 {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+            body { background: white !important; color: black !important; }
+            .glass-card { border: 1px solid #ddd !important; background: none !important; backdrop-filter: none !important; }
+            .industrial-label { color: #666 !important; }
         }
     </style>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="./index.tsx"></script>
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
     "vite": "https://esm.sh/vite@^7.3.1",
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.3",
-    "path": "https://esm.sh/path@^0.12.7",
-    "url": "https://esm.sh/url@^0.11.4"
+    "url": "https://esm.sh/url@^0.11.4",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "path": "https://esm.sh/path@^0.12.7"
   }
 }
 </script>
 </head>
-<body class="antialiased min-h-screen flex flex-col selection:bg-accent-500/30">
+  <body class="antialiased selection:bg-orange-600/30">
     <div id="root"></div>
-</body>
+  </body>
 </html>
