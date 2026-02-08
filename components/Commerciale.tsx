@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, DollarSign, PieChart, Activity } from 'lucide-react';
+import { TrendingUp, DollarSign, PieChart } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -17,114 +17,75 @@ export default function Commerciale({ showToast }: Props) {
     if (c && p) {
       setMarkup(((p - c) / c * 100).toFixed(2));
       setMargine(((p - c) / p * 100).toFixed(2));
-      showToast("ANALISI COMPLETATA");
+      showToast("CALCOLO ESEGUITO");
     }
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-1">
-        <span className="industrial-label">Module: 05_Margin_Analysis</span>
-        <h1 className="text-4xl font-black uppercase tracking-tighter text-white">Commercial Dashboard</h1>
+    <div className="space-y-4">
+      <div className="flex flex-col">
+        <span className="industrial-label">MODULO_05_ANALISI</span>
+        <h1 className="text-xl font-black uppercase tracking-tighter text-white">Analisi Commerciale</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        {/* Card: Profit Analysis */}
-        <div className="glass-card rounded-3xl p-8 border-orange-500/10 flex flex-col">
-          <div className="flex items-center gap-3 mb-8">
-             <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
-              <TrendingUp size={18} />
-             </div>
-             <h3 className="text-white font-black uppercase tracking-widest text-xs">Margin & Markup</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="glass-card rounded-xl p-4 border-orange-500/10 space-y-4 flex flex-col">
+          <div className="flex items-center gap-2">
+             <TrendingUp size={12} className="text-orange-500" />
+             <span className="text-white font-black uppercase tracking-widest text-[9px]">Analisi Profitto</span>
           </div>
-
-          <div className="space-y-6 flex-1">
+          <div className="space-y-3 flex-1">
              <div>
-               <span className="industrial-label">Costo Acquisto (€)</span>
-               <input type="number" value={costo} onChange={e => setCosto(e.target.value)} className="w-full industrial-input rounded-2xl p-4 text-sm" placeholder="0.00" />
+               <span className="industrial-label">COSTO DI ACQUISTO (€)</span>
+               <input type="number" value={costo} onChange={e => setCosto(e.target.value)} className="w-full industrial-input rounded-lg p-2 text-xs" />
              </div>
              <div>
-               <span className="industrial-label">Prezzo Vendita (€)</span>
-               <input type="number" value={prezzo} onChange={e => setPrezzo(e.target.value)} className="w-full industrial-input rounded-2xl p-4 text-sm" placeholder="0.00" />
+               <span className="industrial-label">PREZZO DI VENDITA (€)</span>
+               <input type="number" value={prezzo} onChange={e => setPrezzo(e.target.value)} className="w-full industrial-input rounded-lg p-2 text-xs" />
              </div>
-             <button onClick={handleCalc} className="w-full bg-gray-800 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[9px] py-4 rounded-2xl transition-all border border-gray-700">
-                Execute Analysis
-             </button>
+             <button onClick={handleCalc} className="w-full bg-orange-600 text-white font-black text-[8px] py-2 rounded-lg">CALCOLA</button>
           </div>
-
-          <div className="mt-8 pt-8 border-t border-app-border grid grid-cols-2 gap-4">
-             <div className="bg-app-input p-4 rounded-2xl border border-app-border text-center">
-                <span className="industrial-label !mb-1">Markup</span>
-                <div className="text-xl font-mono font-black text-orange-500">{markup}%</div>
+          <div className="pt-3 border-t border-app-border grid grid-cols-2 gap-2">
+             <div className="bg-app-input p-2 rounded-lg text-center">
+                <span className="industrial-label !mb-0">Ricarico</span>
+                <div className="text-base font-mono font-black text-orange-500">{markup}%</div>
              </div>
-             <div className="bg-app-input p-4 rounded-2xl border border-app-border text-center">
-                <span className="industrial-label !mb-1">Margine</span>
-                <div className="text-xl font-mono font-black text-emerald-500">{margine}%</div>
+             <div className="bg-app-input p-2 rounded-lg text-center">
+                <span className="industrial-label !mb-0">Margine</span>
+                <div className="text-base font-mono font-black text-emerald-500">{margine}%</div>
              </div>
           </div>
         </div>
 
-        {/* Card: Invoice Calc */}
-        <div className="glass-card rounded-3xl p-8 border-orange-500/10">
-           <div className="flex items-center gap-3 mb-8">
-              <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
-               <DollarSign size={18} />
-              </div>
-              <h3 className="text-white font-black uppercase tracking-widest text-xs">Fee Calculator</h3>
+        <div className="glass-card rounded-xl p-4 border-orange-500/10">
+           <div className="flex items-center gap-2 mb-4">
+              <DollarSign size={12} className="text-orange-500" />
+              <span className="text-white font-black uppercase tracking-widest text-[9px]">Parcella Prof.</span>
            </div>
-
-           <div className="space-y-6">
+           <div className="space-y-3">
               <div>
-                <span className="industrial-label">Onorario Base</span>
-                <input type="number" className="w-full industrial-input rounded-2xl p-4 text-sm" placeholder="1000.00" />
+                <span className="industrial-label">IMPONIBILE BASE</span>
+                <input type="number" className="w-full industrial-input rounded-lg p-2 text-xs" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="industrial-label">Cassa Prev. (%)</span>
-                  <input type="number" defaultValue="4" className="w-full industrial-input rounded-2xl p-4 text-sm text-center" />
-                </div>
-                <div>
-                  <span className="industrial-label">IVA (%)</span>
-                  <input type="number" defaultValue="22" className="w-full industrial-input rounded-2xl p-4 text-sm text-center" />
-                </div>
-              </div>
-              
-              <div className="bg-orange-600 shadow-xl shadow-orange-900/20 p-6 rounded-2xl text-center">
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-200 mb-1 block">Netto a Pagare</span>
-                 <div className="text-3xl font-mono font-black text-white">€ 1.240,00</div>
+              <div className="bg-orange-600 p-4 rounded-lg text-center">
+                 <span className="text-[7px] font-black uppercase tracking-widest text-orange-200">Netto a Pagare</span>
+                 <div className="text-xl font-mono font-black text-white">€ 0.00</div>
               </div>
            </div>
         </div>
 
-        {/* Card: VAT Split */}
-        <div className="glass-card rounded-3xl p-8 border-orange-500/10">
-           <div className="flex items-center gap-3 mb-8">
-              <div className="bg-orange-600/10 p-2 rounded-xl border border-orange-500/20 text-orange-500">
-               <PieChart size={18} />
-              </div>
-              <h3 className="text-white font-black uppercase tracking-widest text-xs">VAT Breakdown</h3>
+        <div className="glass-card rounded-xl p-4 border-orange-500/10">
+           <div className="flex items-center gap-2 mb-4">
+              <PieChart size={12} className="text-orange-500" />
+              <span className="text-white font-black uppercase tracking-widest text-[9px]">Scorporo IVA</span>
            </div>
-
-           <div className="space-y-6">
-              <div className="bg-app-input border border-app-border rounded-2xl p-6 text-center">
-                <span className="industrial-label">Totale Lordo</span>
-                <input type="number" className="bg-transparent text-white font-mono font-black text-3xl text-center w-full outline-none" placeholder="0.00" />
-              </div>
-
-              <div className="space-y-3">
-                 <div className="flex justify-between items-center p-4 bg-gray-800/30 rounded-2xl">
-                    <span className="industrial-label !mb-0">Imponibile</span>
-                    <span className="text-sm font-mono font-bold text-white">€ 0,00</span>
-                 </div>
-                 <div className="flex justify-between items-center p-4 bg-gray-800/30 rounded-2xl">
-                    <span className="industrial-label !mb-0">IVA Quota</span>
-                    <span className="text-sm font-mono font-bold text-orange-500">€ 0,00</span>
-                 </div>
+           <div className="space-y-4">
+              <div className="bg-app-input p-3 rounded-lg text-center">
+                <span className="industrial-label">TOTALE LORDO</span>
+                <input type="number" className="bg-transparent text-white font-mono font-black text-xl text-center w-full" placeholder="0.00" />
               </div>
            </div>
         </div>
-
       </div>
     </div>
   );

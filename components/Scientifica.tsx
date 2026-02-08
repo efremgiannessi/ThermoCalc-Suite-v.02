@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { History, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -18,15 +18,15 @@ export default function Scientifica({ showToast }: Props) {
       setPreview(res.toString());
       setCurrentExp(res.toString());
     } catch(e) {
-      setPreview("ERROR");
+      setPreview("ERR");
     }
   };
 
   const Btn = ({ label, onClick, type = 'num', wide = false }: any) => {
-    let base = "h-11 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-90 border shadow-sm ";
+    let base = "h-9 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 border ";
     if (type === 'num') base += "bg-gray-800 border-gray-700 text-white hover:bg-gray-700";
     else if (type === 'op') base += "bg-app-panel border-gray-800 text-orange-500 hover:bg-orange-600 hover:text-white";
-    else if (type === 'eq') base += "bg-orange-600 border-orange-500 text-white hover:bg-orange-700 shadow-md";
+    else if (type === 'eq') base += "bg-orange-600 border-orange-500 text-white hover:bg-orange-700";
     else if (type === 'ac') base += "bg-red-900/10 border-red-900/30 text-red-500 hover:bg-red-600 hover:text-white";
     
     return (
@@ -37,26 +37,24 @@ export default function Scientifica({ showToast }: Props) {
   };
 
   return (
-    <div className="max-w-xs mx-auto space-y-5">
-      <div className="flex flex-col gap-0.5 text-center">
-        <span className="industrial-label">Module: 00_Precision_Terminal</span>
-        <h1 className="text-2xl font-black uppercase tracking-tighter text-white">Scientific Unit</h1>
+    <div className="max-w-[240px] mx-auto space-y-4">
+      <div className="text-center">
+        <span className="industrial-label">MODULO_00_FPU</span>
+        <h1 className="text-lg font-black uppercase tracking-tighter text-white">Unità Scientifica</h1>
       </div>
 
-      <div className="glass-card rounded-[30px] p-5 border-orange-500/10 shadow-2xl">
-        {/* Display - Ridotto h-160 a h-110 */}
-        <div className="bg-app-input border border-app-border rounded-2xl p-5 mb-5 flex flex-col items-end min-h-[110px] justify-between relative overflow-hidden">
-          <span className="text-[7px] font-mono text-gray-700 absolute top-3 right-5 tracking-[0.2em]">REGISTER_0x8F</span>
-          <div className="text-gray-500 font-mono text-[10px] mb-1 h-4">{preview || "0.00"}</div>
-          <div className="text-3xl font-mono font-black text-white tracking-tighter max-w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
+      <div className="glass-card rounded-2xl p-4 border-orange-500/10">
+        <div className="bg-app-input border border-app-border rounded-xl p-4 mb-4 flex flex-col items-end min-h-[90px] justify-between relative overflow-hidden">
+          <span className="text-[6px] font-mono text-gray-700 absolute top-2 right-4">0x8F</span>
+          <div className="text-gray-500 font-mono text-[9px] mb-0.5 h-3">{preview || "0.00"}</div>
+          <div className="text-2xl font-mono font-black text-white tracking-tighter max-w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
             {currentExp || "0"}
           </div>
         </div>
 
-        {/* Keypad */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-1.5">
           <Btn label="AC" onClick={clearAll} type="ac" />
-          <Btn label={<RotateCcw size={12} />} onClick={() => setCurrentExp("")} type="op" />
+          <Btn label={<RotateCcw size={10} />} onClick={() => setCurrentExp("")} type="op" />
           <Btn label="%" type="op" />
           <Btn label="÷" onClick={() => insertChar('/')} type="op" />
 
@@ -78,11 +76,6 @@ export default function Scientifica({ showToast }: Props) {
           <Btn label="0" onClick={() => insertChar('0')} wide />
           <Btn label="." onClick={() => insertChar('.')} />
           <Btn label="=" onClick={calculate} type="eq" />
-        </div>
-
-        <div className="mt-5 flex justify-between items-center px-2">
-           <button className="text-gray-600 hover:text-orange-500 transition-colors"><History size={14} /></button>
-           <span className="text-[7px] font-black text-gray-700 uppercase tracking-widest">FPU_ACTIVE</span>
         </div>
       </div>
     </div>
