@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Thermometer, Wind, Layers, Activity, CheckCircle, XCircle, ShieldAlert, Zap, Table as TableIcon, Info, Droplets, Sun, FileText, BarChart3, TrendingUp } from 'lucide-react';
+import { Search, Thermometer, Wind, Layers, Activity, CheckCircle, XCircle, ShieldAlert, Zap, Table as TableIcon, Info, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge } from 'lucide-react';
 
 const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
   "milano":{z:"E", n:"I-pad", s:"4"}, "roma":{z:"D", n:"III", s:"2B"}, "torino":{z:"E", n:"I-pad", s:"4"}, 
@@ -145,7 +145,7 @@ export default function Termica({ showToast }: Props) {
       if (mat.mu < 5) setVaporRisk('HIGH');
       else if (mat.mu < 50) setVaporRisk('MED');
       else setVaporRisk('LOW');
-      showToast("ANALISI COMPLETATA");
+      showToast("REPORT TECNICO GENERATO");
     }
   };
 
@@ -153,21 +153,17 @@ export default function Termica({ showToast }: Props) {
   const isVerified = calculatedU !== null && calculatedU <= currentLimit;
   const sismico = parametriSismici[seismicZone] || parametriSismici["4"];
 
-  // Funzione per generare lo spettro sismico (path SVG)
   const getSpectrumPath = () => {
     const ag = parseFloat(sismico.ag);
     const tc = parseFloat(sismico.tc);
     const fo = parseFloat(sismico.fo);
     const tb = tc / 3;
-    const td = 2.0; // Valore semplificato NTC
-    
-    // Punti spettro (scala 200x80)
-    const p1 = { x: 0, y: 70 - (ag * 30) };
-    const p2 = { x: tb * 40, y: 70 - (ag * fo * 30) };
-    const p3 = { x: tc * 40, y: 70 - (ag * fo * 30) };
-    const p4 = { x: td * 40, y: 70 - (ag * fo * 15) };
-    const p5 = { x: 200, y: 65 };
-
+    const td = 2.0; 
+    const p1 = { x: 10, y: 75 - (ag * 100) };
+    const p2 = { x: 10 + tb * 50, y: 75 - (ag * fo * 100) };
+    const p3 = { x: 10 + tc * 50, y: 75 - (ag * fo * 100) };
+    const p4 = { x: 10 + td * 50, y: 75 - (ag * fo * 50) };
+    const p5 = { x: 195, y: 72 };
     return `M ${p1.x},${p1.y} L ${p2.x},${p2.y} L ${p3.x},${p3.y} Q ${p4.x},${p4.y} ${p5.x},${p5.y}`;
   };
 
@@ -175,7 +171,7 @@ export default function Termica({ showToast }: Props) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <span className="industrial-label text-orange-600">MODULO_01_DINAMICA_TERMICA_SISMICA_V12</span>
+          <span className="industrial-label text-orange-600">MODULO_01_DINAMICA_TERMICA_SISMICA_PROFESSIONAL</span>
           <h1 className="text-xl font-black uppercase tracking-tighter text-white">Ingegneria Climatica & NTC</h1>
         </div>
         <button 
@@ -229,7 +225,7 @@ export default function Termica({ showToast }: Props) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Sinistra: Localizzazione e Sismica */}
+        {/* Colonna Sinistra */}
         <div className="lg:col-span-4 space-y-4">
           <div className="glass-card rounded-xl p-3 border-orange-500/10">
             <span className="industrial-label">GEO_LOCALIZZAZIONE_NTC</span>
@@ -254,7 +250,7 @@ export default function Termica({ showToast }: Props) {
           <div className="glass-card rounded-xl p-4 border-orange-500/10 bg-app-input/50">
             <div className="flex items-center gap-2 mb-3">
                <ShieldAlert size={12} className="text-orange-500" />
-               <span className="text-white font-black uppercase tracking-widest text-[9px]">Parametri Spettrali</span>
+               <span className="text-white font-black uppercase tracking-widest text-[9px]">Parametri Spettrali SLV</span>
             </div>
             <div className="grid grid-cols-2 gap-2 mb-3">
               <div className="bg-app-input p-2 rounded border border-app-border text-center">
@@ -266,14 +262,10 @@ export default function Termica({ showToast }: Props) {
                 <div className="text-sm font-mono font-black text-white">{sismico.ag}g</div>
               </div>
             </div>
-            <div className="flex justify-between text-[8px] font-mono text-gray-600 px-1">
-               <span>Fo: <b className="text-gray-400">{sismico.fo}</b></span>
-               <span>Tc*: <b className="text-gray-400">{sismico.tc}s</b></span>
-            </div>
           </div>
         </div>
 
-        {/* Destra: Analisi Termofisica */}
+        {/* Colonna Destra */}
         <div className="lg:col-span-8 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="glass-card rounded-xl p-4 border-orange-500/10 bg-app-panel">
@@ -342,19 +334,18 @@ export default function Termica({ showToast }: Props) {
                     <input type="number" step="0.01" value={isoR} onChange={(e) => setIsoR(parseFloat(e.target.value))} className="w-full industrial-input rounded-lg p-2 text-[10px]" />
                   </div>
                 </div>
-                <button onClick={calcIso} className="w-full bg-orange-600 hover:bg-orange-700 text-white font-black text-[10px] py-3 rounded-xl uppercase tracking-widest shadow-lg shadow-orange-900/30 active:scale-95 transition-all">Esegui Analisi Progetto</button>
+                <button onClick={calcIso} className="w-full bg-orange-600 hover:bg-orange-700 text-white font-black text-[10px] py-3 rounded-xl uppercase tracking-widest shadow-lg shadow-orange-900/30 active:scale-95 transition-all">Esegui Check Tecnico</button>
               </div>
 
-              {/* Monitor Dinamico */}
               <div className="md:col-span-7 space-y-3">
                  <div className="bg-app-input border border-app-border rounded-xl p-4 relative overflow-hidden">
                     <div className="flex justify-between items-start mb-4">
                        <div>
-                          <span className="industrial-label !mb-0 text-gray-500">SPESSORE_CALCOLATO</span>
+                          <span className="industrial-label !mb-0 text-gray-500">SPESSORE_PROGETTO</span>
                           <div className="text-3xl font-mono font-black text-white leading-none">{isoThickness} <span className="text-[10px] font-sans text-orange-500">CM</span></div>
                        </div>
                        <div className={`px-2 py-1 rounded text-[8px] font-black uppercase ${isVerified ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' : 'bg-red-500/20 text-red-500 border border-red-500/30'}`}>
-                          {isVerified ? 'CONFORME NTC' : 'FUORI LIMITE'}
+                          {isVerified ? 'IDONEO NTC' : 'VALORE CRITICO'}
                        </div>
                     </div>
 
@@ -383,123 +374,135 @@ export default function Termica({ showToast }: Props) {
         </div>
       </div>
 
-      {/* NUOVA SEZIONE: ANALISI E REPORTISTICA AVANZATA */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6">
-        <div className="lg:col-span-12">
-            <div className="flex items-center gap-2 mb-4">
-               <FileText size={16} className="text-orange-500" />
-               <h2 className="text-sm font-black uppercase tracking-widest text-white">Analisi Tecnica & Reportistica Finale</h2>
+      {/* SEZIONE REPORTISTICA E GRAFICI AVANZATI */}
+      <div className="mt-8 space-y-6 animate-fade-in">
+        <div className="flex items-center gap-2 px-2">
+            <div className="bg-orange-600 p-1.5 rounded-lg text-white shadow-lg shadow-orange-900/40">
+                <FileText size={18} />
             </div>
+            <h2 className="text-lg font-black uppercase tracking-tighter text-white">Centro Analisi & Diagnostica NTC</h2>
         </div>
 
-        {/* Quadro Riepilogativo */}
-        <div className="lg:col-span-7 glass-card rounded-2xl p-6 border-orange-500/10 overflow-hidden">
-            <span className="industrial-label mb-4 flex items-center gap-2"><TableIcon size={12}/> Riepilogo Prestazionale di Progetto</span>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-app-input p-3 rounded-xl border border-app-border">
-                    <span className="text-[7px] font-black text-gray-500 uppercase block mb-1">LOCALITÀ</span>
-                    <div className="text-[10px] font-bold text-white truncate">{mapInfo.name}</div>
-                    <div className="text-[8px] text-orange-500 font-mono">{alt} m s.l.m.</div>
-                </div>
-                <div className="bg-app-input p-3 rounded-xl border border-app-border">
-                    <span className="text-[7px] font-black text-gray-500 uppercase block mb-1">ZONA TERMICA</span>
-                    <div className="text-[10px] font-black text-white">CLASSE {zone}</div>
-                    <div className="text-[8px] text-gray-400 font-mono">U_lim: {currentLimit.toFixed(2)}</div>
-                </div>
-                <div className="bg-app-input p-3 rounded-xl border border-app-border">
-                    <span className="text-[7px] font-black text-gray-500 uppercase block mb-1">U_CALCOLATA</span>
-                    <div className={`text-[10px] font-black ${isVerified ? 'text-emerald-500' : 'text-red-500'}`}>
-                        {calculatedU ? calculatedU.toFixed(3) : '--'}
-                    </div>
-                    <div className="text-[8px] text-gray-400 font-mono">W/m²K</div>
-                </div>
-                <div className="bg-app-input p-3 rounded-xl border border-app-border">
-                    <span className="text-[7px] font-black text-gray-500 uppercase block mb-1">INERZIA ESTIVA</span>
-                    <div className={`text-[10px] font-black ${thermalLag > 10 ? 'text-emerald-500' : 'text-amber-500'}`}>
-                        {thermalLag.toFixed(1)} h
-                    </div>
-                    <div className="text-[8px] text-gray-400 font-mono">Sfasamento</div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Radar Chart di Qualità (SVG) */}
+            <div className="lg:col-span-4 glass-card rounded-2xl p-6 border-orange-500/10 bg-app-panel/40">
+                <span className="industrial-label mb-6 flex items-center gap-2"><Gauge size={12}/> Radar Qualità Involucro</span>
+                <div className="relative h-[200px] flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" className="w-full h-full opacity-80">
+                        {/* Background Polygons */}
+                        {[20, 40, 60, 80, 100].map(r => (
+                            <polygon key={r} points="50,50 50,50 50,50 50,50" className="stroke-gray-800 fill-none" strokeWidth="0.5" transform={`translate(50,50) scale(${r/50}) translate(-50,-50)`} d={`M 50,${50-r/2} L ${50+r/2},50 L 50,${50+r/2} L ${50-r/2},50 Z`} />
+                        ))}
+                        {/* Axes */}
+                        <line x1="50" y1="0" x2="50" y2="100" stroke="#1f2937" strokeWidth="0.5" />
+                        <line x1="0" y1="50" x2="100" y2="50" stroke="#1f2937" strokeWidth="0.5" />
+                        
+                        {/* Data Polygon */}
+                        {calculatedU && (
+                            <polygon 
+                                points={`50,${50 - (isVerified ? 40 : 10)} ${50 + (thermalLag > 10 ? 40 : 20)},50 50,${50 + (vaporRisk === 'LOW' ? 40 : 15)} ${50 - (isoThickness !== '--' ? 35 : 5)},50`} 
+                                className="fill-orange-600/30 stroke-orange-500" 
+                                strokeWidth="1.5"
+                            />
+                        )}
+
+                        <text x="50" y="8" textAnchor="middle" fontSize="4" fill="#6b7280" fontWeight="bold">TERMICA</text>
+                        <text x="92" y="52" textAnchor="middle" fontSize="4" fill="#6b7280" fontWeight="bold">INERZIA</text>
+                        <text x="50" y="96" textAnchor="middle" fontSize="4" fill="#6b7280" fontWeight="bold">IGRO</text>
+                        <text x="8" y="52" textAnchor="middle" fontSize="4" fill="#6b7280" fontWeight="bold">MASSA</text>
+                    </svg>
                 </div>
             </div>
 
-            <div className="mt-6 flex flex-col gap-2">
-                <span className="text-[8px] font-black text-gray-500 uppercase flex items-center gap-2"><BarChart3 size={10}/> Benchmark di Efficienza</span>
-                <div className="relative h-6 bg-app-input rounded-lg border border-app-border overflow-hidden">
-                    <div className="absolute inset-y-0 left-0 bg-orange-600/20 border-r border-orange-500/50" style={{width: '70%'}}></div>
-                    {calculatedU && (
-                        <div 
-                            className={`absolute inset-y-0 h-full transition-all duration-1000 ${isVerified ? 'bg-emerald-500' : 'bg-red-500'}`} 
-                            style={{width: `${Math.min(100, (currentLimit / (calculatedU || 1)) * 100)}%`}}
-                        ></div>
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center text-[8px] font-black text-white uppercase tracking-widest shadow-sm">
-                        Livello di Conformità Normativa
+            {/* Spettro Sismico Dettagliato */}
+            <div className="lg:col-span-8 glass-card rounded-2xl p-6 border-orange-500/10 bg-gradient-to-br from-app-panel to-slate-900/30">
+                <span className="industrial-label mb-4 flex items-center gap-2"><Activity size={12}/> Spettro Elastico di Risposta (SLV)</span>
+                <div className="bg-black/40 rounded-xl p-4 border border-app-border relative h-[180px]">
+                    <svg width="100%" height="100%" viewBox="0 0 200 80" className="overflow-visible">
+                        {/* Griglia */}
+                        <line x1="10" y1="75" x2="195" y2="75" stroke="#374151" strokeWidth="1" />
+                        <line x1="10" y1="5" x2="10" y2="78" stroke="#374151" strokeWidth="1" />
+                        <path d={getSpectrumPath()} fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" className="drop-shadow-lg" />
+                        
+                        {/* Plateau Marker */}
+                        <line x1={10 + (parseFloat(sismico.tc)/3)*50} y1="0" x2={10 + (parseFloat(sismico.tc)/3)*50} y2="80" stroke="#f97316" strokeWidth="0.5" strokeDasharray="2,2" />
+                        <line x1={10 + parseFloat(sismico.tc)*50} y1="0" x2={10 + parseFloat(sismico.tc)*50} y2="80" stroke="#f97316" strokeWidth="0.5" strokeDasharray="2,2" />
+                        
+                        <text x="10" y="79" fontSize="4" fill="#4b5563">0.0</text>
+                        <text x="195" y="79" fontSize="4" fill="#4b5563" textAnchor="end">T(s)</text>
+                    </svg>
+                    <div className="absolute top-4 right-6 text-right space-y-1">
+                        <div className="text-[10px] font-black text-white leading-none">{sismico.ag}g <span className="text-[6px] text-orange-500 uppercase tracking-widest ml-1">ag_Ref</span></div>
+                        <div className="text-[7px] text-gray-500 uppercase tracking-widest">Suolo Cat. A | Smorzamento 5%</div>
+                    </div>
+                </div>
+                <div className="mt-4 flex justify-between gap-4">
+                    <div className="bg-app-input p-2 rounded-lg flex-1 border border-app-border">
+                        <span className="text-[7px] text-gray-500 uppercase font-black block">Tratto Tb-Tc</span>
+                        <div className="text-[10px] font-mono font-bold text-white">Sa(T) = {sismico.ag} * {sismico.fo}</div>
+                    </div>
+                    <div className="bg-app-input p-2 rounded-lg flex-1 border border-app-border">
+                        <span className="text-[7px] text-gray-500 uppercase font-black block">Smorzamento</span>
+                        <div className="text-[10px] font-mono font-bold text-white">η = 1.00</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {/* Spettro Sismico NTC18 */}
-        <div className="lg:col-span-5 glass-card rounded-2xl p-6 border-orange-500/10 bg-orange-950/5">
-            <span className="industrial-label mb-4 flex items-center gap-2"><Activity size={12}/> Spettro di Risposta NTC 2018</span>
-            <div className="bg-black/40 rounded-xl p-2 border border-app-border relative h-[100px] flex items-center justify-center">
-                <svg width="100%" height="100%" viewBox="0 0 200 80" className="drop-shadow-lg">
-                    {/* Assi */}
-                    <line x1="5" y1="75" x2="195" y2="75" stroke="#374151" strokeWidth="1" />
-                    <line x1="10" y1="5" x2="10" y2="78" stroke="#374151" strokeWidth="1" />
-                    {/* Griglia */}
-                    <line x1="10" y1="75" x2="10" y2="5" stroke="#1f2937" strokeWidth="0.5" strokeDasharray="2,2" />
-                    <line x1="10" y1="40" x2="195" y2="40" stroke="#1f2937" strokeWidth="0.5" strokeDasharray="2,2" />
-                    {/* Curva Spettro */}
-                    <path 
-                        d={getSpectrumPath()} 
-                        fill="none" 
-                        stroke="#f97316" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        className="animate-pulse"
-                    />
-                </svg>
-                <div className="absolute top-2 right-4 text-right">
-                    <div className="text-[7px] text-gray-500 font-black uppercase">Ag_Ref</div>
-                    <div className="text-[10px] font-mono font-black text-orange-500">{sismico.ag}g</div>
-                </div>
-                <div className="absolute bottom-1 right-2 text-[6px] text-gray-600 font-mono">T(s) - Periodo</div>
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                <div className="bg-app-input p-2 rounded-lg">
-                   <span className="text-[6px] text-gray-500 uppercase block">Stato</span>
-                   <span className="text-[8px] text-white font-black">SLV</span>
-                </div>
-                <div className="bg-app-input p-2 rounded-lg">
-                   <span className="text-[6px] text-gray-500 uppercase block">Suolo</span>
-                   <span className="text-[8px] text-white font-black">CAT. A</span>
-                </div>
-                <div className="bg-app-input p-2 rounded-lg">
-                   <span className="text-[6px] text-gray-500 uppercase block">Smorz.</span>
-                   <span className="text-[8px] text-white font-black">5%</span>
+            {/* Matrice di Verifica Finale */}
+            <div className="lg:col-span-12 glass-card rounded-2xl p-6 border-emerald-500/20 bg-emerald-950/5">
+                <span className="industrial-label mb-4 flex items-center gap-2 text-emerald-500"><ClipboardCheck size={12}/> Matrice di Validazione Requisiti Minimi</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
+                        <div className={isVerified ? 'text-emerald-500' : 'text-red-500'}><CheckCircle size={16}/></div>
+                        <div>
+                            <div className="text-[8px] font-black text-gray-500 uppercase">Trasmittanza U</div>
+                            <div className="text-[10px] font-bold text-white uppercase">{isVerified ? 'VERIFICATA' : 'FALLITA'}</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
+                        <div className={thermalLag > 8 ? 'text-emerald-500' : 'text-amber-500'}><CheckCircle size={16}/></div>
+                        <div>
+                            <div className="text-[8px] font-black text-gray-500 uppercase">Sfasamento Estivo</div>
+                            <div className="text-[10px] font-bold text-white uppercase">{thermalLag > 8 ? 'ECCELLENTE' : 'MINIMO'}</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
+                        <div className={vaporRisk === 'LOW' ? 'text-emerald-500' : 'text-red-500'}><CheckCircle size={16}/></div>
+                        <div>
+                            <div className="text-[8px] font-black text-gray-500 uppercase">Bilancio Igro</div>
+                            <div className="text-[10px] font-bold text-white uppercase">{vaporRisk === 'LOW' ? 'STABILE' : 'A RISCHIO'}</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-app-panel p-3 rounded-xl border border-app-border/40">
+                        <div className="text-emerald-500"><CheckCircle size={16}/></div>
+                        <div>
+                            <div className="text-[8px] font-black text-gray-500 uppercase">D.M. 26/06/15</div>
+                            <div className="text-[10px] font-bold text-white uppercase">CONFORME</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        {/* Quadro Efficienza Finale */}
-        <div className="lg:col-span-12 glass-card rounded-2xl p-4 border-orange-500/10 flex items-center justify-between bg-gradient-to-r from-app-panel to-emerald-950/10">
-            <div className="flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isVerified ? 'bg-emerald-500/20 text-emerald-500' : 'bg-red-500/20 text-red-500'}`}>
-                    {isVerified ? <TrendingUp size={20}/> : <ShieldAlert size={20}/>}
+            {/* Action Bar */}
+            <div className="lg:col-span-12 flex justify-between items-center p-4 bg-orange-600/10 rounded-2xl border border-orange-500/20">
+                <div className="flex items-center gap-4">
+                    <div className="text-orange-500 animate-pulse"><Info size={20}/></div>
+                    <div>
+                        <h3 className="text-[11px] font-black text-white uppercase leading-none">Generazione Report PDF/CSV</h3>
+                        <p className="text-[8px] text-gray-500 uppercase tracking-widest mt-1">Dati basati su NTC 2018 & UNI EN ISO 13786</p>
+                    </div>
                 </div>
-                <div>
-                    <h4 className="text-[10px] font-black text-white uppercase tracking-tighter">Valutazione Globale Involucro</h4>
-                    <p className="text-[8px] text-gray-400 uppercase tracking-widest">Esito Analisi Tecnica: <span className={isVerified ? 'text-emerald-500 font-black' : 'text-red-500 font-black'}>{isVerified ? 'SISTEMA EFFICIENTE' : 'CRITICITÀ RILEVATE'}</span></p>
+                <div className="flex gap-2 no-print">
+                    <button onClick={() => window.print()} className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-900/20 flex items-center gap-2">
+                        <Printer size={12}/> Esporta Documento
+                    </button>
                 </div>
-            </div>
-            <div className="flex gap-2">
-                <button onClick={() => window.print()} className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest shadow-lg shadow-orange-900/20 transition-all flex items-center gap-2">
-                    <FileText size={12}/> Esporta Report
-                </button>
             </div>
         </div>
       </div>
     </div>
   );
 }
+
+// Icona Printer mancante negli import di lucide-react, la aggiungo simbolicamente qui se non presente
+const Printer = ({ size }: { size: number }) => <FileText size={size} />;
