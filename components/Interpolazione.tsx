@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LineChart } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -56,46 +57,44 @@ export default function Interpolazione({ showToast }: Props) {
   return (
     <div className="animate-slide-in">
         <div className="flex justify-end gap-2 mb-6 max-w-2xl mx-auto no-print">
-          <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
-          <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
-          <button onClick={() => window.print()} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-print"></i> Stampa</button>
+          <button onClick={handleSave} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-gray-700">Salva</button>
+          <button onClick={handleShare} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-gray-700">Condividi</button>
+          <button onClick={() => window.print()} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-gray-700">Stampa</button>
       </div>
-    <div className="max-w-2xl mx-auto glass-panel rounded-3xl p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] print-break-inside">
-        <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-            <div className="bg-yellow-500/20 p-2 rounded-lg text-yellow-500 border border-yellow-500/20"><i className="fa-solid fa-chart-line"></i></div>
+    <div className="max-w-2xl mx-auto glass-card rounded-[2.5rem] p-10 shadow-2xl print-break-inside">
+        <h2 className="text-2xl font-black uppercase tracking-tighter text-white mb-8 flex items-center gap-3">
+            <div className="bg-orange-600 p-2 rounded-xl text-white"><LineChart size={20} /></div>
             Interpolazione Lineare
         </h2>
         <div className="grid grid-cols-2 gap-8 mb-8 relative">
-            {/* Connecting Line Visual */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px bg-white/10"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px bg-gray-800"></div>
 
-            <div className="glass-input p-6 rounded-2xl bg-white/5">
-                <div className="text-xs text-yellow-500 font-bold mb-4 uppercase tracking-widest">Punto 1</div>
+            <div className="bg-app-input border border-gray-800 p-6 rounded-3xl">
+                <div className="industrial-label text-orange-500 mb-4">Punto_A_Register</div>
                 <div className="space-y-3">
-                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">X1</span><input type="number" value={p1.x} onChange={e=>setP1({...p1, x:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p1.x)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs no-print"><i className="fa-regular fa-copy"></i></button></div>
-                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">Y1</span><input type="number" value={p1.y} onChange={e=>setP1({...p1, y:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p1.y)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs no-print"><i className="fa-regular fa-copy"></i></button></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-gray-600 font-mono text-[8px]">X1</span><input type="number" value={p1.x} onChange={e=>setP1({...p1, x:e.target.value})} className="w-full bg-black/40 border border-gray-800 p-3 pl-8 rounded-xl text-sm outline-none font-mono text-white" placeholder="0"/></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-gray-600 font-mono text-[8px]">Y1</span><input type="number" value={p1.y} onChange={e=>setP1({...p1, y:e.target.value})} className="w-full bg-black/40 border border-gray-800 p-3 pl-8 rounded-xl text-sm outline-none font-mono text-white" placeholder="0"/></div>
                 </div>
             </div>
-            <div className="glass-input p-6 rounded-2xl bg-white/5">
-                <div className="text-xs text-yellow-500 font-bold mb-4 uppercase tracking-widest">Punto 2</div>
+            <div className="bg-app-input border border-gray-800 p-6 rounded-3xl">
+                <div className="industrial-label text-orange-500 mb-4">Punto_B_Register</div>
                 <div className="space-y-3">
-                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">X2</span><input type="number" value={p2.x} onChange={e=>setP2({...p2, x:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p2.x)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs no-print"><i className="fa-regular fa-copy"></i></button></div>
-                    <div className="relative"><span className="absolute left-3 top-3 text-slate-500 font-mono text-xs">Y2</span><input type="number" value={p2.y} onChange={e=>setP2({...p2, y:e.target.value})} className="w-full glass-input p-3 pl-8 rounded-xl text-sm outline-none bg-black/20" placeholder="0"/><button onClick={()=>copy(p2.y)} className="absolute right-2 top-3 text-slate-600 hover:text-white text-xs no-print"><i className="fa-regular fa-copy"></i></button></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-gray-600 font-mono text-[8px]">X2</span><input type="number" value={p2.x} onChange={e=>setP2({...p2, x:e.target.value})} className="w-full bg-black/40 border border-gray-800 p-3 pl-8 rounded-xl text-sm outline-none font-mono text-white" placeholder="0"/></div>
+                    <div className="relative"><span className="absolute left-3 top-3 text-gray-600 font-mono text-[8px]">Y2</span><input type="number" value={p2.y} onChange={e=>setP2({...p2, y:e.target.value})} className="w-full bg-black/40 border border-gray-800 p-3 pl-8 rounded-xl text-sm outline-none font-mono text-white" placeholder="0"/></div>
                 </div>
             </div>
         </div>
         
-        <div className="bg-black/20 p-8 rounded-2xl border border-white/10 flex items-center justify-between gap-6 relative overflow-hidden backdrop-blur-md">
-            <div className="absolute top-0 left-0 w-1 h-full bg-accent-500 shadow-[0_0_15px_#3b82f6]"></div>
+        <div className="bg-black/30 p-8 rounded-[2rem] border border-gray-800 flex items-center justify-between gap-6 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-orange-600"></div>
             <div className="relative w-full">
-                <label className="text-[10px] text-slate-400 font-bold uppercase absolute -top-3 left-0">Valore X Target</label>
-                <input type="number" value={targetX} onChange={e=>setTargetX(e.target.value)} className="w-full glass-input p-4 rounded-xl text-white text-xl outline-none font-bold" placeholder="X?"/>
+                <label className="industrial-label">Valore X Target</label>
+                <input type="number" value={targetX} onChange={e=>setTargetX(e.target.value)} className="w-full bg-transparent text-white text-2xl font-black outline-none font-mono" placeholder="X_VALUE"/>
             </div>
             <div className="text-right min-w-[140px]">
-                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Risultato Y</div>
-                <div className="text-4xl font-bold text-accent-400 font-mono flex justify-end items-center gap-3 cursor-pointer group" onClick={()=>copy(result)}>
+                <div className="industrial-label">Result_Y_Output</div>
+                <div className="text-4xl font-black text-orange-500 font-mono flex justify-end items-center gap-3 cursor-pointer" onClick={()=>copy(result)}>
                     {result} 
-                    <i className="fa-regular fa-copy text-lg text-slate-600 group-hover:text-white transition-colors no-print"></i>
                 </div>
             </div>
         </div>
