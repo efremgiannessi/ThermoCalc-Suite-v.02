@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
-// Fix: Added missing imports for Percent and TrendingUp icons
-import { Percent, TrendingUp } from 'lucide-react';
+import { Percent } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -13,10 +12,6 @@ export default function Percentuali({ showToast }: Props) {
   const [resAdd, setResAdd] = useState('--');
   const [resSub, setResSub] = useState('--');
 
-  const [dStart, setDStart] = useState('');
-  const [dEnd, setDEnd] = useState('');
-  const [delta, setDelta] = useState({ val: '-- %', isPos: true });
-
   const copy = (t: string) => { navigator.clipboard.writeText(t); showToast('Copiato!'); };
 
   useEffect(() => {
@@ -26,22 +21,19 @@ export default function Percentuali({ showToast }: Props) {
             const d = JSON.parse(saved);
             if(d.val) setVal(d.val);
             if(d.rate) setRate(d.rate);
-            if(d.dStart) setDStart(d.dStart);
-            if(d.dEnd) setDEnd(d.dEnd);
             if(d.val && d.rate) calcPerc(d.val, d.rate);
-            if(d.dStart && d.dEnd) calcDelta(d.dStart, d.dEnd);
         } catch(e) {}
     }
   }, []);
 
   const handleSave = () => {
-      const data = { val, rate, dStart, dEnd };
+      const data = { val, rate };
       localStorage.setItem('percentualiData', JSON.stringify(data));
       showToast('Dati salvati!');
   };
 
   const handleShare = async () => {
-      const text = `Report Percentuali\nValore: ${val} (+${rate}% = ${resAdd})\nVariazione: ${dStart} -> ${dEnd} (${delta.val})`;
+      const text = `Report Percentuali\nValore: ${val} (+${rate}% = ${resAdd})`;
       if (navigator.share) {
           try { await navigator.share({ title: 'ThermoCalc Percentuali', text }); } catch {}
       } else {
@@ -63,27 +55,15 @@ export default function Percentuali({ showToast }: Props) {
     }
   };
 
-  const calcDelta = (s: string, e: string) => {
-      setDStart(s); setDEnd(e);
-      const start = parseFloat(s);
-      const end = parseFloat(e);
-      if(!isNaN(start) && !isNaN(end) && start !== 0) {
-          const d = ((end - start) / start) * 100;
-          setDelta({ val: (d > 0 ? "+" : "") + d.toFixed(2) + " %", isPos: d >= 0 });
-      } else {
-          setDelta({ val: '-- %', isPos: true });
-      }
-  };
-
   return (
     <div className="animate-slide-in">
-        <div className="flex justify-end gap-2 mb-6 max-w-5xl mx-auto no-print">
+        <div className="flex justify-end gap-2 mb-6 max-w-xl mx-auto no-print">
           <button onClick={handleSave} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-colors border border-gray-700 flex items-center gap-2">Salva</button>
           <button onClick={handleShare} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-colors border border-gray-700 flex items-center gap-2">Condividi</button>
           <button onClick={() => window.print()} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-colors border border-gray-700 flex items-center gap-2">Stampa</button>
       </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div className="max-w-xl mx-auto">
         <div className="glass-card rounded-3xl p-8 flex flex-col justify-between print-break-inside">
             <div>
                 <h2 className="text-xl font-black uppercase tracking-tighter text-white mb-6 flex items-center gap-3">
@@ -114,27 +94,6 @@ export default function Percentuali({ showToast }: Props) {
                         <div className="text-2xl font-black text-gray-400 font-mono">{resSub}</div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div className="glass-card rounded-3xl p-8 print-break-inside">
-            <h2 className="text-xl font-black uppercase tracking-tighter text-white mb-6 flex items-center gap-3">
-                <div className="bg-orange-600 p-2 rounded-xl text-white"><TrendingUp size={18} /></div>
-                Variazione Delta
-            </h2>
-            <div className="space-y-6 mb-8">
-                 <div>
-                     <label className="industrial-label">Valore Iniziale</label>
-                     <input type="number" value={dStart} onChange={e=>calcDelta(e.target.value, dEnd)} className="w-full industrial-input rounded-2xl p-4" placeholder="0.00"/>
-                 </div>
-                 <div>
-                     <label className="industrial-label">Valore Finale</label>
-                     <input type="number" value={dEnd} onChange={e=>calcDelta(dStart, e.target.value)} className="w-full industrial-input rounded-2xl p-4" placeholder="0.00"/>
-                 </div>
-            </div>
-            <div className="mt-auto p-6 bg-black/40 rounded-3xl text-center border border-gray-800 relative group cursor-pointer hover:border-orange-500/50 transition-all shadow-inner" onClick={()=>copy(delta.val)}>
-                <div className="industrial-label text-center">Risultato Variazione</div>
-                <span className={`text-4xl font-black font-mono ${delta.isPos ? 'text-orange-500' : 'text-red-500'}`}>{delta.val}</span>
             </div>
         </div>
     </div>
