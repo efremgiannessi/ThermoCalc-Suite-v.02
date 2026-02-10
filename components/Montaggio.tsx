@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 
 interface Props {
@@ -516,7 +517,7 @@ export default function Montaggio({ showToast }: Props) {
                                  placeholder="Q.tà"
                                  value={quantities[item.id] || ''}
                                  onChange={(e) => updateQty(item.id, e.target.value)}
-                                 className="w-full glass-input p-2 rounded-lg text-center text-white font-bold"
+                                 className="w-full bg-gray-800 border border-gray-700 p-2 rounded-lg text-center text-white font-bold focus:border-emerald-500 outline-none transition-colors"
                                />
                             </div>
                             <div className="col-span-3 md:col-span-1 flex flex-col items-center justify-center no-print">
@@ -550,7 +551,7 @@ export default function Montaggio({ showToast }: Props) {
                                value={surface} 
                                onChange={(e) => setSurface(e.target.value)} 
                                placeholder="0.00" 
-                               className="w-full glass-input rounded-xl p-3 text-white font-bold text-center outline-none border border-white/10 focus:border-emerald-500/50"
+                               className="w-full bg-gray-800 rounded-xl p-3 text-white font-bold text-center outline-none border border-gray-700 focus:border-emerald-500"
                            />
                        </div>
 

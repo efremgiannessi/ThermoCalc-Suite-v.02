@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it" class="dark">
   <head>
@@ -70,6 +71,19 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(75, 85, 99, 0.15);
+        }
+        
+        /* Aggiunta definizione glass-input per compatibilità */
+        .glass-input {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: rgba(249, 115, 22, 0.5);
+            background: rgba(17, 24, 39, 0.9);
         }
 
         .industrial-input {

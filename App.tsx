@@ -144,7 +144,8 @@ export default function App() {
 
         {/* Viewport - p-6 */}
         <section className="flex-1 overflow-y-auto p-6 bg-app-bg custom-scrollbar relative">
-          <div className="max-w-6xl mx-auto animate-fade-in pb-8">
+          {/* Changed max-w-6xl to max-w-5xl for slightly narrower layout */}
+          <div className="max-w-5xl mx-auto animate-fade-in pb-8">
             {activeTab === 'termica' && <Termica showToast={showToast} />}
             {activeTab === 'commerciale' && <Commerciale showToast={showToast} />}
             {activeTab === 'scientifica' && <Scientifica showToast={showToast} />}
