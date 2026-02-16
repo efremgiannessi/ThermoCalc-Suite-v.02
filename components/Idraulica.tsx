@@ -1,6 +1,6 @@
 
-import { useState, useEffect, useMemo } from 'react';
-import { Droplets, Zap, Wind, ArrowDown, Activity, Database, TrendingDown, Ruler, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Droplets, Zap, Database, TrendingDown, Ruler, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -118,7 +118,7 @@ export default function Idraulica({ showToast }: Props) {
         // Calculate Theoretical Diameter
         // A = Q/V -> D = sqrt(4A/pi)
         const A_theo = Q_m3s / V_target;
-        const D_theo_mm = Math.sqrt((4 * A_theo) / Math.PI) * 1000;
+        // const D_theo_mm = Math.sqrt((4 * A_theo) / Math.PI) * 1000;
 
         // Check against DB
         const sizes = PIPE_DB[material].sizes;

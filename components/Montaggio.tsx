@@ -53,7 +53,6 @@ const MOUNTING_DATA: MountingItem[] = [
 
 export default function Montaggio({ showToast }: Props) {
   const [mode, setMode] = useState<Mode>('tegolo');
-  const [showRates, setShowRates] = useState(false);
   const [notes, setNotes] = useState('');
 
   // --- STATI TEGOLO ALARE ---
@@ -61,7 +60,6 @@ export default function Montaggio({ showToast }: Props) {
   const [tegD, setTegD] = useState<string>('24.00'); // Lunghezza max
   const [tegH, setTegH] = useState<string>('5.00'); // Sbraccio
   const [tegQI, setTegQI] = useState<string>('6.60'); // QI
-  const [tegHalfD, setTegHalfD] = useState<number>(0);
   const [tegResH, setTegResH] = useState<string>('--');
   const [tegResW, setTegResW] = useState<string>('--');
 
@@ -145,7 +143,6 @@ export default function Montaggio({ showToast }: Props) {
     const qi = parseFloat(tegQI) || 0;
 
     const dMezzi = d / 2;
-    setTegHalfD(dMezzi);
 
     const totH = a + dMezzi + h;
     setTegResH(totH.toFixed(2));
@@ -195,7 +192,7 @@ export default function Montaggio({ showToast }: Props) {
     const finalPlatDays = Math.max(0, finalCraneDays + (parseFloat(platOffset) || 0));
 
     // Media elementi al giorno
-    const avgElementsPerDay = finalCraneDays > 0 ? totalPieces / finalCraneDays : 0;
+    // const avgElementsPerDay = finalCraneDays > 0 ? totalPieces / finalCraneDays : 0;
 
     // Tariffe
     const dailyCrane = parseFloat(dailyCraneCost) || 0;
@@ -230,7 +227,6 @@ export default function Montaggio({ showToast }: Props) {
       setup: costSetup,
       total: totalCost,
       perSqm: costPerSqm,
-      avgEl: avgElementsPerDay,
       chart: { pCrane, pPlat, pTravel },
       rates: { dailyCrane, dailyPlatform, dailyTravel }
     };

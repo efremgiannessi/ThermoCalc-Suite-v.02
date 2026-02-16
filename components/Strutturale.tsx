@@ -1,6 +1,6 @@
 
 import { useState, useMemo } from 'react';
-import { Trello, ArrowRight, ArrowDown, Construction, Box, Scale, Square, ArrowDownToLine, Wind, Info } from 'lucide-react';
+import { Trello, Construction, Box, Scale, ArrowDownToLine, Wind, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;

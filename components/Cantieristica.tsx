@@ -90,7 +90,6 @@ export default function Cantieristica({ showToast }: Props) {
       const rw = parseFloat(roomW) || 0;
       const tl = parseFloat(tileL) || 0;
       const tw = parseFloat(tileW) || 0;
-      const tj = parseFloat(tileJoint) || 0;
       const waste = parseFloat(tileWaste) || 0;
 
       if(rl > 0 && rw > 0 && tl > 0 && tw > 0) {

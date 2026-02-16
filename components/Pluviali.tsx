@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CloudRain, ArrowDown, Droplets, Umbrella, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
+import { CloudRain, ArrowDown, Umbrella, AlertTriangle, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -215,7 +215,7 @@ export default function Pluviali({ showToast }: Props) {
                     
                     <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto custom-scrollbar">
                         {results.length > 0 ? (
-                            results.map((r, i) => (
+                            results.map((r) => (
                                 <div key={r.dn} className={`rounded-xl p-4 border transition-all ${r.utilization > 90 ? 'bg-orange-900/10 border-orange-500/30' : 'bg-black/20 border-white/5 hover:border-blue-500/30'}`}>
                                     <div className="flex justify-between items-start mb-3">
                                         <div className="flex items-center gap-2">

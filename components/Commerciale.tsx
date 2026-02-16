@@ -2,19 +2,14 @@
 import { useState, useEffect } from 'react';
 import { 
   TrendingUp, 
-  DollarSign, 
   PieChart, 
   Percent, 
   Scale, 
   Clock, 
   ArrowUpRight, 
   Coins, 
-  Calculator,
-  RefreshCcw,
   BarChart3,
   ArrowRight,
-  Plus,
-  Minus,
   Info
 } from 'lucide-react';
 

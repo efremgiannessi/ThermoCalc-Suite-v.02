@@ -4,7 +4,6 @@ import { TabType } from './types';
 import { 
   Thermometer, 
   Calculator, 
-  Percent, 
   LineChart, 
   Ruler, 
   Scale, 
@@ -13,7 +12,6 @@ import {
   Shapes, 
   LayoutDashboard,
   ShieldCheck,
-  Printer,
   ChevronRight,
   Menu,
   Activity,
@@ -23,7 +21,7 @@ import {
   CloudRain,
   Layers,
   FileDown,
-  Trello // Icon for Strutturale
+  Trello 
 } from 'lucide-react';
 
 import Termica from './components/Termica';

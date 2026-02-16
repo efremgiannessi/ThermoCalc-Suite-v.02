@@ -5,10 +5,8 @@ import {
   ArrowUp, 
   ArrowDown, 
   Trash2, 
-  Plus, 
   Download, 
   FileText, 
-  ShieldCheck,
   Zap,
   Droplets,
   Wind,
@@ -80,7 +78,7 @@ interface Layer {
   customDesc?: string;
 }
 
-export default function Stratigrafie({ showToast }: Props) {
+export default function Stratigrafie({ }: Props) {
   const [layers, setLayers] = useState<Layer[]>([
      { uid: '1', materialId: 'gravel', thick: 5 },
      { uid: '2', materialId: 'mem_bit_4mm', thick: 0.4 },
