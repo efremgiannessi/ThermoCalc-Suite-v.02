@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowUp, ArrowRight, Calculator } from 'lucide-react';
+import { ArrowUp, ArrowRight, Calculator, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -112,7 +112,7 @@ export default function Pendenze({ showToast }: Props) {
   };
 
   return (
-    <div className="animate-slide-in">
+    <div className="animate-slide-in pb-12">
         <div className="flex justify-end gap-2 mb-6 max-w-4xl mx-auto no-print">
           <button onClick={handleSave} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-floppy-disk"></i> Salva</button>
           <button onClick={handleShare} className="bg-white/10 hover:bg-white/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold transition-colors border border-white/5 flex items-center gap-2"><i className="fa-solid fa-share-nodes"></i> Condividi</button>
@@ -232,6 +232,27 @@ export default function Pendenze({ showToast }: Props) {
             </div>
         </div>
     </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Calcolo del rapporto tra dislivello verticale (H) e distanza orizzontale (L). Conversione istantanea tra pendenza percentuale (%) e inclinazione in gradi (°).
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
+                  Inserisci H e L per ottenere la %. Usa il calcolo inverso per trovare una dimensione nota la pendenza. Usa i convertitori in basso per trasformare ° in %.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Formule</strong>
+                  Pendenza % = (H/L) * 100. Pendenza Gradi = arctan(H/L). Pendenza 100% corrisponde a 45°.
+              </div>
+          </div>
+      </div>
     </div>
   );
 }

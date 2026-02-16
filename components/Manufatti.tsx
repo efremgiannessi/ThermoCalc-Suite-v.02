@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -79,7 +80,7 @@ export default function Manufatti({ showToast }: Props) {
   );
 
   return (
-    <div className="space-y-4 animate-slide-in">
+    <div className="space-y-4 animate-slide-in pb-12">
       <div className="flex flex-col md:flex-row items-center justify-between gap-3">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <span className="bg-orange-500/20 w-8 h-8 rounded-lg flex items-center justify-center text-orange-500 border border-orange-500/20">
@@ -143,6 +144,23 @@ export default function Manufatti({ showToast }: Props) {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Database tecnico riservato di elementi prefabbricati in cemento armato precompresso (CAP).
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Dati Forniti</strong>
+                  Dimensioni geometriche, peso lineare (kg/ml), volume calcestruzzo (mc/ml) e resistenza al fuoco (R min).
+              </div>
+          </div>
       </div>
     </div>
   );

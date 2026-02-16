@@ -14,7 +14,8 @@ import {
   BarChart3,
   ArrowRight,
   Plus,
-  Minus
+  Minus,
+  Info
 } from 'lucide-react';
 
 interface Props {
@@ -511,6 +512,26 @@ export default function Commerciale({ showToast }: Props) {
         </div>
       </div>
 
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Strumenti per il calcolo rapido di margini commerciali, IVA (scorporo e incorporo), sconti e matematica finanziaria di base (interessi, inflazione).
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
+                  Inserisci i valori di costo e vendita per ottenere markup e margine. Usa il modulo IVA per scorporare tasse. Calcola rendimenti composti per investimenti a lungo termine.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Riferimenti Formule</strong>
+                  Markup = (P-C)/C. Margin = (P-C)/P. CAGR = (Vfin/Vin)^(1/n) - 1. Regola del 72 per stima raddoppio capitale.
+              </div>
+          </div>
+      </div>
     </div>
   );
 }

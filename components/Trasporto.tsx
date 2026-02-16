@@ -1,4 +1,6 @@
+
 import { useState, useEffect } from 'react';
+import { Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -331,7 +333,7 @@ export default function Trasporto({ showToast }: Props) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 animate-slide-in">
+    <div className="max-w-6xl mx-auto space-y-6 animate-slide-in pb-12">
         
         {/* Header & Tabs */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
@@ -871,6 +873,26 @@ export default function Trasporto({ showToast }: Props) {
             </div>
         )}
 
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Preventivazione dettagliata dei costi di trasporto per cantieri. Supporta il calcolo logistico (viaggi, attese), trasporti ordinari (pannelli, manufatti standard) ed eccezionali (travi lunghe).
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
+                  Scegli la modalità (Logistica/Ordinari/Eccezionali). Inserisci distanza e volume. Il sistema applica le tariffe tabellari basate su peso e ingombro.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Riferimenti</strong>
+                  Le tabelle costi sono basate su tariffe medie di mercato per autotrasporto conto terzi, indicizzate su base chilometrica e tipologia di mezzo (bilico standard vs eccezionale).
+              </div>
+          </div>
+      </div>
     </div>
   );
 }

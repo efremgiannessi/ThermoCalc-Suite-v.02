@@ -47,17 +47,17 @@
             color: #e2e8f0;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem; /* Aumentato a ~15px */
+            font-size: 0.9375rem;
         }
 
-        /* Industrial Scrollbar - Più sottile */
+        /* Industrial Scrollbar */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #f97316; }
 
         .industrial-label {
-            font-size: 10px; /* Aumentato da 8px */
+            font-size: 10px;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.12em;
@@ -66,14 +66,13 @@
             display: block;
         }
 
-        .glass-card {
+        .glass-card, .glass-panel {
             background: rgba(31, 41, 55, 0.3);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(75, 85, 99, 0.15);
         }
         
-        /* Aggiunta definizione glass-input per compatibilità */
         .glass-input {
             background: rgba(17, 24, 39, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -92,7 +91,7 @@
             color: white;
             font-family: 'JetBrains Mono', monospace;
             transition: all 0.2s ease;
-            font-size: 0.9rem; /* Aumentato default input */
+            font-size: 0.9rem;
         }
 
         .industrial-input:focus {
@@ -101,11 +100,81 @@
             box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1);
         }
 
+        /* === CONFIGURAZIONE STAMPA PDF PROFESSIONALE === */
         @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
-            .glass-card { border: 1px solid #ddd !important; background: none !important; backdrop-filter: none !important; }
-            .industrial-label { color: #666 !important; }
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
+
+            /* Reset Layout per permettere lo scroll completo */
+            body, html, #root, main, section {
+                height: auto !important;
+                overflow: visible !important;
+                position: relative !important;
+                display: block !important;
+                background-color: white !important;
+                color: black !important;
+            }
+
+            /* Nascondi elementi UI non necessari */
+            .no-print, aside, header, .fixed, footer { 
+                display: none !important; 
+            }
+
+            /* Forza il rendering esatto dei colori (es. grafici) */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Conversione Tema Dark -> Light per risparmio inchiostro */
+            .bg-app-bg, .bg-app-panel, .glass-card, .glass-panel, .bg-black\/20, .bg-black\/30, .bg-black\/40 {
+                background: white !important;
+                border: 1px solid #ddd !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                color: black !important;
+            }
+
+            /* Testi chiari su sfondo scuro -> Testi scuri su sfondo chiaro */
+            .text-white, .text-slate-200, .text-slate-300, .text-gray-200 { 
+                color: #000 !important; 
+            }
+            .text-slate-400, .text-slate-500, .text-gray-400, .text-gray-500 { 
+                color: #444 !important; 
+            }
+            
+            /* Colori accento più scuri per leggibilità su bianco */
+            .text-orange-400, .text-orange-500 { color: #c2410c !important; }
+            .text-cyan-400, .text-cyan-500 { color: #0e7490 !important; }
+            .text-emerald-400, .text-emerald-500 { color: #047857 !important; }
+            .text-blue-400, .text-blue-500 { color: #1d4ed8 !important; }
+            .text-red-400, .text-red-500 { color: #b91c1c !important; }
+
+            /* Bordi */
+            .border-white\/5, .border-white\/10, .border-app-border {
+                border-color: #ccc !important;
+            }
+
+            /* Input formattati come testo */
+            input, select, textarea {
+                background: transparent !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+
+            /* Gestione interruzioni pagina */
+            .print-break-inside {
+                break-inside: avoid;
+            }
+            
+            /* Assicura che i grafici (SVG) siano visibili */
+            svg text { fill: #000 !important; }
+            
+            /* Industrial Label */
+            .industrial-label { color: #333 !important; }
         }
     </style>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

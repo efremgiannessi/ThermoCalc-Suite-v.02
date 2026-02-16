@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { Scale } from 'lucide-react';
+import { Scale, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -57,7 +58,7 @@ export default function Pesi({ showToast }: Props) {
   };
 
   return (
-    <div className="animate-slide-in">
+    <div className="animate-slide-in pb-12">
         <div className="flex justify-end gap-2 mb-6 max-w-2xl mx-auto no-print">
           <button onClick={handleSave} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-gray-700">Salva</button>
           <button onClick={handleShare} className="bg-gray-800 hover:bg-orange-600 text-slate-300 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-gray-700">Condividi</button>
@@ -113,6 +114,23 @@ export default function Pesi({ showToast }: Props) {
             </div>
         </div>
     </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 max-w-2xl mx-auto border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Calcolo del peso teorico di elementi prismatici basato sul volume e sul peso specifico del materiale.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Pesi Specifici di Riferimento</strong>
+                  Acciaio: 7850 kg/m³. Calcestruzzo Armato: 2500 kg/m³. Alluminio: 2700 kg/m³. Acqua: 1000 kg/m³.
+              </div>
+          </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 
 import { useState, useEffect, useRef } from 'react';
-// Added missing 'Info' icon to the imports
 import { Search, Thermometer, Layers, Activity, ShieldAlert, Zap, Table as TableIcon, Droplets, Sun, FileText, BarChart3, TrendingUp, ClipboardCheck, Gauge, Info } from 'lucide-react';
 
 const capoluoghiDB: Record<string, { z: string; n: string; s: string }> = { 
@@ -504,6 +503,27 @@ export default function Termica({ showToast }: Props) {
                 </div>
             </div>
         </div>
+      </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Modulo per il calcolo delle prestazioni energetiche e sismiche in base alla località (Geo-Ref). Fornisce valori di Trasmittanza (U), Sfasamento termico e verifica del rischio condensa interstiziale.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
+                  Cerca una città per caricare i dati climatici e sismici (Zona, Neve, Ag). Seleziona un isolante dal database e imposta il target U per ottenere lo spessore necessario.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Normative di Riferimento</strong>
+                  D.M. 26/06/2015 (Requisiti Minimi), UNI EN ISO 13786 (Comportamento dinamico), NTC 2018 (Parametri Sismici e Carico Neve).
+              </div>
+          </div>
       </div>
     </div>
   );

@@ -16,7 +16,14 @@ import {
   Printer,
   ChevronRight,
   Menu,
-  Activity
+  Activity,
+  ArrowRightLeft,
+  BrickWall,
+  Droplets,
+  CloudRain,
+  Layers,
+  FileDown,
+  Trello // Icon for Strutturale
 } from 'lucide-react';
 
 import Termica from './components/Termica';
@@ -28,6 +35,13 @@ import Pesi from './components/Pesi';
 import Montaggio from './components/Montaggio';
 import Trasporto from './components/Trasporto';
 import Manufatti from './components/Manufatti';
+import Convertitore from './components/Convertitore';
+import Cantieristica from './components/Cantieristica';
+import Idraulica from './components/Idraulica';
+import Pluviali from './components/Pluviali';
+import Stratigrafie from './components/Stratigrafie';
+import Strutturale from './components/Strutturale'; // New Component
+import Footer from './components/Footer';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('termica');
@@ -44,7 +58,13 @@ export default function App() {
         pesi: "Massa Materiali",
         montaggio: "Preventivo Montaggio",
         trasporto: "Logistica Trasporti",
-        manufatti: "Database Manufatti"
+        manufatti: "Database Manufatti",
+        convertitore: "Convertitore Universale",
+        cantieristica: "Computo Cantiere",
+        idraulica: "Idraulica e Fluidi",
+        pluviali: "Drenaggio Meteo",
+        stratigrafie: "Design Stratigrafie",
+        strutturale: "Calcolo Strutturale"
     };
     document.title = `OMNICALC | ${titles[activeTab].toUpperCase()}`;
   }, [activeTab]);
@@ -54,10 +74,16 @@ export default function App() {
     setTimeout(() => setToast({ show: false, message: '' }), 2500);
   };
 
-  const navItems: { id: TabType; label: string; icon: any }[] = [
+  const navItems: { id: TabType; label: string; icon: any; badge?: boolean }[] = [
     { id: 'termica', label: 'Dinamica Termica', icon: Thermometer },
+    { id: 'strutturale', label: 'Strutturale Rapido', icon: Trello, badge: true }, // New Item
+    { id: 'stratigrafie', label: 'Stratigrafie & Tetti', icon: Layers },
+    { id: 'idraulica', label: 'Idraulica & Fluidi', icon: Droplets },
+    { id: 'pluviali', label: 'Sistemi di Drenaggio', icon: CloudRain },
     { id: 'scientifica', label: 'Calcolo Scientifico', icon: Calculator },
     { id: 'commerciale', label: 'Dashboard Commerciale', icon: LayoutDashboard },
+    { id: 'cantieristica', label: 'Computo Cantiere', icon: BrickWall },
+    { id: 'convertitore', label: 'Convertitore Unità', icon: ArrowRightLeft },
     { id: 'interpol', label: 'Interpolazione', icon: LineChart },
     { id: 'pendenze', label: 'Pendenze e Gradi', icon: Ruler },
     { id: 'pesi', label: 'Pesi Materiali', icon: Scale },
@@ -67,9 +93,9 @@ export default function App() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-app-bg text-gray-200 font-sans text-sm"> {/* Base text increased to sm (14px) */}
+    <div className="flex min-h-screen bg-app-bg text-gray-200 font-sans text-sm">
       
-      {/* Sidebar - Widened to w-56 */}
+      {/* Sidebar */}
       <aside className={`${isSidebarOpen ? 'w-56' : 'w-16'} bg-app-panel border-r border-app-border transition-all duration-300 flex flex-col no-print z-50`}>
         <div className="p-4 flex items-center gap-3 border-b border-app-border">
           <div className="bg-orange-600 p-1.5 rounded shadow-lg shadow-orange-900/20">
@@ -88,14 +114,23 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative ${
                 activeTab === item.id 
                   ? 'bg-orange-600 text-white shadow-md' 
                   : 'text-gray-500 hover:bg-gray-800/50 hover:text-gray-300'
               }`}
             >
               <item.icon size={16} className={activeTab === item.id ? 'text-white' : 'text-gray-500 group-hover:text-orange-500'} />
-              {isSidebarOpen && <span className="text-[10px] font-black uppercase tracking-widest truncate">{item.label}</span>}
+              {isSidebarOpen && (
+                <div className="flex-1 flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest truncate">{item.label}</span>
+                    {item.badge && (
+                        <span className="bg-emerald-500 text-white text-[8px] px-1.5 py-0.5 rounded font-bold animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]">
+                            NEW
+                        </span>
+                    )}
+                </div>
+              )}
             </button>
           ))}
         </nav>
@@ -130,21 +165,25 @@ export default function App() {
             </div>
           </div>
           
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 mr-4">
               <span className="text-[10px] font-mono font-bold text-emerald-500 flex items-center gap-1">
                 <Activity size={10} /> SINC_OK
               </span>
             </div>
-            <button onClick={() => window.print()} className="bg-gray-800 hover:bg-orange-600 text-white p-2 rounded transition-all border border-gray-700">
-              <Printer size={16} />
+            
+            {/* Tasto Scarica PDF Completo */}
+            <button 
+              onClick={() => window.print()} 
+              className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-all border border-orange-500 flex items-center gap-2 text-xs font-black uppercase tracking-widest shadow-lg shadow-orange-900/20 active:scale-95"
+            >
+              <FileDown size={16} /> Scarica PDF Completo
             </button>
           </div>
         </header>
 
         {/* Viewport - p-6 */}
-        <section className="flex-1 overflow-y-auto p-6 bg-app-bg custom-scrollbar relative">
-          {/* Changed max-w-6xl to max-w-5xl for slightly narrower layout */}
+        <section className="flex-1 overflow-y-auto p-6 bg-app-bg custom-scrollbar relative" id="print-area">
           <div className="max-w-5xl mx-auto animate-fade-in pb-8">
             {activeTab === 'termica' && <Termica showToast={showToast} />}
             {activeTab === 'commerciale' && <Commerciale showToast={showToast} />}
@@ -155,6 +194,14 @@ export default function App() {
             {activeTab === 'montaggio' && <Montaggio showToast={showToast} />}
             {activeTab === 'trasporto' && <Trasporto showToast={showToast} />}
             {activeTab === 'manufatti' && <Manufatti showToast={showToast} />}
+            {activeTab === 'convertitore' && <Convertitore showToast={showToast} />}
+            {activeTab === 'cantieristica' && <Cantieristica showToast={showToast} />}
+            {activeTab === 'idraulica' && <Idraulica showToast={showToast} />}
+            {activeTab === 'pluviali' && <Pluviali showToast={showToast} />}
+            {activeTab === 'stratigrafie' && <Stratigrafie showToast={showToast} />}
+            {activeTab === 'strutturale' && <Strutturale showToast={showToast} />}
+            
+            <Footer />
           </div>
         </section>
 

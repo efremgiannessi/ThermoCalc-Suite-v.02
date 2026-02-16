@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
+import { Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -252,7 +253,7 @@ export default function Montaggio({ showToast }: Props) {
   const categories = Array.from(new Set(MOUNTING_DATA.map(d => d.cat)));
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-slide-in">
+    <div className="max-w-5xl mx-auto space-y-6 animate-slide-in pb-12">
       
       {/* Header & Tabs */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
@@ -357,24 +358,15 @@ export default function Montaggio({ showToast }: Props) {
                 </div>
 
                 {/* Risultati Tegolo */}
-                <div className="glass-panel rounded-2xl p-0 overflow-hidden border border-white/10">
-                    <div className="bg-white/5 p-4 border-b border-white/5">
-                        <h4 className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">Formula Altezza (A + D/2 + H)</h4>
-                        <div className="flex justify-center items-center gap-2 mt-2 text-sm font-mono text-slate-300">
-                            <span className="text-orange-400">{parseFloat(tegA).toFixed(2)}</span> + 
-                            <span className="text-cyan-400">{tegHalfD.toFixed(2)}</span> + 
-                            <span className="text-purple-400">{parseFloat(tegH).toFixed(2)}</span> =
-                        </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-orange-500/10 border border-orange-500/20 p-4 rounded-xl text-center cursor-pointer hover:bg-orange-500/20 transition-colors" onClick={() => copy(tegResH)}>
+                        <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
+                        <div className="text-3xl font-black text-white font-mono">{tegResH} <span className="text-sm font-sans text-slate-400">m</span></div>
                     </div>
-                    <div className="p-6 bg-black/20 text-center cursor-pointer hover:bg-black/30 transition-colors" onClick={() => copy(tegResH)}>
-                        <div className="text-4xl font-bold text-white flex justify-center items-center gap-3">
-                            {tegResH} <span className="text-lg text-slate-500 font-sans">m</span>
-                        </div>
+                    <div className="bg-slate-800/50 border border-white/5 p-4 rounded-xl text-center cursor-pointer hover:bg-white/5 transition-colors" onClick={() => copy(tegResW)}>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
+                        <div className="text-3xl font-black text-white font-mono">{tegResW} <span className="text-sm font-sans text-slate-400">q.li</span></div>
                     </div>
-                </div>
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-white/5 flex items-center justify-between cursor-pointer hover:bg-slate-800 transition-colors" onClick={() => copy(tegResW)}>
-                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Peso (D × QI)</div>
-                    <div className="text-2xl font-bold text-emerald-400 font-mono">{tegResW} <span className="text-sm text-emerald-600">QI</span></div>
                 </div>
             </div>
            </div>
@@ -383,344 +375,205 @@ export default function Montaggio({ showToast }: Props) {
         {/* === CAPRIATA SECTION === */}
         {mode === 'capriata' && (
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in print-full-width">
-            <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6 print-break-inside">
-                <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Capriata</h3>
-                <div className="space-y-4">
-                    <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-orange-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>A - Altezza Interna (m)</span></label>
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold border border-orange-500/30">A</div>
-                            <input type="number" value={capA} onChange={(e) => setCapA(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-orange-500/50"/>
+                <div className="glass-panel rounded-2xl p-6 lg:p-8 space-y-6 print-break-inside">
+                    <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Capriata</h3>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div>
+                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">A - Alt. Interna (m)</label>
+                            <input type="number" value={capA} onChange={(e) => setCapA(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">B - Alt. Colmo (m)</label>
+                            <input type="number" value={capB} onChange={(e) => setCapB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">C - Alt. Imbrago (m)</label>
+                            <input type="number" value={capC} onChange={(e) => setCapC(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">H - Sbraccio (m)</label>
+                            <input type="number" value={capH} onChange={(e) => setCapH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
                         </div>
                     </div>
-                    <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-yellow-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>B - Colmo (m)</span></label>
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 text-yellow-500 flex items-center justify-center font-bold border border-yellow-500/30">B</div>
-                            <input type="number" value={capB} onChange={(e) => setCapB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-yellow-500/50"/>
+                    <div className="bg-indigo-500/10 p-4 rounded-xl border border-indigo-500/20 space-y-4">
+                        <div>
+                            <label className="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-1 block">Lunghezza Trave (m)</label>
+                            <input type="number" value={capL} onChange={(e) => setCapL(e.target.value)} className="w-full bg-slate-900/50 border border-indigo-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-1 block">Coeff. Peso (QI)</label>
+                            <input type="number" value={capQI} onChange={(e) => setCapQI(e.target.value)} className="w-full bg-slate-900/50 border border-indigo-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
                         </div>
                     </div>
-                    <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-cyan-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>C - h a 45° (m)</span></label>
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center font-bold border border-cyan-500/30">C</div>
-                            <input type="number" value={capC} onChange={(e) => setCapC(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-cyan-500/50"/>
-                        </div>
-                    </div>
-                    <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-purple-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>H Braccio / Sbraccio (m)</span></label>
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center font-bold border border-purple-500/30">H</div>
-                            <input type="number" value={capH} onChange={(e) => setCapH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-purple-500/50"/>
-                        </div>
-                    </div>
-                </div>
-                <div className="mt-8 pt-6 border-t border-white/5 grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Lunghezza Trave</label>
-                        <input type="number" value={capL} onChange={(e) => setCapL(e.target.value)} className="w-full bg-slate-900/40 border border-white/10 rounded-xl p-3 text-slate-300 font-mono text-center outline-none"/>
-                    </div>
-                    <div>
-                        <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Coefficiente (QI)</label>
-                        <input type="number" value={capQI} onChange={(e) => setCapQI(e.target.value)} className="w-full bg-slate-900/40 border border-white/10 rounded-xl p-3 text-slate-300 font-mono text-center outline-none"/>
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-6 print-break-inside">
-                {/* SVG Capriata */}
-                <div className="glass-panel rounded-2xl p-6 relative flex items-center justify-center bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[250px]">
-                    <svg viewBox="0 0 400 250" className="w-full h-full drop-shadow-lg">
-                        {/* Pilastri */}
-                        <rect x="50" y="150" width="20" height="80" fill="#334155" stroke="#475569" strokeWidth="1" />
-                        <rect x="330" y="150" width="20" height="80" fill="#334155" stroke="#475569" strokeWidth="1" />
-                        <line x1="20" y1="230" x2="380" y2="230" stroke="#475569" strokeWidth="2" />
-                        {/* A */}
-                        <line x1="40" y1="230" x2="40" y2="150" stroke="#fb923c" strokeWidth="1" markerEnd="url(#arrow)" />
-                        <text x="30" y="190" fill="#fb923c" fontSize="12" fontWeight="bold" textAnchor="end">A</text>
-                        {/* Trave Capriata */}
-                        <path d="M50 150 L200 130 L350 150" fill="none" stroke="#e2e8f0" strokeWidth="2" />
-                        <line x1="50" y1="150" x2="350" y2="150" stroke="#e2e8f0" strokeWidth="1" />
-                        {/* B (Colmo) */}
-                        <line x1="200" y1="130" x2="200" y2="150" stroke="#facc15" strokeWidth="2" />
-                        <text x="205" y="145" fill="#facc15" fontSize="10" fontWeight="bold">B</text>
-                        {/* Rigging (C) */}
-                        <line x1="80" y1="145" x2="200" y2="50" stroke="#22d3ee" strokeWidth="1" />
-                        <line x1="320" y1="145" x2="200" y2="50" stroke="#22d3ee" strokeWidth="1" />
-                        <line x1="200" y1="130" x2="200" y2="50" stroke="#22d3ee" strokeWidth="1" strokeDasharray="2 2" />
-                        <text x="190" y="90" fill="#22d3ee" fontSize="10" fontWeight="bold" textAnchor="end">C</text>
-                        {/* Crane H */}
-                        <line x1="200" y1="50" x2="200" y2="10" stroke="#c084fc" strokeWidth="2" strokeDasharray="4 2" />
-                        <circle cx="200" cy="10" r="4" fill="#c084fc" />
-                        <text x="210" y="25" fill="#c084fc" fontSize="10" fontWeight="bold">H</text>
-                    </svg>
                 </div>
 
-                {/* Risultati Capriata */}
-                <div className="glass-panel rounded-2xl p-0 overflow-hidden border border-white/10">
-                    <div className="bg-white/5 p-4 border-b border-white/5">
-                        <h4 className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">Formula Altezza (A + B + C + H)</h4>
-                        <div className="flex justify-center items-center gap-2 mt-2 text-sm font-mono text-slate-300 flex-wrap">
-                            <span className="text-orange-400 bg-orange-500/10 px-1 rounded">{parseFloat(capA).toFixed(2)}</span> + 
-                            <span className="text-yellow-400 bg-yellow-500/10 px-1 rounded">{parseFloat(capB).toFixed(2)}</span> + 
-                            <span className="text-cyan-400 bg-cyan-500/10 px-1 rounded">{parseFloat(capC).toFixed(2)}</span> + 
-                            <span className="text-purple-400 bg-purple-500/10 px-1 rounded">{parseFloat(capH).toFixed(2)}</span>
+                <div className="flex flex-col gap-6 print-break-inside">
+                    <div className="glass-panel rounded-2xl p-6 relative flex items-center justify-center bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[250px]">
+                        {/* Placeholder SVG for Capriata visualization if needed, or keeping it simple */}
+                        <div className="text-center text-slate-500">
+                            <i className="fa-solid fa-draw-polygon text-4xl mb-2 opacity-50"></i>
+                            <div className="text-xs font-bold uppercase">Schema Geometrico</div>
                         </div>
                     </div>
-                    <div className="p-6 bg-black/20 text-center cursor-pointer hover:bg-black/30 transition-colors" onClick={() => copy(capResH)}>
-                        <div className="text-4xl font-bold text-white flex justify-center items-center gap-3">
-                            {capResH} <span className="text-lg text-slate-500 font-sans">m</span>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl text-center cursor-pointer hover:bg-indigo-500/20 transition-colors" onClick={() => copy(capResH)}>
+                            <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
+                            <div className="text-3xl font-black text-white font-mono">{capResH} <span className="text-sm font-sans text-slate-400">m</span></div>
+                        </div>
+                        <div className="bg-slate-800/50 border border-white/5 p-4 rounded-xl text-center cursor-pointer hover:bg-white/5 transition-colors" onClick={() => copy(capResW)}>
+                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
+                            <div className="text-3xl font-black text-white font-mono">{capResW} <span className="text-sm font-sans text-slate-400">q.li</span></div>
                         </div>
                     </div>
                 </div>
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-white/5 flex items-center justify-between cursor-pointer hover:bg-slate-800 transition-colors" onClick={() => copy(capResW)}>
-                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Peso (L. Trave × QI)</div>
-                    <div className="text-2xl font-bold text-emerald-400 font-mono">{capResW} <span className="text-sm text-emerald-600">QI</span></div>
-                </div>
-            </div>
            </div>
         )}
 
-        {/* === PREVENTIVO COSTI SECTION === */}
+        {/* === COSTI SECTION === */}
         {mode === 'costi' && (
-           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in print-full-width">
-             <div className="lg:col-span-8 space-y-8">
-               
-               {/* Categories Input */}
-               {categories.map(cat => (
-                 <div key={cat} className="glass-panel rounded-2xl p-6 print-break-inside">
-                    <h3 className="text-lg font-bold text-emerald-400 mb-4 flex items-center gap-2">
-                       {cat === 'Fondazioni' && <i className="fa-solid fa-shapes"></i>}
-                       {cat === 'Verticali' && <i className="fa-solid fa-up-long"></i>}
-                       {cat === 'Pareti' && <i className="fa-solid fa-border-all"></i>}
-                       {cat === 'Orizzontali' && <i className="fa-solid fa-bars"></i>}
-                       {cat === 'Copertura' && <i className="fa-solid fa-house-chimney-window"></i>}
-                       {cat === 'Accessori' && <i className="fa-solid fa-puzzle-piece"></i>}
-                       {cat === 'Esterni' && <i className="fa-solid fa-tree"></i>}
-                       {cat}
-                    </h3>
-                    <div className="space-y-4">
-                       {MOUNTING_DATA.filter(i => i.cat === cat).map(item => (
-                         <div key={item.id} className="grid grid-cols-12 gap-4 items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                            <div className="col-span-5 md:col-span-5">
-                               <div className="font-bold text-white text-sm">{item.name}</div>
-                               <div className="text-[10px] text-slate-400">{item.detail}</div>
-                               {item.threshold !== '-' && <div className="text-[10px] text-orange-400 font-mono mt-1">XL: {item.threshold}</div>}
-                            </div>
-                            <div className="col-span-3 md:col-span-4 text-[10px] text-slate-500 leading-tight hidden md:block border-l border-white/10 pl-3 no-print">
-                                <span className="block text-slate-400 mb-1">Criticità:</span> {item.crit}
-                            </div>
-                            <div className="col-span-4 md:col-span-2">
-                               <input 
-                                 type="number" 
-                                 min="0"
-                                 placeholder="Q.tà"
-                                 value={quantities[item.id] || ''}
-                                 onChange={(e) => updateQty(item.id, e.target.value)}
-                                 className="w-full bg-gray-800 border border-gray-700 p-2 rounded-lg text-center text-white font-bold focus:border-emerald-500 outline-none transition-colors"
-                               />
-                            </div>
-                            <div className="col-span-3 md:col-span-1 flex flex-col items-center justify-center no-print">
-                               <label className="text-[9px] uppercase font-bold text-slate-500 mb-1">XL</label>
-                               <div 
-                                 onClick={() => toggleXL(item.id)}
-                                 className={`w-10 h-6 rounded-full flex items-center p-1 cursor-pointer transition-colors ${isXL[item.id] ? 'bg-orange-500' : 'bg-slate-700'}`}
-                               >
-                                 <div className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform ${isXL[item.id] ? 'translate-x-4' : 'translate-x-0'}`}></div>
-                               </div>
-                            </div>
-                         </div>
-                       ))}
-                    </div>
-                 </div>
-               ))}
-             </div>
-
-             <div className="lg:col-span-4 space-y-6">
-                <div className="glass-panel rounded-2xl p-6 sticky top-24 border-t-4 border-emerald-500 print-break-inside">
-                   <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                      <i className="fa-solid fa-cash-register text-emerald-500"></i> Totale Costo Montaggio
-                   </h3>
-                   
-                   <div className="space-y-4 mb-6 no-print">
-                       {/* Input Superficie Totale */}
-                       <div className="mb-6">
-                           <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">Superficie Totale (m²)</label>
-                           <input 
-                               type="number" 
-                               value={surface} 
-                               onChange={(e) => setSurface(e.target.value)} 
-                               placeholder="0.00" 
-                               className="w-full bg-gray-800 rounded-xl p-3 text-white font-bold text-center outline-none border border-gray-700 focus:border-emerald-500"
-                           />
-                       </div>
-
-                        {/* Parametri Economici */}
-                        <div className="mb-6 border-t border-white/5 pt-4">
-                            <label className="text-[10px] text-emerald-500 font-bold uppercase tracking-wider mb-3 block">Parametri Economici</label>
-                            <div className="grid grid-cols-2 gap-3 mb-4">
-                                <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Tariffa Gru €/gg</label>
-                                    <input 
-                                        type="number"
-                                        placeholder="2650"
-                                        value={dailyCraneCost} 
-                                        onChange={(e) => setDailyCraneCost(e.target.value)} 
-                                        className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
-                                    />
+            <div className="animate-fade-in print-full-width">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* INPUT LIST */}
+                    <div className="lg:col-span-8 space-y-8">
+                        {categories.map(cat => (
+                            <div key={cat} className="glass-panel rounded-2xl overflow-hidden border border-white/5 print-break-inside">
+                                <div className="bg-white/5 px-6 py-3 border-b border-white/5">
+                                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">{cat}</h3>
                                 </div>
-                                <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Tariffa Piattaf. €/gg</label>
-                                    <input 
-                                        type="number"
-                                        placeholder="200"
-                                        value={dailyPlatformCost} 
-                                        onChange={(e) => setDailyPlatformCost(e.target.value)} 
-                                        className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                       {/* Input Adjustments */}
-                       <div className="grid grid-cols-2 gap-3 mb-4">
-                           <div>
-                               <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Adj Giorni</label>
-                               <input 
-                                   type="number"
-                                   step="0.5"
-                                   placeholder="+/-" 
-                                   value={manualOffset} 
-                                   onChange={(e) => setManualOffset(e.target.value)} 
-                                   className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
-                               />
-                           </div>
-                           <div>
-                               <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Adj Piattaf.</label>
-                               <input 
-                                   type="number"
-                                   step="0.5" 
-                                   placeholder="+/-"
-                                   value={platOffset} 
-                                   onChange={(e) => setPlatOffset(e.target.value)} 
-                                   className="w-full bg-slate-800/50 rounded-lg p-2 text-white text-xs text-center border border-white/5 focus:border-emerald-500/50 outline-none transition-colors"
-                               />
-                           </div>
-                       </div>
-                   </div>
-
-                    {/* Cost Breakdown Visual */}
-                   <div className="mb-6 no-print">
-                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">Analisi Costi</label>
-                        <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden flex">
-                            <div className="bg-emerald-500 h-full" style={{width: `${costResults.chart.pCrane}%`}} title="Gru & Squadra"></div>
-                            <div className="bg-blue-500 h-full" style={{width: `${costResults.chart.pPlat}%`}} title="Piattaforme"></div>
-                            <div className="bg-orange-500 h-full" style={{width: `${costResults.chart.pTravel}%`}} title="Trasferta & Setup"></div>
-                        </div>
-                        <div className="flex justify-between text-[9px] text-slate-500 mt-1 uppercase font-bold">
-                            <span className="text-emerald-500">Squadra {costResults.chart.pCrane.toFixed(0)}%</span>
-                            <span className="text-blue-500">Mezzi {costResults.chart.pPlat.toFixed(0)}%</span>
-                            <span className="text-orange-500">Logistica {costResults.chart.pTravel.toFixed(0)}%</span>
-                        </div>
-                   </div>
-                   
-                   <div className="space-y-4">
-                      <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                         <span className="text-sm text-slate-300">Giorni Lavoro</span>
-                         <span className="text-xl font-mono font-bold text-white">{costResults.days} gg</span>
-                      </div>
-                      <div className="h-px bg-white/10 my-2"></div>
-                      <div className="flex justify-between items-center">
-                         <span className="text-xs text-slate-400 uppercase tracking-wider">Gru ({costResults.rates.dailyCrane}€/gg)</span>
-                         <span className="font-mono text-slate-200">€ {costResults.crane.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                         <span className="text-xs text-slate-400 uppercase tracking-wider">Piattaforme ({costResults.platDays}gg)</span>
-                         <span className="font-mono text-slate-200">€ {costResults.plat.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                         <span className="text-xs text-slate-400 uppercase tracking-wider">Trasferta ({costResults.rates.dailyTravel}€/gg)</span>
-                         <span className="font-mono text-slate-200">€ {costResults.travel.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                         <span className="text-xs text-orange-400 uppercase tracking-wider">Setup (A/R) +1gg</span>
-                         <span className="font-mono text-orange-400">€ {costResults.setup.toLocaleString()}</span>
-                      </div>
-                   </div>
-
-                   <div className="bg-gradient-to-br from-emerald-900/50 to-slate-900/50 p-6 rounded-xl border border-emerald-500/30 text-center cursor-pointer hover:scale-[1.02] transition-transform mt-6" onClick={() => copy(costResults.total.toString())}>
-                      <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Costo Totale Stimato</div>
-                      <div className="text-3xl font-bold text-white font-mono">€ {costResults.total.toLocaleString()}</div>
-                   </div>
-
-                   {/* Costo al Metro Quadro & Media Elementi */}
-                   <div className="mt-4 grid grid-cols-2 gap-3">
-                       <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
-                           <div className="text-[9px] text-slate-400 uppercase tracking-widest mb-1">Media Pz/Gg</div>
-                           <div className="text-lg font-bold text-orange-400 font-mono">{costResults.avgEl.toFixed(1)}</div>
-                       </div>
-                       <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
-                           <div className="text-[9px] text-slate-400 uppercase tracking-widest mb-1">Costo al m²</div>
-                           <div className="text-lg font-bold text-cyan-400 font-mono">€ {costResults.perSqm.toFixed(2)}</div>
-                       </div>
-                   </div>
-                   
-                   {/* Note di Cantiere */}
-                   <div className="mt-4 no-print">
-                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">Note di Cantiere</label>
-                        <textarea 
-                            value={notes} 
-                            onChange={(e) => setNotes(e.target.value)} 
-                            className="w-full glass-input rounded-xl p-3 text-sm text-white outline-none min-h-[100px]"
-                            placeholder="Inserisci dettagli, limitazioni di accesso, orari..."
-                        ></textarea>
-                   </div>
-                   {/* Visualizzazione Note solo in Stampa */}
-                   {notes && (
-                       <div className="hidden print:block mt-6 p-4 border border-slate-300 rounded-xl bg-slate-50">
-                           <h4 className="font-bold text-sm uppercase mb-2">Note di Cantiere</h4>
-                           <p className="text-sm whitespace-pre-wrap">{notes}</p>
-                       </div>
-                   )}
-                </div>
-             </div>
-
-             {/* Tabella Rese Espandibile */}
-             <div className="lg:col-span-12 mt-4 no-print">
-                <button 
-                    onClick={() => setShowRates(!showRates)} 
-                    className="w-full glass-panel p-4 flex items-center justify-between text-slate-400 hover:text-white hover:bg-white/5 transition-all rounded-xl"
-                >
-                    <span className="font-bold uppercase tracking-wider text-xs flex items-center gap-2">
-                        <i className="fa-solid fa-table-list"></i> Tabella Rese Riferimento (Pezzi/Giorno)
-                    </span>
-                    <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${showRates ? 'rotate-180' : ''}`}></i>
-                </button>
-
-                {showRates && (
-                    <div className="glass-panel mt-4 p-6 rounded-2xl animate-fade-in">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {categories.map(cat => (
-                                <div key={cat} className="space-y-2">
-                                    <h4 className="text-xs font-bold text-emerald-500 uppercase border-b border-white/5 pb-1 mb-2">{cat}</h4>
-                                    {MOUNTING_DATA.filter(d => d.cat === cat).map(item => (
-                                        <div key={item.id} className="flex justify-between items-center text-xs">
-                                            <span className="text-slate-300">{item.name}</span>
-                                            <div className="flex gap-3 font-mono">
-                                                <span className="text-slate-500" title="Standard">Std: <span className="text-white">{item.rateStd}</span></span>
-                                                <span className="text-slate-500" title="XL">XL: <span className="text-orange-400">{item.rateXL}</span></span>
+                                <div className="p-4 space-y-1">
+                                    {MOUNTING_DATA.filter(i => i.cat === cat).map(item => (
+                                        <div key={item.id} className="grid grid-cols-12 gap-4 items-center p-3 hover:bg-white/5 rounded-lg transition-colors">
+                                            <div className="col-span-5 md:col-span-6">
+                                                <div className="text-sm font-bold text-slate-200">{item.name}</div>
+                                                <div className="text-[10px] text-slate-500">{item.detail}</div>
+                                                <div className="text-[9px] text-orange-500/70 mt-0.5">{item.crit}</div>
+                                            </div>
+                                            <div className="col-span-3 md:col-span-2 text-center">
+                                                <button 
+                                                    onClick={() => toggleXL(item.id)} 
+                                                    className={`text-[9px] font-bold px-2 py-1 rounded border transition-all ${isXL[item.id] ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}
+                                                >
+                                                    {isXL[item.id] ? 'XL / Lento' : 'Standard'}
+                                                </button>
+                                                <div className="text-[9px] text-slate-600 mt-1">
+                                                    Resa: {isXL[item.id] ? item.rateXL : item.rateStd} pz/gg
+                                                </div>
+                                            </div>
+                                            <div className="col-span-4 md:col-span-4">
+                                                <input 
+                                                    type="number" 
+                                                    placeholder="Q.tà" 
+                                                    value={quantities[item.id] || ''} 
+                                                    onChange={(e) => updateQty(item.id, e.target.value)}
+                                                    className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-center text-white font-mono outline-none focus:border-emerald-500/50"
+                                                />
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                            ))}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* SIDEBAR RIEPILOGO */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <div className="glass-panel rounded-2xl p-6 sticky top-6 border-t-4 border-emerald-500 print-break-inside">
+                            <h3 className="text-lg font-bold text-white mb-6">Totale Preventivo</h3>
+                            
+                            <div className="space-y-4 mb-6">
+                                <div className="bg-white/5 p-3 rounded-xl">
+                                    <div className="flex justify-between text-[10px] text-slate-400 uppercase font-bold mb-1">
+                                        <span>Giorni Gru</span>
+                                        <span>{costResults.days} gg</span>
+                                    </div>
+                                    <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-emerald-500 h-full" style={{width: '100%'}}></div>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <div className="w-1/2">
+                                        <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Extra Gru (gg)</label>
+                                        <input type="number" value={manualOffset} onChange={e=>setManualOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center"/>
+                                    </div>
+                                    <div className="w-1/2">
+                                        <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Extra Piattaf. (gg)</label>
+                                        <input type="number" value={platOffset} onChange={e=>setPlatOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-white/10">
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-slate-400">Montaggio (Gru + Sq.)</span>
+                                    <span className="text-white font-mono">€ {costResults.crane.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-slate-400">Piattaforme Aeree</span>
+                                    <span className="text-white font-mono">€ {costResults.plat.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-slate-400">Mobilitazione</span>
+                                    <span className="text-white font-mono">€ {costResults.setup.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-slate-400">Vitto & Alloggio</span>
+                                    <span className="text-white font-mono">€ {costResults.travel.toLocaleString()}</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 pt-4 border-t border-white/10 bg-emerald-900/10 -mx-6 px-6 pb-2">
+                                <div className="flex justify-between items-end mb-2">
+                                    <span className="text-sm font-bold text-emerald-400 uppercase">Totale</span>
+                                    <span className="text-3xl font-black text-white font-mono cursor-pointer" onClick={() => copy(costResults.total.toFixed(2))}>€ {costResults.total.toLocaleString()}</span>
+                                </div>
+                                <div className="text-right text-[10px] text-slate-500 font-mono">
+                                    Incidenza: {(costResults.total / (costResults.days || 1)).toLocaleString()} €/gg
+                                </div>
+                            </div>
+                            
+                            <div className="mt-4">
+                                <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Superficie Cantiere (mq)</label>
+                                <input type="number" value={surface} onChange={e=>setSurface(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center mb-2" placeholder="Opzionale"/>
+                                {parseFloat(surface) > 0 && (
+                                    <div className="text-center text-xs font-bold text-emerald-400 bg-emerald-900/20 py-2 rounded-lg border border-emerald-500/20">
+                                        € {costResults.perSqm.toFixed(2)} / mq
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        
+                        <div className="glass-panel rounded-2xl p-4 border border-white/5 text-[10px] text-slate-500 space-y-2">
+                            <div className="flex justify-between"><span>Costo Gru</span><span className="text-slate-300">€ {dailyCraneCost}/gg</span></div>
+                            <div className="flex justify-between"><span>Costo Piattaforma</span><span className="text-slate-300">€ {dailyPlatformCost}/gg</span></div>
+                            <div className="flex justify-between"><span>Trasferta Squadra</span><span className="text-slate-300">€ 250/gg</span></div>
                         </div>
                     </div>
-                )}
-             </div>
-           </div>
+                </div>
+            </div>
         )}
 
+      </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-10 border-t border-white/10 pt-6 no-print">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Info size={14} /> Specifiche Tecniche & Guida
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
+              <div>
+                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
+                  Calcolo di verifica geometrica (altezze gancio) e pesi per il sollevamento di elementi prefabbricati (Tegoli, Capriate). Stima analitica dei costi di montaggio basata su rese giornaliere standardizzate.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
+                  Inserisci i parametri dimensionali per calcolare altezza gancio e peso. Nella sezione Costi, inserisci le quantità per ogni elemento strutturale. Il sistema calcola le giornate gru necessarie e i costi associati.
+              </div>
+              <div>
+                  <strong className="text-slate-300 block mb-1">Note Tecniche</strong>
+                  Rese di montaggio medie per squadre standard (3 operai + gruista). I pesi calcolati sono teorici e basati su coefficienti QI indicativi (da verificare con schede tecniche produttore).
+              </div>
+          </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -79,6 +80,16 @@ export default function Scientifica({ showToast }: Props) {
           <Btn label="." onClick={() => insertChar('.')} />
           <Btn label="=" onClick={calculate} type="eq" />
         </div>
+      </div>
+
+      {/* LEGENDA TECNICA */}
+      <div className="mt-6 border-t border-white/10 pt-4 no-print">
+          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+              <Info size={10} /> Specifiche
+          </h4>
+          <p className="text-[9px] text-slate-400">
+              Calcolatrice aritmetica con precisione standard IEEE 754. Supporta le 4 operazioni fondamentali.
+          </p>
       </div>
     </div>
   );
