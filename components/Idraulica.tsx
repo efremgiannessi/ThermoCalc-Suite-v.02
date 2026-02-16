@@ -115,11 +115,7 @@ export default function Idraulica({ showToast }: Props) {
 
     if (Q_m3h > 0 && V_target > 0) {
         const Q_m3s = Q_m3h / 3600;
-        // Calculate Theoretical Diameter
-        // A = Q/V -> D = sqrt(4A/pi)
-        const A_theo = Q_m3s / V_target;
-        // const D_theo_mm = Math.sqrt((4 * A_theo) / Math.PI) * 1000;
-
+        
         // Check against DB
         const sizes = PIPE_DB[material].sizes;
         const results = sizes.map(p => {
