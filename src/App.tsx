@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { TabType } from './types';
 import { 
   Thermometer, 
@@ -21,27 +22,34 @@ import {
   CloudRain,
   Layers,
   FileDown,
-  Trello 
+  Trello,
+  Maximize,
+  Hammer,
+  ExternalLink
 } from 'lucide-react';
 
-import Termica from './components/Termica';
-import Scientifica from './components/Scientifica';
-import Commerciale from './components/Commerciale';
-import Interpolazione from './components/Interpolazione';
-import Pendenze from './components/Pendenze';
-import Pesi from './components/Pesi';
-import Montaggio from './components/Montaggio';
-import Trasporto from './components/Trasporto';
-import Manufatti from './components/Manufatti';
-import Convertitore from './components/Convertitore';
-import Cantieristica from './components/Cantieristica';
-import Idraulica from './components/Idraulica';
-import Pluviali from './components/Pluviali';
-import Stratigrafie from './components/Stratigrafie';
-import Strutturale from './components/Strutturale'; // New Component
-import Footer from './components/Footer';
+import Termica from '../components/Termica';
+import Scientifica from '../components/Scientifica';
+import Commerciale from '../components/Commerciale';
+import Interpolazione from '../components/Interpolazione';
+import Pendenze from '../components/Pendenze';
+import Pesi from '../components/Pesi';
+import Montaggio from '../components/Montaggio';
+import Trasporto from '../components/Trasporto';
+import Manufatti from '../components/Manufatti';
+import Convertitore from '../components/Convertitore';
+import Cantieristica from '../components/Cantieristica';
+import Idraulica from '../components/Idraulica';
+import Pluviali from '../components/Pluviali';
+import Stratigrafie from '../components/Stratigrafie';
+import Strutturale from '../components/Strutturale';
+import IsoCalc from '../components/IsoCalc';
+import StructuralLoad from './components/StructuralLoad';
+import Footer from '../components/Footer';
+import Preloader from './components/Preloader';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('termica');
   const [toast, setToast] = useState({ show: false, message: '' });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -62,7 +70,9 @@ export default function App() {
         idraulica: "Idraulica e Fluidi",
         pluviali: "Drenaggio Meteo",
         stratigrafie: "Design Stratigrafie",
-        strutturale: "Calcolo Strutturale"
+        strutturale: "Calcolo Strutturale",
+        isocalc: "Calcolo Isolamento",
+        structural_load: "Analisi Carichi Strutturali"
     };
     document.title = `OMNICALC | ${titles[activeTab].toUpperCase()}`;
   }, [activeTab]);
@@ -74,7 +84,9 @@ export default function App() {
 
   const navItems: { id: TabType; label: string; icon: any; badge?: boolean }[] = [
     { id: 'termica', label: 'Dinamica Termica', icon: Thermometer },
-    { id: 'strutturale', label: 'Strutturale Rapido', icon: Trello, badge: true }, // New Item
+    { id: 'structural_load', label: 'Structural Load', icon: Hammer, badge: true },
+    { id: 'isocalc', label: 'IsoCalc Check', icon: Maximize },
+    { id: 'strutturale', label: 'Strutturale Rapido', icon: Trello }, 
     { id: 'stratigrafie', label: 'Stratigrafie & Tetti', icon: Layers },
     { id: 'idraulica', label: 'Idraulica & Fluidi', icon: Droplets },
     { id: 'pluviali', label: 'Sistemi di Drenaggio', icon: CloudRain },
@@ -91,7 +103,14 @@ export default function App() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-app-bg text-gray-200 font-sans text-sm">
+    <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
+      <div className="flex min-h-screen bg-app-bg text-gray-200 font-sans text-sm">
       
       {/* Sidebar */}
       <aside className={`${isSidebarOpen ? 'w-56' : 'w-16'} bg-app-panel border-r border-app-border transition-all duration-300 flex flex-col no-print z-50`}>
@@ -102,7 +121,7 @@ export default function App() {
           {isSidebarOpen && (
             <div className="flex flex-col">
               <span className="text-white font-black uppercase tracking-tighter text-sm">OmniCalc</span>
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-orange-500">v11.0.1 INDUSTRIALE</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-orange-500">v11.0.2 INDUSTRIALE</span>
             </div>
           )}
         </div>
@@ -170,6 +189,24 @@ export default function App() {
               </span>
             </div>
             
+            {/* Link Esterni */}
+            <a 
+              href="https://prefab-load-pro.netlify.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-lg transition-all border border-gray-600 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95"
+            >
+              <ExternalLink size={14} /> Prefab Load Pro
+            </a>
+            <a 
+              href="https://analisi-carichi-e-sollecitazioni-v2.netlify.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-lg transition-all border border-gray-600 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95"
+            >
+              <ExternalLink size={14} /> Analisi Carichi V2
+            </a>
+
             {/* Tasto Scarica PDF Completo */}
             <button 
               onClick={() => window.print()} 
@@ -184,6 +221,8 @@ export default function App() {
         <section className="flex-1 overflow-y-auto p-6 bg-app-bg custom-scrollbar relative" id="print-area">
           <div className="max-w-5xl mx-auto animate-fade-in pb-8">
             {activeTab === 'termica' && <Termica showToast={showToast} />}
+            {activeTab === 'isocalc' && <IsoCalc showToast={showToast} />}
+            {activeTab === 'structural_load' && <StructuralLoad showToast={showToast} />}
             {activeTab === 'commerciale' && <Commerciale showToast={showToast} />}
             {activeTab === 'scientifica' && <Scientifica showToast={showToast} />}
             {activeTab === 'interpol' && <Interpolazione showToast={showToast} />}
@@ -199,7 +238,7 @@ export default function App() {
             {activeTab === 'stratigrafie' && <Stratigrafie showToast={showToast} />}
             {activeTab === 'strutturale' && <Strutturale showToast={showToast} />}
             
-            <Footer />
+            {activeTab !== 'isocalc' && activeTab !== 'structural_load' && <Footer />}
           </div>
         </section>
 
@@ -214,5 +253,6 @@ export default function App() {
         </div>
       </main>
     </div>
+    </>
   );
 }

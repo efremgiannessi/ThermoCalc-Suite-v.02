@@ -125,7 +125,7 @@ export default function Cantieristica({ showToast }: Props) {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span className="bg-yellow-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-yellow-500 border border-yellow-500/20">
+                <span className="bg-orange-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 border border-orange-500/20">
                     <BrickWall size={20} />
                 </span>
                 Computo Cantiere
@@ -135,7 +135,7 @@ export default function Cantieristica({ showToast }: Props) {
             <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto">
                 <button 
                     onClick={() => setMode('calcestruzzo')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'calcestruzzo' ? 'bg-yellow-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'calcestruzzo' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Box size={14} /> Calcestruzzo
                 </button>
@@ -147,7 +147,7 @@ export default function Cantieristica({ showToast }: Props) {
                 </button>
                 <button 
                     onClick={() => setMode('piastrelle')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'piastrelle' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'piastrelle' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Grid3X3 size={14} /> Pavimenti
                 </button>
@@ -157,17 +157,17 @@ export default function Cantieristica({ showToast }: Props) {
         {/* ================= CALCESTRUZZO ================= */}
         {mode === 'calcestruzzo' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
-                <div className="glass-panel rounded-2xl p-6 border-yellow-500/10">
-                    <h3 className="text-sm font-bold text-yellow-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Geometria Getto</h3>
+                <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Geometria Getto</h3>
                     
                     <div className="flex gap-4 mb-6">
-                        <button onClick={()=>setClsShape('cube')} className={`flex-1 py-3 rounded-xl border border-white/10 flex flex-col items-center gap-2 ${clsShape === 'cube' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-black/20 text-slate-500'}`}>
+                        <button onClick={()=>setClsShape('cube')} className={`flex-1 py-3 rounded-xl border border-white/10 flex flex-col items-center gap-2 ${clsShape === 'cube' ? 'bg-orange-500/20 text-orange-500 border-orange-500/50' : 'bg-black/20 text-slate-500'}`}>
                             <Box size={24}/>
-                            <span className="text-[10px] font-black uppercase">Prisma / Platea</span>
+                            <span className="text-[8px] font-black uppercase">Prisma / Platea</span>
                         </button>
-                        <button onClick={()=>setClsShape('cylinder')} className={`flex-1 py-3 rounded-xl border border-white/10 flex flex-col items-center gap-2 ${clsShape === 'cylinder' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-black/20 text-slate-500'}`}>
+                        <button onClick={()=>setClsShape('cylinder')} className={`flex-1 py-3 rounded-xl border border-white/10 flex flex-col items-center gap-2 ${clsShape === 'cylinder' ? 'bg-orange-500/20 text-orange-500 border-orange-500/50' : 'bg-black/20 text-slate-500'}`}>
                             <Cylinder size={24}/>
-                            <span className="text-[10px] font-black uppercase">Pilastro Tondo</span>
+                            <span className="text-[8px] font-black uppercase">Pilastro Tondo</span>
                         </button>
                     </div>
 
@@ -175,43 +175,43 @@ export default function Cantieristica({ showToast }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                              <div>
                                 <label className="industrial-label">{clsShape === 'cube' ? 'Lunghezza (m)' : 'Raggio (m)'}</label>
-                                <input type="number" value={clsDimA} onChange={e=>setClsDimA(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="0.00"/>
+                                <input type="number" value={clsDimA} onChange={e=>setClsDimA(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="0.00"/>
                              </div>
                              {clsShape === 'cube' && (
                                  <div>
                                     <label className="industrial-label">Larghezza (m)</label>
-                                    <input type="number" value={clsDimB} onChange={e=>setClsDimB(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="0.00"/>
+                                    <input type="number" value={clsDimB} onChange={e=>setClsDimB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="0.00"/>
                                  </div>
                              )}
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="industrial-label">Altezza (m)</label>
-                                <input type="number" value={clsDimH} onChange={e=>setClsDimH(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="0.00"/>
+                                <input type="number" value={clsDimH} onChange={e=>setClsDimH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="0.00"/>
                             </div>
                             <div>
                                 <label className="industrial-label">Quantità (Pz)</label>
-                                <input type="number" value={clsQty} onChange={e=>setClsQty(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="1"/>
+                                <input type="number" value={clsQty} onChange={e=>setClsQty(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="1"/>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
-                    <div className="glass-panel rounded-2xl p-6 bg-yellow-950/10 border-yellow-500/20 text-center cursor-pointer hover:bg-yellow-900/20 transition-colors" onClick={()=>copy(clsResult.mc.toFixed(3))}>
-                         <span className="industrial-label text-yellow-500 !mb-2">Volume Totale</span>
-                         <div className="text-5xl font-black text-white font-mono">{clsResult.mc.toFixed(2)} <span className="text-xl text-slate-500">m³</span></div>
-                         <div className="text-[10px] text-slate-500 mt-2 font-mono">Peso Stimato: {(clsResult.weight/1000).toFixed(2)} ton</div>
+                    <div className="glass-panel rounded-2xl p-6 bg-orange-950/10 border-orange-500/20 text-center cursor-pointer hover:bg-orange-900/20 transition-colors" onClick={()=>copy(clsResult.mc.toFixed(3))}>
+                         <span className="industrial-label text-orange-500 !mb-2">Volume Totale</span>
+                         <div className="text-4xl font-black text-white font-mono">{clsResult.mc.toFixed(2)} <span className="text-lg text-slate-500">m³</span></div>
+                         <div className="text-[9px] text-slate-500 mt-2 font-mono">Peso Stimato: {(clsResult.weight/1000).toFixed(2)} ton</div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                          <div className="glass-panel rounded-2xl p-4 text-center">
                              <span className="industrial-label text-slate-500">Cemento (350kg/mc)</span>
-                             <div className="text-2xl font-bold text-white font-mono">{Math.ceil(clsResult.mc * 350)} <span className="text-xs text-slate-500">kg</span></div>
+                             <div className="text-xl font-bold text-white font-mono">{Math.ceil(clsResult.mc * 350)} <span className="text-[10px] text-slate-500">kg</span></div>
                          </div>
                          <div className="glass-panel rounded-2xl p-4 text-center">
                              <span className="industrial-label text-slate-500">Sacchi (25kg)</span>
-                             <div className="text-2xl font-bold text-white font-mono">{clsResult.bags} <span className="text-xs text-slate-500">pz</span></div>
+                             <div className="text-xl font-bold text-white font-mono">{clsResult.bags} <span className="text-[10px] text-slate-500">pz</span></div>
                          </div>
                     </div>
                 </div>
@@ -222,27 +222,27 @@ export default function Cantieristica({ showToast }: Props) {
         {mode === 'laterizi' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
                 <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
-                    <h3 className="text-sm font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Parete & Blocco</h3>
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Parete & Blocco</h3>
                     <div className="space-y-4">
-                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider ml-1">Dimensioni Parete (m)</label>
+                        <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider ml-1">Dimensioni Parete (m)</label>
                         <div className="grid grid-cols-2 gap-4">
-                            <input type="number" value={wallL} onChange={e=>setWallL(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="Lunghezza"/>
-                            <input type="number" value={wallH} onChange={e=>setWallH(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="Altezza"/>
+                            <input type="number" value={wallL} onChange={e=>setWallL(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="Lunghezza"/>
+                            <input type="number" value={wallH} onChange={e=>setWallH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="Altezza"/>
                         </div>
 
-                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider ml-1 mt-4 block">Dimensioni Blocco (cm)</label>
+                        <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider ml-1 mt-4 block">Dimensioni Blocco (cm)</label>
                         <div className="grid grid-cols-3 gap-3">
                              <div>
-                                 <input type="number" value={brickL} onChange={e=>setBrickL(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center" placeholder="L"/>
-                                 <span className="text-[9px] text-center block mt-1 text-slate-500">Lung.</span>
+                                 <input type="number" value={brickL} onChange={e=>setBrickL(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center text-xs" placeholder="L"/>
+                                 <span className="text-[8px] text-center block mt-1 text-slate-500">Lung.</span>
                              </div>
                              <div>
-                                 <input type="number" value={brickH} onChange={e=>setBrickH(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center" placeholder="H"/>
-                                 <span className="text-[9px] text-center block mt-1 text-slate-500">Alt.</span>
+                                 <input type="number" value={brickH} onChange={e=>setBrickH(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center text-xs" placeholder="H"/>
+                                 <span className="text-[8px] text-center block mt-1 text-slate-500">Alt.</span>
                              </div>
                              <div>
-                                 <input type="number" value={joint} onChange={e=>setJoint(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center border-orange-500/30 text-orange-200" placeholder="1"/>
-                                 <span className="text-[9px] text-center block mt-1 text-orange-500">Fuga</span>
+                                 <input type="number" value={joint} onChange={e=>setJoint(e.target.value)} className="w-full glass-input rounded-xl p-2 text-center border-orange-500/30 text-orange-200 text-xs" placeholder="1"/>
+                                 <span className="text-[8px] text-center block mt-1 text-orange-500">Fuga</span>
                              </div>
                         </div>
                     </div>
@@ -251,12 +251,12 @@ export default function Cantieristica({ showToast }: Props) {
                 <div className="flex flex-col justify-center space-y-4">
                      <div className="glass-panel rounded-2xl p-8 text-center bg-orange-900/10 border-orange-500/30" onClick={()=>copy(brickResult.count.toString())}>
                          <div className="industrial-label text-orange-500">Totale Elementi</div>
-                         <div className="text-6xl font-black text-white font-mono">{brickResult.count}</div>
-                         <div className="text-xs text-slate-400 mt-2">per {brickResult.sqm.toFixed(2)} m² di parete</div>
+                         <div className="text-5xl font-black text-white font-mono">{brickResult.count}</div>
+                         <div className="text-[10px] text-slate-400 mt-2">per {brickResult.sqm.toFixed(2)} m² di parete</div>
                      </div>
                      <div className="bg-white/5 p-4 rounded-xl text-center border border-white/5">
-                         <span className="text-[10px] text-slate-500 uppercase font-bold">Incidenza</span>
-                         <div className="text-lg font-mono text-slate-300">{(brickResult.count / (brickResult.sqm || 1)).toFixed(1)} pezzi/m²</div>
+                         <span className="text-[9px] text-slate-500 uppercase font-bold">Incidenza</span>
+                         <div className="text-base font-mono text-slate-300">{(brickResult.count / (brickResult.sqm || 1)).toFixed(1)} pezzi/m²</div>
                      </div>
                 </div>
             </div>
@@ -265,23 +265,23 @@ export default function Cantieristica({ showToast }: Props) {
         {/* ================= PIASTRELLE ================= */}
         {mode === 'piastrelle' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
-                <div className="glass-panel rounded-2xl p-6 border-cyan-500/10">
-                    <h3 className="text-sm font-bold text-cyan-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Pavimentazione</h3>
+                <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Pavimentazione</h3>
                     
                     <div className="space-y-5">
                         <div>
                             <label className="industrial-label">Stanza (m)</label>
                             <div className="grid grid-cols-2 gap-4">
-                                <input type="number" value={roomL} onChange={e=>setRoomL(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="Lunghezza"/>
-                                <input type="number" value={roomW} onChange={e=>setRoomW(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="Larghezza"/>
+                                <input type="number" value={roomL} onChange={e=>setRoomL(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="Lunghezza"/>
+                                <input type="number" value={roomW} onChange={e=>setRoomW(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="Larghezza"/>
                             </div>
                         </div>
 
                         <div>
                             <label className="industrial-label">Piastrella (cm)</label>
                             <div className="grid grid-cols-2 gap-4">
-                                <input type="number" value={tileL} onChange={e=>setTileL(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="60"/>
-                                <input type="number" value={tileW} onChange={e=>setTileW(e.target.value)} className="w-full glass-input rounded-xl p-3" placeholder="60"/>
+                                <input type="number" value={tileL} onChange={e=>setTileL(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="60"/>
+                                <input type="number" value={tileW} onChange={e=>setTileW(e.target.value)} className="w-full glass-input rounded-xl p-3 text-xs" placeholder="60"/>
                             </div>
                         </div>
 
@@ -289,12 +289,12 @@ export default function Cantieristica({ showToast }: Props) {
                              <label className="industrial-label">Parametri Posa</label>
                              <div className="grid grid-cols-2 gap-4">
                                 <div className="relative">
-                                    <input type="number" value={tileWaste} onChange={e=>setTileWaste(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white border-red-500/30" placeholder="10"/>
-                                    <span className="absolute right-3 top-3.5 text-xs text-red-500 font-bold">% Sfrido</span>
+                                    <input type="number" value={tileWaste} onChange={e=>setTileWaste(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white border-red-500/30 text-xs" placeholder="10"/>
+                                    <span className="absolute right-3 top-3.5 text-[10px] text-red-500 font-bold">% Sfrido</span>
                                 </div>
                                 <div className="relative">
-                                    <input type="number" value={tileJoint} onChange={e=>setTileJoint(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" placeholder="2"/>
-                                    <span className="absolute right-3 top-3.5 text-xs text-slate-500 font-bold">mm Fuga</span>
+                                    <input type="number" value={tileJoint} onChange={e=>setTileJoint(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-xs" placeholder="2"/>
+                                    <span className="absolute right-3 top-3.5 text-[10px] text-slate-500 font-bold">mm Fuga</span>
                                 </div>
                              </div>
                         </div>
@@ -302,14 +302,14 @@ export default function Cantieristica({ showToast }: Props) {
                 </div>
 
                 <div className="flex flex-col justify-center space-y-4">
-                     <div className="glass-panel rounded-2xl p-8 text-center bg-cyan-900/10 border-cyan-500/30" onClick={()=>copy(tileResult.count.toString())}>
-                         <div className="industrial-label text-cyan-500">Totale Piastrelle</div>
-                         <div className="text-6xl font-black text-white font-mono">{tileResult.count}</div>
-                         <div className="text-xs text-slate-400 mt-2">inclusi sfridi ({tileWaste}%)</div>
+                     <div className="glass-panel rounded-2xl p-8 text-center bg-orange-900/10 border-orange-500/30" onClick={()=>copy(tileResult.count.toString())}>
+                         <div className="industrial-label text-orange-500">Totale Piastrelle</div>
+                         <div className="text-5xl font-black text-white font-mono">{tileResult.count}</div>
+                         <div className="text-[10px] text-slate-400 mt-2">inclusi sfridi ({tileWaste}%)</div>
                      </div>
                      <div className="bg-white/5 p-4 rounded-xl text-center border border-white/5">
-                         <span className="text-[10px] text-slate-500 uppercase font-bold">Metratura Ordine Consigliata</span>
-                         <div className="text-2xl font-mono text-white font-bold">{tileResult.sqm.toFixed(2)} m²</div>
+                         <span className="text-[9px] text-slate-500 uppercase font-bold">Metratura Ordine Consigliata</span>
+                         <div className="text-xl font-mono text-white font-bold">{tileResult.sqm.toFixed(2)} m²</div>
                      </div>
                 </div>
             </div>

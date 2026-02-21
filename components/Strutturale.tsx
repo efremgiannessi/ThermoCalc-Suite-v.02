@@ -1,12 +1,41 @@
 
 import { useState, useMemo } from 'react';
-import { Trello, Construction, Box, Scale, ArrowDownToLine, Wind, Info } from 'lucide-react';
+import { Trello, Construction, Box, Scale, ArrowDownToLine, Wind, Info, Database, BarChart3, LineChart as LineChartIcon } from 'lucide-react';
+import { 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  AreaChart, 
+  Area,
+  BarChart,
+  Bar
+} from 'recharts';
 
 interface Props {
   showToast: (msg: string) => void;
 }
 
-type Mode = 'statica' | 'carichi' | 'sezioni' | 'plinto' | 'vento';
+type Mode = 'statica' | 'carichi' | 'sezioni' | 'plinto' | 'vento' | 'materiali';
+
+// --- DATABASE MATERIALI ---
+const CONCRETE_CLASSES = [
+    { label: 'C20/25', fck: 20, fctm: 2.2, ecm: 29962 },
+    { label: 'C25/30', fck: 25, fctm: 2.6, ecm: 31476 },
+    { label: 'C28/35', fck: 28, fctm: 2.8, ecm: 32308 },
+    { label: 'C30/37', fck: 30, fctm: 2.9, ecm: 32837 },
+    { label: 'C32/40', fck: 32, fctm: 3.0, ecm: 33347 },
+    { label: 'C35/45', fck: 35, fctm: 3.2, ecm: 34077 },
+    { label: 'C40/50', fck: 40, fctm: 3.5, ecm: 35220 },
+    { label: 'C45/55', fck: 45, fctm: 3.8, ecm: 36283 },
+    { label: 'C50/60', fck: 50, fctm: 4.1, ecm: 37278 },
+];
+
+const STEEL_GRADES = [
+    { label: 'B450C', fyk: 450, ftk: 540, es: 210000 },
+    { label: 'B450A', fyk: 450, ftk: 472, es: 210000 },
+];
 
 // --- DATI VENTO NTC 2018 ---
 const ZONES_NTC = [
@@ -174,7 +203,7 @@ export default function Strutturale({ showToast }: Props) {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span className="bg-rose-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-rose-500 border border-rose-500/20">
+                <span className="bg-orange-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 border border-orange-500/20">
                     <Trello size={20} />
                 </span>
                 Analisi Strutturale Rapida
@@ -183,7 +212,7 @@ export default function Strutturale({ showToast }: Props) {
             <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto custom-scrollbar">
                 <button 
                     onClick={() => setMode('statica')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'statica' ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'statica' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Construction size={14} /> Trave App.
                 </button>
@@ -195,43 +224,114 @@ export default function Strutturale({ showToast }: Props) {
                 </button>
                 <button 
                     onClick={() => setMode('sezioni')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'sezioni' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'sezioni' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Box size={14} /> Inerzia
                 </button>
                 <button 
                     onClick={() => setMode('plinto')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'plinto' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'plinto' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <ArrowDownToLine size={14} /> Plinto
                 </button>
                 <button 
                     onClick={() => setMode('vento')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'vento' ? 'bg-sky-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'vento' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Wind size={14} /> Vento NTC
                 </button>
+                <button 
+                    onClick={() => setMode('materiali')}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${mode === 'materiali' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    <Database size={14} /> Materiali
+                </button>
             </div>
         </div>
+
+        {/* --- MATERIALI DATABASE --- */}
+        {mode === 'materiali' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
+                <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Database Calcestruzzo (UNI EN 1992-1-1)</h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-[10px] text-left">
+                            <thead className="text-orange-500 border-b border-app-border uppercase">
+                                <tr>
+                                    <th className="pb-2">Classe</th>
+                                    <th className="pb-2">fck (MPa)</th>
+                                    <th className="pb-2">fctm (MPa)</th>
+                                    <th className="pb-2">Ecm (MPa)</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-gray-400 font-mono">
+                                {CONCRETE_CLASSES.map(c => (
+                                    <tr key={c.label} className="border-b border-app-border/30 hover:bg-white/5 transition-colors">
+                                        <td className="py-2 font-bold text-white">{c.label}</td>
+                                        <td>{c.fck}</td>
+                                        <td>{c.fctm}</td>
+                                        <td>{c.ecm.toLocaleString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className="space-y-6">
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                        <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Database Acciaio per C.A.</h3>
+                        <div className="space-y-4">
+                            {STEEL_GRADES.map(s => (
+                                <div key={s.label} className="bg-app-input p-4 rounded-xl border border-app-border flex justify-between items-center">
+                                    <div>
+                                        <div className="text-lg font-black text-white">{s.label}</div>
+                                        <div className="text-[9px] text-gray-500 uppercase">Acciaio ad alta duttilità</div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-sm font-mono text-orange-500">fyk = {s.fyk} MPa</div>
+                                        <div className="text-[9px] text-gray-500">Es = {s.es.toLocaleString()} MPa</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10 h-[200px]">
+                        <span className="industrial-label mb-4 flex items-center gap-2"><BarChart3 size={12}/> Resistenza a Compressione</span>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={CONCRETE_CLASSES}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                                <XAxis dataKey="label" stroke="#4b5563" fontSize={8} tickLine={false} axisLine={false} />
+                                <YAxis stroke="#4b5563" fontSize={8} tickLine={false} axisLine={false} />
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#0a0f1d', border: '1px solid #1f2937', borderRadius: '8px', fontSize: '10px' }}
+                                    itemStyle={{ color: '#f97316' }}
+                                />
+                                <Bar dataKey="fck" fill="#f97316" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        )}
 
         {/* --- STATICA TRAVE --- */}
         {mode === 'statica' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 <div className="lg:col-span-4 space-y-6">
-                    <div className="glass-panel rounded-2xl p-6 border-rose-500/10">
-                        <h3 className="text-sm font-bold text-rose-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Dati Statici</h3>
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                        <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Dati Statici</h3>
                         <div className="space-y-5">
                             <div>
                                 <label className="industrial-label">Luce di Calcolo (L)</label>
                                 <div className="relative">
-                                    <input type="number" value={span} onChange={e=>setSpan(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-rose-500/50" />
+                                    <input type="number" value={span} onChange={e=>setSpan(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-orange-500/50 text-sm" />
                                     <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">m</span>
                                 </div>
                             </div>
                             <div>
                                 <label className="industrial-label">Carico Uniforme (q)</label>
                                 <div className="relative">
-                                    <input type="number" value={load} onChange={e=>setLoad(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-rose-500/50" />
+                                    <input type="number" value={load} onChange={e=>setLoad(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-orange-500/50 text-sm" />
                                     <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">kN/m</span>
                                 </div>
                             </div>
@@ -240,7 +340,7 @@ export default function Strutturale({ showToast }: Props) {
                 </div>
 
                 <div className="lg:col-span-8 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[200px] flex flex-col justify-between relative border-rose-500/10">
+                    <div className="glass-panel rounded-2xl p-8 bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[200px] flex flex-col justify-between relative border-orange-500/10">
                         <div className="absolute top-4 right-4 text-[10px] text-slate-500 font-mono">SCHEMA STATICO</div>
                         <svg viewBox="0 0 400 150" className="w-full h-full">
                             {[20, 60, 100, 140, 180, 220, 260, 300, 340, 380].map(x => (
@@ -257,21 +357,49 @@ export default function Strutturale({ showToast }: Props) {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-rose-950/20 border border-rose-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-rose-900/20 transition-colors" onClick={()=>copy(staticRes.M.toFixed(2))}>
-                            <div className="text-[10px] text-rose-400 uppercase font-bold mb-1">Momento M_max</div>
+                        <div className="bg-orange-950/20 border border-orange-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-orange-900/20 transition-colors" onClick={()=>copy(staticRes.M.toFixed(2))}>
+                            <div className="text-[10px] text-orange-400 uppercase font-bold mb-1">Momento M_max</div>
                             <div className="text-3xl font-black text-white font-mono">{staticRes.M.toFixed(2)}</div>
-                            <div className="text-[10px] text-slate-500">kN·m</div>
+                            <div className="text-[9px] text-slate-500">kN·m</div>
                         </div>
                         <div className="bg-slate-800/50 border border-white/5 rounded-xl p-4 text-center">
                             <div className="text-[10px] text-slate-400 uppercase font-bold mb-1">Taglio V_max</div>
                             <div className="text-2xl font-bold text-white font-mono">{staticRes.V.toFixed(2)}</div>
-                            <div className="text-[10px] text-slate-500">kN</div>
+                            <div className="text-[9px] text-slate-500">kN</div>
                         </div>
                         <div className="bg-slate-800/50 border border-white/5 rounded-xl p-4 text-center">
                             <div className="text-[10px] text-slate-400 uppercase font-bold mb-1">Reazioni (Ra = Rb)</div>
                             <div className="text-2xl font-bold text-white font-mono">{staticRes.R.toFixed(2)}</div>
-                            <div className="text-[10px] text-slate-500">kN</div>
+                            <div className="text-[9px] text-slate-500">kN</div>
                         </div>
+                    </div>
+
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10 h-[250px]">
+                        <span className="industrial-label mb-4 flex items-center gap-2"><LineChartIcon size={12}/> Diagramma del Momento Flettente (M)</span>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={Array.from({length: 21}, (_, i) => {
+                                const x = (parseFloat(span) / 20) * i;
+                                const q = parseFloat(load);
+                                const L = parseFloat(span);
+                                const m = (q * x / 2) * (L - x);
+                                return { x: x.toFixed(2), m: parseFloat(m.toFixed(2)) };
+                            })}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                                <XAxis dataKey="x" stroke="#4b5563" fontSize={8} tickLine={false} axisLine={false} label={{ value: 'x (m)', position: 'insideBottom', offset: -5, fontSize: 8, fill: '#4b5563' }} />
+                                <YAxis stroke="#4b5563" fontSize={8} tickLine={false} axisLine={false} reversed label={{ value: 'M (kNm)', angle: -90, position: 'insideLeft', fontSize: 8, fill: '#4b5563' }} />
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#0a0f1d', border: '1px solid #1f2937', borderRadius: '8px', fontSize: '10px' }}
+                                    itemStyle={{ color: '#f97316' }}
+                                />
+                                <Area type="monotone" dataKey="m" stroke="#f97316" fill="url(#colorM)" strokeWidth={2} />
+                                <defs>
+                                    <linearGradient id="colorM" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
+                                        <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                            </AreaChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
             </div>
@@ -281,18 +409,18 @@ export default function Strutturale({ showToast }: Props) {
         {mode === 'carichi' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
                 <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
-                    <h3 className="text-sm font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Analisi dei Carichi (kN/m²)</h3>
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Analisi dei Carichi (kN/m²)</h3>
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
-                            <div><label className="industrial-label">G1 - Peso Proprio</label><input type="number" value={g1} onChange={e=>setG1(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" placeholder="0.00" /></div>
+                            <div><label className="industrial-label">G1 - Peso Proprio</label><input type="number" value={g1} onChange={e=>setG1(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" placeholder="0.00" /></div>
                             <div className="flex items-end pb-3 text-xs text-slate-500 font-mono">x 1.30</div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div><label className="industrial-label">G2 - Permanenti</label><input type="number" value={g2} onChange={e=>setG2(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" placeholder="0.00" /></div>
+                            <div><label className="industrial-label">G2 - Permanenti</label><input type="number" value={g2} onChange={e=>setG2(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" placeholder="0.00" /></div>
                             <div className="flex items-end pb-3 text-xs text-slate-500 font-mono">x 1.50</div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div><label className="industrial-label">Qk - Variabili</label><input type="number" value={qk} onChange={e=>setQk(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" placeholder="0.00" /></div>
+                            <div><label className="industrial-label">Qk - Variabili</label><input type="number" value={qk} onChange={e=>setQk(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" placeholder="0.00" /></div>
                             <div className="flex items-end pb-3 text-xs text-slate-500 font-mono">x 1.50</div>
                         </div>
                     </div>
@@ -301,11 +429,11 @@ export default function Strutturale({ showToast }: Props) {
                     <div className="glass-panel rounded-2xl p-8 bg-orange-950/20 border-orange-500/20 text-center" onClick={()=>copy(loadRes.slu.toFixed(2))}>
                         <div className="industrial-label text-orange-500 !mb-2 flex items-center justify-center gap-2"><Scale size={14}/> Carico SLU (Design)</div>
                         <div className="text-5xl font-black text-white font-mono">{loadRes.slu.toFixed(2)}</div>
-                        <div className="text-sm text-orange-300/60 mt-2 font-mono">kN/m²</div>
+                        <div className="text-[10px] text-orange-300/60 mt-2 font-mono">kN/m²</div>
                     </div>
                     <div className="glass-panel rounded-2xl p-4 text-center border border-white/5">
                         <div className="industrial-label text-slate-500">Carico SLE (Raro)</div>
-                        <div className="text-2xl font-bold text-white font-mono">{loadRes.sle.toFixed(2)} <span className="text-xs text-slate-500">kN/m²</span></div>
+                        <div className="text-xl font-bold text-white font-mono">{loadRes.sle.toFixed(2)} <span className="text-[10px] text-slate-500">kN/m²</span></div>
                     </div>
                 </div>
             </div>
@@ -314,32 +442,32 @@ export default function Strutturale({ showToast }: Props) {
         {/* --- SEZIONI --- */}
         {mode === 'sezioni' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
-                <div className="glass-panel rounded-2xl p-6 border-indigo-500/10">
-                    <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Geometria Sezione (Rettangolare)</h3>
+                <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Geometria Sezione (Rettangolare)</h3>
                     <div className="flex gap-8 items-center">
                         <div className="w-32 h-40 border-2 border-white/20 relative flex items-center justify-center bg-white/5">
                             <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 rotate-270">H</div>
                             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold text-slate-400">B</div>
-                            <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
+                            <div className="w-1 h-1 bg-orange-500 rounded-full"></div>
                         </div>
                         <div className="flex-1 space-y-4">
-                            <div><label className="industrial-label">Base (cm)</label><input type="number" value={b} onChange={e=>setB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" /></div>
-                            <div><label className="industrial-label">Altezza (cm)</label><input type="number" value={h} onChange={e=>setH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" /></div>
+                            <div><label className="industrial-label">Base (cm)</label><input type="number" value={b} onChange={e=>setB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" /></div>
+                            <div><label className="industrial-label">Altezza (cm)</label><input type="number" value={h} onChange={e=>setH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" /></div>
                         </div>
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <div className="glass-panel rounded-2xl p-6 flex justify-between items-center bg-indigo-950/20 border-indigo-500/20">
-                        <div><div className="text-[10px] text-indigo-400 uppercase font-bold">Momento Inerzia (Jx)</div><div className="text-[9px] text-slate-500 font-mono">bh³/12</div></div>
-                        <div className="text-right"><div className="text-3xl font-black text-white font-mono">{sectionRes.J.toLocaleString('it-IT', {maximumFractionDigits: 0})}</div><div className="text-xs text-slate-500">cm⁴</div></div>
+                    <div className="glass-panel rounded-2xl p-6 flex justify-between items-center bg-orange-950/20 border-orange-500/20">
+                        <div><div className="text-[10px] text-orange-400 uppercase font-bold">Momento Inerzia (Jx)</div><div className="text-[9px] text-slate-500 font-mono">bh³/12</div></div>
+                        <div className="text-right"><div className="text-3xl font-black text-white font-mono">{sectionRes.J.toLocaleString('it-IT', {maximumFractionDigits: 0})}</div><div className="text-[10px] text-slate-500">cm⁴</div></div>
                     </div>
                     <div className="glass-panel rounded-2xl p-6 flex justify-between items-center border border-white/5">
                         <div><div className="text-[10px] text-slate-400 uppercase font-bold">Modulo Resistenza (Wx)</div><div className="text-[9px] text-slate-600 font-mono">bh²/6</div></div>
-                        <div className="text-right"><div className="text-2xl font-bold text-white font-mono">{sectionRes.W.toLocaleString('it-IT', {maximumFractionDigits: 0})}</div><div className="text-xs text-slate-500">cm³</div></div>
+                        <div className="text-right"><div className="text-2xl font-bold text-white font-mono">{sectionRes.W.toLocaleString('it-IT', {maximumFractionDigits: 0})}</div><div className="text-[10px] text-slate-500">cm³</div></div>
                     </div>
                     <div className="glass-panel rounded-2xl p-6 flex justify-between items-center border border-white/5">
                         <div><div className="text-[10px] text-slate-400 uppercase font-bold">Area (A)</div></div>
-                        <div className="text-right"><div className="text-2xl font-bold text-white font-mono">{sectionRes.Area.toLocaleString('it-IT')}</div><div className="text-xs text-slate-500">cm²</div></div>
+                        <div className="text-right"><div className="text-2xl font-bold text-white font-mono">{sectionRes.Area.toLocaleString('it-IT')}</div><div className="text-[10px] text-slate-500">cm²</div></div>
                     </div>
                 </div>
             </div>
@@ -349,27 +477,27 @@ export default function Strutturale({ showToast }: Props) {
         {mode === 'plinto' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 <div className="lg:col-span-4 space-y-6">
-                    <div className="glass-panel rounded-2xl p-6 border-emerald-500/10">
-                        <h3 className="text-sm font-bold text-emerald-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Dati Geotecnici & Carico</h3>
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                        <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Dati Geotecnici & Carico</h3>
                         <div className="space-y-5">
                             <div>
                                 <label className="industrial-label">Carico Assiale SLU (Ned)</label>
                                 <div className="relative">
-                                    <input type="number" value={plintoN} onChange={e=>setPlintoN(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-emerald-500/50" placeholder="0" />
+                                    <input type="number" value={plintoN} onChange={e=>setPlintoN(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-orange-500/50 text-sm" placeholder="0" />
                                     <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">kN</span>
                                 </div>
                             </div>
                             <div>
                                 <label className="industrial-label">Portata Terreno (σ_amm)</label>
                                 <div className="relative">
-                                    <input type="number" value={sigmaT} onChange={e=>setSigmaT(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-emerald-500/50" placeholder="0.0" />
+                                    <input type="number" value={sigmaT} onChange={e=>setSigmaT(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-orange-500/50 text-sm" placeholder="0.0" />
                                     <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">kg/cm²</span>
                                 </div>
                             </div>
                             <div>
                                 <label className="industrial-label">Lato Pilastro (Quadro)</label>
                                 <div className="relative">
-                                    <input type="number" value={colSide} onChange={e=>setColSide(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-emerald-500/50" placeholder="0" />
+                                    <input type="number" value={colSide} onChange={e=>setColSide(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white outline-none focus:border-orange-500/50 text-sm" placeholder="0" />
                                     <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">cm</span>
                                 </div>
                             </div>
@@ -381,7 +509,7 @@ export default function Strutturale({ showToast }: Props) {
                 </div>
 
                 <div className="lg:col-span-8 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[220px] relative border-emerald-500/10 flex items-center justify-center">
+                    <div className="glass-panel rounded-2xl p-8 bg-gradient-to-b from-slate-800/30 to-slate-900/30 min-h-[220px] relative border-orange-500/10 flex items-center justify-center">
                         <div className="absolute top-4 right-4 text-[10px] text-slate-500 font-mono">SEZIONE PLINTO</div>
                         
                         {/* Plinto SVG Visualization */}
@@ -401,15 +529,15 @@ export default function Strutturale({ showToast }: Props) {
                             <path d="M80 150 L220 150 L220 110 L165 80 L135 80 L80 110 Z" fill="#475569" stroke="#e2e8f0" strokeWidth="2"/>
                             
                             {/* Dimensions */}
-                            <line x1="80" y1="165" x2="220" y2="165" stroke="#10b981" strokeWidth="1"/>
-                            <line x1="80" y1="162" x2="80" y2="168" stroke="#10b981" strokeWidth="1"/>
-                            <line x1="220" y1="162" x2="220" y2="168" stroke="#10b981" strokeWidth="1"/>
-                            <text x="150" y="175" fill="#10b981" fontSize="10" fontWeight="bold" textAnchor="middle">B = {plintoRes.B} cm</text>
+                            <line x1="80" y1="165" x2="220" y2="165" stroke="#f97316" strokeWidth="1"/>
+                            <line x1="80" y1="162" x2="80" y2="168" stroke="#f97316" strokeWidth="1"/>
+                            <line x1="220" y1="162" x2="220" y2="168" stroke="#f97316" strokeWidth="1"/>
+                            <text x="150" y="175" fill="#f97316" fontSize="10" fontWeight="bold" textAnchor="middle">B = {plintoRes.B} cm</text>
 
-                            <line x1="60" y1="150" x2="60" y2="80" stroke="#10b981" strokeWidth="1"/>
-                            <line x1="57" y1="150" x2="63" y2="150" stroke="#10b981" strokeWidth="1"/>
-                            <line x1="57" y1="80" x2="63" y2="80" stroke="#10b981" strokeWidth="1"/>
-                            <text x="50" y="120" fill="#10b981" fontSize="10" fontWeight="bold" textAnchor="end">H = {plintoRes.H} cm</text>
+                            <line x1="60" y1="150" x2="60" y2="80" stroke="#f97316" strokeWidth="1"/>
+                            <line x1="57" y1="150" x2="63" y2="150" stroke="#f97316" strokeWidth="1"/>
+                            <line x1="57" y1="80" x2="63" y2="80" stroke="#f97316" strokeWidth="1"/>
+                            <text x="50" y="120" fill="#f97316" fontSize="10" fontWeight="bold" textAnchor="end">H = {plintoRes.H} cm</text>
 
                             {/* Rigid Cone */}
                             <line x1="135" y1="80" x2="80" y2="135" stroke="#fbbf24" strokeWidth="1" strokeDasharray="2 2" opacity="0.6"/>
@@ -418,13 +546,13 @@ export default function Strutturale({ showToast }: Props) {
                     </div>
 
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-emerald-900/20 transition-colors" onClick={()=>copy(plintoRes.B.toString())}>
-                            <div className="text-[10px] text-emerald-400 uppercase font-bold mb-1">Lato Base (B)</div>
+                        <div className="bg-orange-950/20 border border-orange-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-orange-900/20 transition-colors" onClick={()=>copy(plintoRes.B.toString())}>
+                            <div className="text-[10px] text-orange-400 uppercase font-bold mb-1">Lato Base (B)</div>
                             <div className="text-3xl font-black text-white font-mono">{plintoRes.B}</div>
                             <div className="text-[10px] text-slate-500">cm (Quadro)</div>
                         </div>
-                        <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-emerald-900/20 transition-colors" onClick={()=>copy(plintoRes.H.toString())}>
-                            <div className="text-[10px] text-emerald-400 uppercase font-bold mb-1">Altezza (H)</div>
+                        <div className="bg-orange-950/20 border border-orange-500/20 rounded-xl p-4 text-center cursor-pointer hover:bg-orange-900/20 transition-colors" onClick={()=>copy(plintoRes.H.toString())}>
+                            <div className="text-[10px] text-orange-400 uppercase font-bold mb-1">Altezza (H)</div>
                             <div className="text-3xl font-black text-white font-mono">{plintoRes.H}</div>
                             <div className="text-[10px] text-slate-500">cm (Rigido)</div>
                         </div>
@@ -435,7 +563,7 @@ export default function Strutturale({ showToast }: Props) {
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-[10px] text-slate-400 uppercase font-bold">Sigma Terreno</span>
-                                <span className={`text-sm font-mono font-bold ${plintoRes.Sigma > parseFloat(sigmaT) ? 'text-red-500' : 'text-emerald-400'}`}>{plintoRes.Sigma.toFixed(2)} kg/cm²</span>
+                                <span className={`text-sm font-mono font-bold ${plintoRes.Sigma > parseFloat(sigmaT) ? 'text-red-500' : 'text-orange-400'}`}>{plintoRes.Sigma.toFixed(2)} kg/cm²</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-[10px] text-slate-400 uppercase font-bold">Calcestruzzo</span>
@@ -451,15 +579,15 @@ export default function Strutturale({ showToast }: Props) {
         {mode === 'vento' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="glass-panel rounded-2xl p-6 border-sky-500/10">
-                        <h3 className="text-sm font-bold text-sky-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Parametri Ambientali NTC</h3>
+                    <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                        <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Parametri Ambientali NTC</h3>
                         <div className="space-y-5">
                             <div>
                                 <label className="industrial-label">Zona Vento</label>
                                 <select 
                                     value={windZoneId} 
                                     onChange={(e) => setWindZoneId(parseInt(e.target.value))}
-                                    className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer"
+                                    className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer text-sm"
                                 >
                                     {ZONES_NTC.map(z => (
                                         <option key={z.id} value={z.id} className="bg-app-panel">{z.label}</option>
@@ -468,14 +596,14 @@ export default function Strutturale({ showToast }: Props) {
                             </div>
                             <div>
                                 <label className="industrial-label">Altitudine s.l.m. (m)</label>
-                                <input type="number" value={windAlt} onChange={e=>setWindAlt(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono" />
+                                <input type="number" value={windAlt} onChange={e=>setWindAlt(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-sm" />
                             </div>
                             <div>
                                 <label className="industrial-label">Categoria Esposizione</label>
                                 <select 
                                     value={windExpCat} 
                                     onChange={(e) => setWindExpCat(e.target.value)}
-                                    className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer"
+                                    className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer text-sm"
                                 >
                                     {EXPOSURE_CATS.map(e => (
                                         <option key={e.id} value={e.id} className="bg-app-panel">{e.label}</option>
@@ -485,27 +613,27 @@ export default function Strutturale({ showToast }: Props) {
                             <div className="h-px bg-white/5 my-2"></div>
                             <div>
                                 <label className="industrial-label">Altezza Edificio z (m)</label>
-                                <input type="number" value={windZ} onChange={e=>setWindZ(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg border-sky-500/30 focus:border-sky-500" />
+                                <input type="number" value={windZ} onChange={e=>setWindZ(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg border-orange-500/30 focus:border-orange-500" />
                             </div>
                             <div>
                                 <label className="industrial-label">Coeff. Aerodinamico (Cp)</label>
-                                <input type="number" step="0.1" value={windCp} onChange={e=>setWindCp(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono" placeholder="es. 0.8 o 1.2" />
+                                <input type="number" step="0.1" value={windCp} onChange={e=>setWindCp(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-sm" placeholder="es. 0.8 o 1.2" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="lg:col-span-7 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 bg-sky-950/10 border-sky-500/20 flex flex-col items-center justify-center relative min-h-[300px]">
-                        <div className="absolute top-4 right-4 text-[10px] text-sky-500/50 font-mono">RISULTATI DI CALCOLO</div>
+                    <div className="glass-panel rounded-2xl p-8 bg-orange-950/10 border-orange-500/20 flex flex-col items-center justify-center relative min-h-[300px]">
+                        <div className="absolute top-4 right-4 text-[10px] text-orange-500/50 font-mono">RISULTATI DI CALCOLO</div>
                         
                         <div className="w-full max-w-sm text-center mb-8" onClick={()=>copy(windRes.p_kn.toFixed(2))}>
-                            <div className="industrial-label text-sky-400 !mb-2 flex items-center justify-center gap-2">Pressione Vento SLU</div>
+                            <div className="industrial-label text-orange-400 !mb-2 flex items-center justify-center gap-2">Pressione Vento SLU</div>
                             <div className="text-6xl font-black text-white font-mono flex justify-center items-baseline gap-2">
                                 {windRes.p_kn.toFixed(2)} 
                                 <span className="text-xl text-slate-500 font-sans font-bold">kN/m²</span>
                             </div>
-                            <div className="text-xs text-sky-300/60 mt-2 font-mono">≈ {windRes.p_kg.toFixed(0)} kg/m²</div>
+                            <div className="text-[10px] text-orange-300/60 mt-2 font-mono">≈ {windRes.p_kg.toFixed(0)} kg/m²</div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 w-full">
@@ -519,7 +647,7 @@ export default function Strutturale({ showToast }: Props) {
                             </div>
                             <div className="bg-slate-800/50 rounded-xl p-3 border border-white/5">
                                 <div className="text-[9px] text-slate-400 uppercase font-bold mb-1">Coeff. Esposizione Ce</div>
-                                <div className="text-lg font-mono text-sky-400 font-bold">{windRes.ce.toFixed(2)}</div>
+                                <div className="text-lg font-mono text-orange-400 font-bold">{windRes.ce.toFixed(2)}</div>
                             </div>
                             <div className="bg-slate-800/50 rounded-xl p-3 border border-white/5">
                                 <div className="text-[9px] text-slate-400 uppercase font-bold mb-1">Altezza Calc. z</div>
@@ -529,7 +657,7 @@ export default function Strutturale({ showToast }: Props) {
                     </div>
 
                     <div className="bg-white/5 p-4 rounded-xl border border-white/5 text-[10px] text-slate-400 leading-relaxed flex gap-3">
-                        <Wind size={16} className="shrink-0 text-sky-500" />
+                        <Wind size={16} className="shrink-0 text-orange-500" />
                         <div>
                             Calcolo semplificato per pressione statica equivalente su superficie verticale secondo NTC 2018 (Eq. 3.3.1).
                             <br/>Formula: p = qb * Ce(z) * Cp * Cd (con Cd=1).

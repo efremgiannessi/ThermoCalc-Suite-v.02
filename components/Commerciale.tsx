@@ -227,47 +227,47 @@ export default function Commerciale({ showToast }: Props) {
       {/* HEADER */}
       <div className="flex flex-col">
         <span className="industrial-label text-orange-600">MODULO_05_FINANZA_AZIENDALE</span>
-        <h1 className="text-3xl font-black uppercase tracking-tighter text-white flex items-center gap-3">
-            <Coins className="text-orange-500" size={32} /> Analisi Commerciale & Finanziaria
+        <h1 className="text-2xl font-black uppercase tracking-tighter text-white flex items-center gap-3">
+            <Coins className="text-orange-500" size={24} /> Analisi Commerciale & Finanziaria
         </h1>
       </div>
 
       {/* --- SEZIONE 1: PROFITABILITY & PRICING --- */}
       <div>
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
-            <TrendingUp size={16} className="text-emerald-500" /> Strategia di Prezzo
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
+            <TrendingUp size={14} className="text-orange-500" /> Strategia di Prezzo
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* CARD: MARKUP & MARGIN */}
-            <div className="glass-card rounded-2xl p-6 lg:col-span-2 border-emerald-500/20">
+            <div className="glass-card rounded-2xl p-6 lg:col-span-2 border-orange-500/20">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-emerald-500">Analisi Redditività</span>
-                    <span className="text-[10px] font-mono text-slate-500">GP_CALC_V2</span>
+                    <span className="industrial-label text-orange-500">Analisi Redditività</span>
+                    <span className="text-[9px] font-mono text-slate-500">GP_CALC_V2</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                         <div>
                             <label className="industrial-label">Costo Acquisto (€)</label>
-                            <input type="number" value={profCost} onChange={e=>setProfCost(e.target.value)} className="w-full industrial-input rounded-xl p-4 text-white outline-none text-lg" placeholder="0.00"/>
+                            <input type="number" value={profCost} onChange={e=>setProfCost(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-base" placeholder="0.00"/>
                         </div>
                         <div>
                             <label className="industrial-label">Prezzo Vendita (€)</label>
-                            <input type="number" value={profPrice} onChange={e=>setProfPrice(e.target.value)} className="w-full industrial-input rounded-xl p-4 text-white outline-none text-lg" placeholder="0.00"/>
+                            <input type="number" value={profPrice} onChange={e=>setProfPrice(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-base" placeholder="0.00"/>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-app-input p-4 rounded-xl border border-white/5 flex flex-col justify-center text-center">
-                            <span className="text-[10px] text-slate-500 uppercase font-black">Markup</span>
-                            <div className="text-2xl font-mono font-black text-orange-500">{profMarkup}</div>
+                            <span className="text-[9px] text-slate-500 uppercase font-black">Markup</span>
+                            <div className="text-xl font-mono font-black text-orange-500">{profMarkup}</div>
                         </div>
                         <div className="bg-app-input p-4 rounded-xl border border-white/5 flex flex-col justify-center text-center">
-                            <span className="text-[10px] text-slate-500 uppercase font-black">Margine</span>
-                            <div className="text-2xl font-mono font-black text-emerald-500">{profMargin}</div>
+                            <span className="text-[9px] text-slate-500 uppercase font-black">Margine</span>
+                            <div className="text-xl font-mono font-black text-orange-500">{profMargin}</div>
                         </div>
-                        <div className="col-span-2 bg-emerald-900/20 p-4 rounded-xl border border-emerald-500/30 flex items-center justify-between px-6">
-                            <span className="text-[10px] text-emerald-400 uppercase font-black">Profitto Netto</span>
-                            <div className="text-xl font-mono font-black text-white">{profProfit}</div>
+                        <div className="col-span-2 bg-orange-900/10 p-4 rounded-xl border border-orange-500/20 flex items-center justify-between px-6">
+                            <span className="text-[9px] text-orange-400 uppercase font-black">Profitto Netto</span>
+                            <div className="text-lg font-mono font-black text-white">{profProfit}</div>
                         </div>
                     </div>
                 </div>
@@ -277,20 +277,20 @@ export default function Commerciale({ showToast }: Props) {
             <div className="glass-card rounded-2xl p-6">
                 <div className="flex justify-between mb-4">
                     <span className="industrial-label text-orange-500">Prezzo Unitario</span>
-                    <Scale size={16} className="text-slate-600"/>
+                    <Scale size={14} className="text-slate-600"/>
                 </div>
                 <div className="space-y-4">
                     <div>
                          <label className="industrial-label">Prezzo Totale (€)</label>
-                         <input type="number" value={unitPrice} onChange={e=>setUnitPrice(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="0.00"/>
+                         <input type="number" value={unitPrice} onChange={e=>setUnitPrice(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="0.00"/>
                     </div>
                     <div>
                          <label className="industrial-label">Quantità / Volume</label>
-                         <input type="number" value={unitQty} onChange={e=>setUnitQty(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="1"/>
+                         <input type="number" value={unitQty} onChange={e=>setUnitQty(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="1"/>
                     </div>
                     <div className="mt-4 pt-4 border-t border-white/5 text-center cursor-pointer hover:bg-white/5 rounded-lg transition-colors" onClick={()=>copy(unitRes)}>
                          <span className="industrial-label block mb-1">Costo per Unità</span>
-                         <span className="text-3xl font-black text-white font-mono">{unitRes}</span>
+                         <span className="text-2xl font-black text-white font-mono">{unitRes}</span>
                     </div>
                 </div>
             </div>
@@ -299,42 +299,42 @@ export default function Commerciale({ showToast }: Props) {
 
       {/* --- SEZIONE 2: TAX & DISCOUNTS --- */}
       <div>
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
-            <PieChart size={16} className="text-blue-500" /> Regime Fiscale & Scontistica
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
+            <PieChart size={14} className="text-orange-500" /> Regime Fiscale & Scontistica
         </h3>
         {/* Updated to 3 columns to include Apply % */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
              {/* CARD: CALCOLO IVA (DUAL MODE) */}
-             <div className="glass-card rounded-2xl p-6 border-blue-500/20">
+             <div className="glass-card rounded-2xl p-6 border-orange-500/20">
                  <div className="flex justify-between mb-4 items-center">
-                    <span className="industrial-label text-blue-500">IVA / Sales Tax & Scorporo</span>
+                    <span className="industrial-label text-orange-500">IVA / Sales Tax & Scorporo</span>
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-slate-500 font-bold uppercase">Aliquota %</span>
-                        <input type="number" value={vatRate} onChange={e=>setVatRate(e.target.value)} className="w-14 bg-app-input border border-white/10 text-white text-center text-xs rounded p-1 font-mono outline-none"/>
+                        <span className="text-[9px] text-slate-500 font-bold uppercase">Aliquota %</span>
+                        <input type="number" value={vatRate} onChange={e=>setVatRate(e.target.value)} className="w-12 bg-app-input border border-white/10 text-white text-center text-xs rounded p-1 font-mono outline-none"/>
                     </div>
                  </div>
                  
                  <div className="mb-6">
-                    <input type="number" value={vatAmount} onChange={e=>setVatAmount(e.target.value)} className="w-full industrial-input rounded-xl p-4 text-center text-3xl font-black text-white outline-none focus:border-blue-500/50" placeholder="Importo..."/>
+                    <input type="number" value={vatAmount} onChange={e=>setVatAmount(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-center text-2xl font-black text-white outline-none focus:border-orange-500/50" placeholder="Importo..."/>
                  </div>
 
                  <div className="grid grid-cols-2 gap-4">
                      {/* SCORPORO */}
-                     <div className="bg-app-input rounded-xl p-4 border border-white/5 relative group hover:border-blue-500/30 transition-all">
-                        <span className="absolute -top-2 left-3 bg-app-bg px-1 text-[9px] text-slate-500 font-black uppercase">Se Lordo</span>
+                     <div className="bg-app-input rounded-xl p-3 border border-white/5 relative group hover:border-orange-500/30 transition-all">
+                        <span className="absolute -top-2 left-3 bg-app-bg px-1 text-[8px] text-slate-500 font-black uppercase">Se Lordo</span>
                         <div className="flex justify-between items-center mt-2">
-                            <span className="text-[11px] text-slate-400">Impon.</span>
-                            <span className="font-mono font-bold text-white text-sm">€ {vatRes.scorporo.net.toFixed(2)}</span>
+                            <span className="text-[10px] text-slate-400">Impon.</span>
+                            <span className="font-mono font-bold text-white text-xs">€ {vatRes.scorporo.net.toFixed(2)}</span>
                         </div>
                      </div>
 
                      {/* AGGIUNTA */}
-                     <div className="bg-app-input rounded-xl p-4 border border-white/5 relative group hover:border-blue-500/30 transition-all">
-                        <span className="absolute -top-2 left-3 bg-app-bg px-1 text-[9px] text-slate-500 font-black uppercase">Se Netto</span>
+                     <div className="bg-app-input rounded-xl p-3 border border-white/5 relative group hover:border-orange-500/30 transition-all">
+                        <span className="absolute -top-2 left-3 bg-app-bg px-1 text-[8px] text-slate-500 font-black uppercase">Se Netto</span>
                         <div className="flex justify-between items-center mt-2">
-                            <span className="text-[11px] text-slate-400">Totale</span>
-                            <span className="font-mono font-bold text-white text-sm">€ {vatRes.incorporo.gross.toFixed(2)}</span>
+                            <span className="text-[10px] text-slate-400">Totale</span>
+                            <span className="font-mono font-bold text-white text-xs">€ {vatRes.incorporo.gross.toFixed(2)}</span>
                         </div>
                      </div>
                  </div>
@@ -343,27 +343,27 @@ export default function Commerciale({ showToast }: Props) {
              {/* CARD: SCONTO */}
              <div className="glass-card rounded-2xl p-6">
                  <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-pink-500">Calcolo Sconto</span>
-                    <Percent size={16} className="text-slate-600"/>
+                    <span className="industrial-label text-orange-500">Calcolo Sconto</span>
+                    <Percent size={14} className="text-slate-600"/>
                  </div>
                  <div className="space-y-4 mb-4">
                      <div>
                          <label className="industrial-label">Prezzo Originale</label>
-                         <input type="number" value={discPrice} onChange={e=>setDiscPrice(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none" placeholder="0.00"/>
+                         <input type="number" value={discPrice} onChange={e=>setDiscPrice(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-xs" placeholder="0.00"/>
                      </div>
                      <div>
                          <label className="industrial-label">Sconto %</label>
-                         <input type="number" value={discRate} onChange={e=>setDiscRate(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none" placeholder="%"/>
+                         <input type="number" value={discRate} onChange={e=>setDiscRate(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-xs" placeholder="%"/>
                      </div>
                  </div>
-                 <div className="bg-pink-900/10 border border-pink-500/20 p-4 rounded-xl flex items-center justify-between">
+                 <div className="bg-orange-900/10 border border-orange-500/20 p-4 rounded-xl flex items-center justify-between">
                      <div>
-                         <span className="text-[10px] text-pink-400 uppercase font-black block">Risparmio</span>
-                         <span className="text-sm font-mono text-pink-300">{discSaved}</span>
+                         <span className="text-[9px] text-orange-400 uppercase font-black block">Risparmio</span>
+                         <span className="text-xs font-mono text-orange-300">{discSaved}</span>
                      </div>
                      <div className="text-right">
-                         <span className="text-[10px] text-white uppercase font-black block">Prezzo Finale</span>
-                         <span className="text-2xl font-mono font-black text-white">{discFinal}</span>
+                         <span className="text-[9px] text-white uppercase font-black block">Prezzo Finale</span>
+                         <span className="text-xl font-mono font-black text-white">{discFinal}</span>
                      </div>
                  </div>
              </div>
@@ -372,26 +372,26 @@ export default function Commerciale({ showToast }: Props) {
              <div className="glass-card rounded-2xl p-6 border-slate-700/50">
                  <div className="flex justify-between mb-4">
                     <span className="industrial-label text-slate-400">Applica Percentuale</span>
-                    <Percent size={16} className="text-slate-600"/>
+                    <Percent size={14} className="text-slate-600"/>
                  </div>
                  <div className="space-y-4 mb-4">
                     <div>
                         <label className="industrial-label">Valore Base</label>
-                        <input type="number" value={appVal} onChange={e=>setAppVal(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none" placeholder="0.00"/>
+                        <input type="number" value={appVal} onChange={e=>setAppVal(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-xs" placeholder="0.00"/>
                     </div>
                     <div>
                         <label className="industrial-label">Aliquota %</label>
-                        <input type="number" value={appRate} onChange={e=>setAppRate(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none" placeholder="%"/>
+                        <input type="number" value={appRate} onChange={e=>setAppRate(e.target.value)} className="w-full industrial-input rounded-xl p-3 text-white outline-none text-xs" placeholder="%"/>
                     </div>
                  </div>
                  <div className="grid grid-cols-2 gap-3">
-                     <div className="bg-emerald-500/10 p-3 rounded-xl text-center cursor-pointer hover:bg-emerald-500/20 transition-colors border border-emerald-500/10" onClick={()=>copy(appResAdd)}>
-                         <span className="text-[9px] text-emerald-500 uppercase font-black block mb-1">Aggiungi (+)</span>
-                         <span className="text-lg font-mono font-black text-white">{appResAdd}</span>
+                     <div className="bg-orange-500/10 p-3 rounded-xl text-center cursor-pointer hover:bg-orange-500/20 transition-colors border border-orange-500/10" onClick={()=>copy(appResAdd)}>
+                         <span className="text-[8px] text-orange-500 uppercase font-black block mb-1">Aggiungi (+)</span>
+                         <span className="text-base font-mono font-black text-white">{appResAdd}</span>
                      </div>
                      <div className="bg-red-500/10 p-3 rounded-xl text-center cursor-pointer hover:bg-red-500/20 transition-colors border border-red-500/10" onClick={()=>copy(appResSub)}>
-                         <span className="text-[9px] text-red-500 uppercase font-black block mb-1">Sottrai (-)</span>
-                         <span className="text-lg font-mono font-black text-white">{appResSub}</span>
+                         <span className="text-[8px] text-red-500 uppercase font-black block mb-1">Sottrai (-)</span>
+                         <span className="text-base font-mono font-black text-white">{appResSub}</span>
                      </div>
                  </div>
              </div>
@@ -400,72 +400,72 @@ export default function Commerciale({ showToast }: Props) {
 
       {/* --- SEZIONE 3: TIME VALUE OF MONEY --- */}
       <div>
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
-            <Clock size={16} className="text-amber-500" /> Matematica Finanziaria
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-2">
+            <Clock size={14} className="text-orange-500" /> Matematica Finanziaria
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
             {/* CARD: INTERESSE COMPOSTO */}
-            <div className="glass-card rounded-2xl p-6 lg:col-span-2 bg-gradient-to-br from-app-panel to-amber-900/10 border-amber-500/20">
+            <div className="glass-card rounded-2xl p-6 lg:col-span-2 bg-gradient-to-br from-app-panel to-orange-900/10 border-orange-500/20">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-amber-500">Interesse Composto</span>
-                    <ArrowUpRight size={16} className="text-amber-500"/>
+                    <span className="industrial-label text-orange-500">Interesse Composto</span>
+                    <ArrowUpRight size={14} className="text-orange-500"/>
                 </div>
                 <div className="grid grid-cols-3 gap-4 mb-4">
-                    <input type="number" value={ciPrincipal} onChange={e=>setCiPrincipal(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-sm" placeholder="Capitale"/>
-                    <input type="number" value={ciRate} onChange={e=>setCiRate(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-sm" placeholder="Tasso %"/>
-                    <input type="number" value={ciYears} onChange={e=>setCiYears(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-sm" placeholder="Anni"/>
+                    <input type="number" value={ciPrincipal} onChange={e=>setCiPrincipal(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-xs" placeholder="Capitale"/>
+                    <input type="number" value={ciRate} onChange={e=>setCiRate(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-xs" placeholder="Tasso %"/>
+                    <input type="number" value={ciYears} onChange={e=>setCiYears(e.target.value)} className="col-span-1 industrial-input rounded-lg p-3 text-xs" placeholder="Anni"/>
                 </div>
                 <div className="flex justify-between items-end border-t border-white/5 pt-4">
                     <div>
-                        <span className="text-[10px] text-slate-500 uppercase font-black block">Interessi Maturati</span>
-                        <span className="text-sm font-mono text-amber-300">{ciDiff}</span>
+                        <span className="text-[9px] text-slate-500 uppercase font-black block">Interessi Maturati</span>
+                        <span className="text-xs font-mono text-orange-300">{ciDiff}</span>
                     </div>
                     <div className="text-right">
-                        <span className="text-[10px] text-slate-400 uppercase font-black block">Montante Finale</span>
-                        <span className="text-2xl font-mono font-black text-white">{ciResult}</span>
+                        <span className="text-[9px] text-slate-400 uppercase font-black block">Montante Finale</span>
+                        <span className="text-xl font-mono font-black text-white">{ciResult}</span>
                     </div>
                 </div>
             </div>
 
             {/* CARD: VARIAZIONE DELTA */}
-            <div className="glass-card rounded-2xl p-6 border-cyan-500/20">
+            <div className="glass-card rounded-2xl p-6 border-orange-500/20">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-cyan-500">Variazione Delta %</span>
-                    <TrendingUp size={16} className={delta.isPos ? "text-emerald-500" : "text-red-500"}/>
+                    <span className="industrial-label text-orange-500">Variazione Delta %</span>
+                    <TrendingUp size={14} className={delta.isPos ? "text-orange-500" : "text-red-500"}/>
                 </div>
                 <div className="flex items-center gap-3 mb-4">
-                     <input type="number" value={dStart} onChange={e=>setDStart(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="Inizio"/>
-                     <ArrowRight size={14} className="text-slate-600 shrink-0"/>
-                     <input type="number" value={dEnd} onChange={e=>setDEnd(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="Fine"/>
+                     <input type="number" value={dStart} onChange={e=>setDStart(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="Inizio"/>
+                     <ArrowRight size={12} className="text-slate-600 shrink-0"/>
+                     <input type="number" value={dEnd} onChange={e=>setDEnd(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="Fine"/>
                 </div>
                 <div className="bg-app-input p-4 rounded-xl text-center cursor-pointer hover:bg-white/5 transition-colors" onClick={()=>copy(delta.val)}>
-                    <span className="text-[9px] text-slate-500 uppercase block">Delta</span>
-                    <span className={`text-2xl font-mono font-black ${delta.isPos ? 'text-emerald-400' : 'text-red-400'}`}>{delta.val}</span>
+                    <span className="text-[8px] text-slate-500 uppercase block">Delta</span>
+                    <span className={`text-xl font-mono font-black ${delta.isPos ? 'text-orange-400' : 'text-red-400'}`}>{delta.val}</span>
                 </div>
             </div>
 
             {/* CARD: CRESCITA CUMULATIVA */}
             <div className="glass-card rounded-2xl p-6">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-cyan-400">CAGR Analysis</span>
-                    <BarChart3 size={16} className="text-slate-600"/>
+                    <span className="industrial-label text-orange-400">CAGR Analysis</span>
+                    <BarChart3 size={14} className="text-slate-600"/>
                 </div>
                 <div className="space-y-3 mb-4">
                     <div className="grid grid-cols-2 gap-3">
-                        <input type="number" value={cgStart} onChange={e=>setCgStart(e.target.value)} className="industrial-input rounded-lg p-3 text-sm" placeholder="Val. Iniziale"/>
-                        <input type="number" value={cgEnd} onChange={e=>setCgEnd(e.target.value)} className="industrial-input rounded-lg p-3 text-sm" placeholder="Val. Finale"/>
+                        <input type="number" value={cgStart} onChange={e=>setCgStart(e.target.value)} className="industrial-input rounded-lg p-3 text-xs" placeholder="Val. Iniziale"/>
+                        <input type="number" value={cgEnd} onChange={e=>setCgEnd(e.target.value)} className="industrial-input rounded-lg p-3 text-xs" placeholder="Val. Finale"/>
                     </div>
-                    <input type="number" value={cgPeriods} onChange={e=>setCgPeriods(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="Periodi (Anni)"/>
+                    <input type="number" value={cgPeriods} onChange={e=>setCgPeriods(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="Periodi (Anni)"/>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div className="bg-app-input p-3 rounded-lg text-center">
-                        <span className="text-[9px] text-slate-500 uppercase block">Totale %</span>
-                        <span className={`text-base font-mono font-bold ${parseFloat(cgTotal) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>{cgTotal}</span>
+                        <span className="text-[8px] text-slate-500 uppercase block">Totale %</span>
+                        <span className={`text-sm font-mono font-bold ${parseFloat(cgTotal) >= 0 ? 'text-orange-400' : 'text-red-400'}`}>{cgTotal}</span>
                     </div>
                     <div className="bg-app-input p-3 rounded-lg text-center">
-                        <span className="text-[9px] text-slate-500 uppercase block">CAGR %</span>
-                        <span className="text-base font-mono font-bold text-cyan-400">{cgCagr}</span>
+                        <span className="text-[8px] text-slate-500 uppercase block">CAGR %</span>
+                        <span className="text-sm font-mono font-bold text-orange-400">{cgCagr}</span>
                     </div>
                 </div>
             </div>
@@ -473,34 +473,34 @@ export default function Commerciale({ showToast }: Props) {
             {/* CARD: INFLAZIONE */}
             <div className="glass-card rounded-2xl p-6">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-red-400">Inflazione</span>
+                    <span className="industrial-label text-orange-400">Inflazione</span>
                 </div>
                 <div className="space-y-3 mb-4">
-                    <input type="number" value={infVal} onChange={e=>setInfVal(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="Valore Attuale"/>
+                    <input type="number" value={infVal} onChange={e=>setInfVal(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="Valore Attuale"/>
                     <div className="grid grid-cols-2 gap-3">
-                        <input type="number" value={infRate} onChange={e=>setInfRate(e.target.value)} className="industrial-input rounded-lg p-3 text-sm" placeholder="Infl. %"/>
-                        <input type="number" value={infYears} onChange={e=>setInfYears(e.target.value)} className="industrial-input rounded-lg p-3 text-sm" placeholder="Anni"/>
+                        <input type="number" value={infRate} onChange={e=>setInfRate(e.target.value)} className="industrial-input rounded-lg p-3 text-xs" placeholder="Infl. %"/>
+                        <input type="number" value={infYears} onChange={e=>setInfYears(e.target.value)} className="industrial-input rounded-lg p-3 text-xs" placeholder="Anni"/>
                     </div>
                 </div>
                 <div className="bg-app-input p-3 rounded-lg text-center">
-                    <span className="text-[9px] text-slate-500 uppercase block">Valore Futuro</span>
-                    <span className="text-lg font-mono font-bold text-white">{infResult}</span>
+                    <span className="text-[8px] text-slate-500 uppercase block">Valore Futuro</span>
+                    <span className="text-sm font-mono font-bold text-white">{infResult}</span>
                 </div>
             </div>
 
             {/* CARD: TEMPO RADDOPPIO */}
             <div className="glass-card rounded-2xl p-6">
                 <div className="flex justify-between mb-4">
-                    <span className="industrial-label text-purple-400">Tempo Raddoppio</span>
-                    <span className="text-[9px] text-slate-600 font-mono">RULE_72</span>
+                    <span className="industrial-label text-orange-400">Tempo Raddoppio</span>
+                    <span className="text-[8px] text-slate-600 font-mono">RULE_72</span>
                 </div>
                 <div className="mb-6">
                     <label className="industrial-label">Tasso Interesse %</label>
-                    <input type="number" value={dblRate} onChange={e=>setDblRate(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-sm" placeholder="Es. 7"/>
+                    <input type="number" value={dblRate} onChange={e=>setDblRate(e.target.value)} className="w-full industrial-input rounded-lg p-3 text-xs" placeholder="Es. 7"/>
                 </div>
                 <div className="bg-app-input p-3 rounded-lg text-center">
-                    <span className="text-[9px] text-slate-500 uppercase block">Raddoppio In</span>
-                    <span className="text-lg font-mono font-bold text-purple-400">{dblYears}</span>
+                    <span className="text-[8px] text-slate-500 uppercase block">Raddoppio In</span>
+                    <span className="text-sm font-mono font-bold text-orange-400">{dblYears}</span>
                 </div>
             </div>
 

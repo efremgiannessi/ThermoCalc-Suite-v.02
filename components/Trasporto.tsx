@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { Info } from 'lucide-react';
 
 interface Props {
   showToast: (msg: string) => void;
@@ -338,7 +337,7 @@ export default function Trasporto({ showToast }: Props) {
         {/* Header & Tabs */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span className="bg-amber-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-amber-500 border border-amber-500/20">
+                <span className="bg-orange-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 border border-orange-500/20">
                     <i className="fa-solid fa-truck-fast"></i>
                 </span>
                 Preventivo Trasporti
@@ -347,19 +346,19 @@ export default function Trasporto({ showToast }: Props) {
             <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto">
                 <button 
                     onClick={() => setActiveTab('logistica')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'logistica' ? 'bg-amber-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'logistica' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     Logistica
                 </button>
                 <button 
                     onClick={() => setActiveTab('ordinari')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'ordinari' ? 'bg-indigo-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'ordinari' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     Ordinari
                 </button>
                 <button 
                     onClick={() => setActiveTab('eccezionali')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'eccezionali' ? 'bg-red-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${activeTab === 'eccezionali' ? 'bg-orange-700 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     Eccezionali
                 </button>
@@ -380,36 +379,36 @@ export default function Trasporto({ showToast }: Props) {
                 <div className="lg:col-span-8 space-y-6">
                     {/* Sezione Viaggio */}
                     <div className="glass-panel rounded-2xl p-6 print-break-inside">
-                        <h3 className="text-sm font-bold text-amber-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Parametri Viaggio</h3>
+                        <h3 className="text-sm font-bold text-orange-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Parametri Viaggio</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[10px] text-slate-400 font-bold uppercase mb-2 block ml-1">Distanza Totale (A/R)</label>
+                                    <label className="text-[9px] text-slate-400 font-bold uppercase mb-2 block ml-1">Distanza Totale (A/R)</label>
                                     <div className="relative">
-                                        <input type="number" value={km} onChange={e => setKm(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-amber-500/50" placeholder="0"/>
+                                        <input type="number" value={km} onChange={e => setKm(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-orange-500/50" placeholder="0"/>
                                         <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">KM</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] text-slate-400 font-bold uppercase mb-2 block ml-1">Tariffa Kilometrica</label>
+                                    <label className="text-[9px] text-slate-400 font-bold uppercase mb-2 block ml-1">Tariffa Kilometrica</label>
                                     <div className="relative">
-                                        <input type="number" value={rateKm} onChange={e => setRateKm(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-amber-500/50" placeholder="0.00"/>
+                                        <input type="number" value={rateKm} onChange={e => setRateKm(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-orange-500/50" placeholder="0.00"/>
                                         <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">€/km</span>
                                     </div>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[10px] text-slate-400 font-bold uppercase mb-2 block ml-1">Numero Viaggi</label>
+                                    <label className="text-[9px] text-slate-400 font-bold uppercase mb-2 block ml-1">Numero Viaggi</label>
                                     <div className="relative">
-                                        <input type="number" value={trips} onChange={e => setTrips(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-amber-500/50" placeholder="1"/>
+                                        <input type="number" value={trips} onChange={e => setTrips(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-white font-mono text-lg outline-none focus:border-orange-500/50" placeholder="1"/>
                                         <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold"><i className="fa-solid fa-repeat"></i></span>
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] text-slate-400 font-bold uppercase mb-2 block ml-1">Velocità Media (Stima)</label>
+                                    <label className="text-[9px] text-slate-400 font-bold uppercase mb-2 block ml-1">Velocità Media (Stima)</label>
                                     <div className="relative">
-                                        <input type="number" value={avgSpeed} onChange={e => setAvgSpeed(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-slate-300 font-mono text-sm outline-none focus:border-amber-500/50" placeholder="65"/>
+                                        <input type="number" value={avgSpeed} onChange={e => setAvgSpeed(e.target.value)} className="w-full glass-input rounded-xl p-3 pl-4 text-slate-300 font-mono text-sm outline-none focus:border-orange-500/50" placeholder="65"/>
                                         <span className="absolute right-4 top-3.5 text-xs text-slate-500 font-bold">km/h</span>
                                     </div>
                                 </div>
@@ -423,14 +422,14 @@ export default function Trasporto({ showToast }: Props) {
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i className="fa-regular fa-clock"></i> Tempi & Attese</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Ore Attesa (Carico/Scarico)</label>
-                                    <input type="number" value={waitHours} onChange={e => setWaitHours(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none"/>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase mb-1 block">Ore Attesa (Carico/Scarico)</label>
+                                    <input type="number" value={waitHours} onChange={e => setWaitHours(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none text-sm"/>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Costo Orario Fermo</label>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase mb-1 block">Costo Orario Fermo</label>
                                     <div className="relative">
-                                        <input type="number" value={waitRate} onChange={e => setWaitRate(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none"/>
-                                        <span className="absolute right-3 top-2 text-[10px] text-slate-500">€/h</span>
+                                        <input type="number" value={waitRate} onChange={e => setWaitRate(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none text-sm"/>
+                                        <span className="absolute right-3 top-2 text-[9px] text-slate-500">€/h</span>
                                     </div>
                                 </div>
                             </div>
@@ -440,10 +439,10 @@ export default function Trasporto({ showToast }: Props) {
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i className="fa-solid fa-plus"></i> Costi Accessori</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Permessi / Scorta / Pedaggi</label>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase mb-1 block">Permessi / Scorta / Pedaggi</label>
                                     <div className="relative">
-                                        <input type="number" value={extraCost} onChange={e => setExtraCost(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none" placeholder="0.00"/>
-                                        <span className="absolute right-3 top-2 text-[10px] text-slate-500">€</span>
+                                        <input type="number" value={extraCost} onChange={e => setExtraCost(e.target.value)} className="w-full glass-input rounded-xl p-2 text-white text-center outline-none text-sm" placeholder="0.00"/>
+                                        <span className="absolute right-3 top-2 text-[9px] text-slate-500">€</span>
                                     </div>
                                     <p className="text-[9px] text-slate-600 mt-2 text-center">* Costo applicato per singolo viaggio</p>
                                 </div>
@@ -454,9 +453,9 @@ export default function Trasporto({ showToast }: Props) {
 
                 {/* OUTPUTS */}
                 <div className="lg:col-span-4 space-y-6">
-                    <div className="glass-panel rounded-2xl p-6 sticky top-24 border-t-4 border-amber-500 print-break-inside">
-                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <i className="fa-solid fa-calculator text-amber-500"></i> Totale Stimato
+                    <div className="glass-panel rounded-2xl p-6 sticky top-24 border-t-4 border-orange-500 print-break-inside">
+                        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <i className="fa-solid fa-calculator text-orange-500"></i> Totale Stimato
                     </h3>
 
                     {/* Donut Chart */}
@@ -465,21 +464,21 @@ export default function Trasporto({ showToast }: Props) {
                                 className="w-32 h-32 rounded-full relative"
                                 style={{
                                     background: `conic-gradient(
-                                        #f59e0b 0% ${chartData.travel}%,
-                                        #ef4444 ${chartData.travel}% ${chartData.travel + chartData.wait}%,
-                                        #3b82f6 ${chartData.travel + chartData.wait}% 100%
+                                        #f97316 0% ${chartData.travel}%,
+                                        #c2410c ${chartData.travel}% ${chartData.travel + chartData.wait}%,
+                                        #fb923c ${chartData.travel + chartData.wait}% 100%
                                     )`
                                 }}
                             >
                                 <div className="absolute inset-2 bg-slate-900 rounded-full flex items-center justify-center flex-col">
-                                    <span className="text-[10px] text-slate-500 uppercase">Totale</span>
+                                    <span className="text-[9px] text-slate-500 uppercase">Totale</span>
                                     <span className="font-bold text-white text-sm">€{total.toFixed(0)}</span>
                                 </div>
                             </div>
                             <div className="absolute -right-2 top-0 flex flex-col gap-2 text-[9px] font-bold uppercase">
-                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-amber-500"></span>Viaggio</div>
-                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-red-500"></span>Attesa</div>
-                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-blue-500"></span>Extra</div>
+                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-orange-500"></span>Viaggio</div>
+                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-orange-700"></span>Attesa</div>
+                                <div className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-orange-400"></span>Extra</div>
                             </div>
                     </div>
 
@@ -499,28 +498,28 @@ export default function Trasporto({ showToast }: Props) {
                         
                         <div className="h-px bg-white/10 my-2"></div>
                         
-                        <div className="flex justify-between items-center p-2 bg-amber-500/10 rounded border border-amber-500/20">
-                                <span className="text-xs text-amber-500 font-bold uppercase tracking-wider">Tempo Guida</span>
-                                <span className="font-mono text-amber-400 font-bold">{timeEst}</span>
+                        <div className="flex justify-between items-center p-2 bg-orange-500/10 rounded border border-orange-500/20">
+                                <span className="text-xs text-orange-500 font-bold uppercase tracking-wider">Tempo Guida</span>
+                                <span className="font-mono text-orange-400 font-bold">{timeEst}</span>
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-amber-900/40 to-slate-900/50 p-6 rounded-xl border border-amber-500/30 text-center cursor-pointer hover:scale-[1.02] transition-transform group" onClick={() => copy(total.toFixed(2))}>
-                        <div className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2">Costo Totale</div>
-                        <div className="text-3xl font-bold text-white font-mono group-hover:text-amber-200 transition-colors">€ {total.toLocaleString('it-IT', {minimumFractionDigits: 2})}</div>
-                        <div className="text-[10px] text-slate-500 mt-2">
+                    <div className="bg-gradient-to-br from-orange-900/40 to-slate-900/50 p-6 rounded-xl border border-orange-500/30 text-center cursor-pointer hover:scale-[1.02] transition-transform group" onClick={() => copy(total.toFixed(2))}>
+                        <div className="text-xs font-bold text-orange-400 uppercase tracking-widest mb-2">Costo Totale</div>
+                        <div className="text-3xl font-bold text-white font-mono group-hover:text-orange-200 transition-colors">€ {total.toLocaleString('it-IT', {minimumFractionDigits: 2})}</div>
+                        <div className="text-[9px] text-slate-500 mt-2">
                             {(total / (parseFloat(km) || 1)).toLocaleString('it-IT', {minimumFractionDigits: 2})} €/km complessivi
                         </div>
                     </div>
                     </div>
 
                     {/* Info Box */}
-                    <div className="glass-panel p-4 rounded-xl border border-white/5 bg-blue-500/5 no-print">
+                    <div className="glass-panel p-4 rounded-xl border border-white/5 bg-orange-500/5 no-print">
                         <div className="flex gap-3">
-                            <div className="mt-1 text-blue-400"><i className="fa-solid fa-circle-info"></i></div>
+                            <div className="mt-1 text-orange-400"><i className="fa-solid fa-circle-info"></i></div>
                             <div>
-                                <h4 className="text-xs font-bold text-blue-400 uppercase mb-1">Nota Logistica</h4>
-                                <p className="text-[10px] text-slate-400 leading-relaxed">
+                                <h4 className="text-xs font-bold text-orange-400 uppercase mb-1">Nota Logistica</h4>
+                                <p className="text-[9px] text-slate-400 leading-relaxed">
                                     Il calcolo del tempo di guida è puramente indicativo e basato sulla velocità media inserita. Non include le pause obbligatorie per legge (tacho) o traffico.
                                 </p>
                             </div>
@@ -535,35 +534,35 @@ export default function Trasporto({ showToast }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 {/* CALCOLATORE */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-indigo-500 print-break-inside">
-                         <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                             <i className="fa-solid fa-calculator text-indigo-500"></i> Calcolo Ordinari
+                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-orange-600 print-break-inside">
+                         <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                             <i className="fa-solid fa-calculator text-orange-600"></i> Calcolo Ordinari
                          </h3>
                          
                          <div className="space-y-6">
                             {/* MC Input */}
                             <div className="relative">
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Volume Totale</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Volume Totale</label>
                                 <div className="relative">
                                     <input 
                                         type="number" 
                                         value={ordMc} 
                                         onChange={(e) => setOrdMc(e.target.value)} 
-                                        className="w-full glass-input rounded-xl p-4 pl-4 text-white font-mono text-2xl outline-none focus:border-indigo-500/50" 
+                                        className="w-full glass-input rounded-xl p-4 pl-4 text-white font-mono text-xl outline-none focus:border-orange-500/50" 
                                         placeholder="0"
                                     />
-                                    <span className="absolute right-4 top-5 text-sm text-slate-500 font-bold">mc</span>
+                                    <span className="absolute right-4 top-5 text-xs text-slate-500 font-bold">mc</span>
                                 </div>
                             </div>
 
                             {/* Select Km */}
                             <div>
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Fascia Stabilimento</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Fascia Stabilimento</label>
                                 <div className="relative">
                                     <select 
                                         value={ordKm} 
                                         onChange={(e) => setOrdKm(parseInt(e.target.value))} 
-                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none"
+                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none text-sm"
                                     >
                                         {ORDINARI_ROWS.map(r => (
                                             <option key={r.km} value={r.km} className="bg-slate-800">Km {r.km}</option>
@@ -575,12 +574,12 @@ export default function Trasporto({ showToast }: Props) {
 
                              {/* Select Type */}
                             <div>
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Tipologia Manufatto</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Tipologia Manufatto</label>
                                 <div className="relative">
                                     <select 
                                         value={ordType} 
                                         onChange={(e) => setOrdType(e.target.value as OrdinariType)} 
-                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none"
+                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none text-sm"
                                     >
                                         <option value="norm" className="bg-slate-800">Normali</option>
                                         <option value="p240" className="bg-slate-800">Pareti h 240</option>
@@ -597,8 +596,8 @@ export default function Trasporto({ showToast }: Props) {
                             {/* Specific Weight (Conversion) */}
                             <div className="bg-white/5 p-4 rounded-xl">
                                 <div className="flex justify-between items-center mb-2">
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Peso Specifico</label>
-                                    <span className="text-[10px] text-slate-600">(Default CLS: 2500)</span>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Peso Specifico</label>
+                                    <span className="text-[9px] text-slate-600">(Default CLS: 2500)</span>
                                 </div>
                                 <div className="relative">
                                     <input 
@@ -608,18 +607,18 @@ export default function Trasporto({ showToast }: Props) {
                                         className="w-full glass-input rounded-lg p-2 text-center text-sm text-slate-300 outline-none" 
                                         placeholder="2500"
                                     />
-                                    <span className="absolute right-3 top-2 text-[10px] text-slate-500">kg/mc</span>
+                                    <span className="absolute right-3 top-2 text-[9px] text-slate-500">kg/mc</span>
                                 </div>
                             </div>
                          </div>
                          
                          {/* Result Box */}
-                         <div className="mt-8 bg-gradient-to-br from-indigo-900/50 to-slate-900/50 border border-indigo-500/30 p-6 rounded-2xl text-center">
-                             <div className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-2">Tariffa Applicata: {ordRate} €/qle</div>
-                             <div className="text-4xl font-bold text-white font-mono cursor-pointer hover:scale-105 transition-transform" onClick={() => copy(ordTotalCost.toFixed(2))}>
+                         <div className="mt-8 bg-gradient-to-br from-orange-900/50 to-slate-900/50 border border-orange-500/30 p-6 rounded-2xl text-center">
+                             <div className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-2">Tariffa Applicata: {ordRate} €/qle</div>
+                             <div className="text-3xl font-bold text-white font-mono cursor-pointer hover:scale-105 transition-transform" onClick={() => copy(ordTotalCost.toFixed(2))}>
                                  € {ordTotalCost.toLocaleString('it-IT', {minimumFractionDigits: 2})}
                              </div>
-                             <div className="text-[10px] text-slate-500 mt-2 uppercase font-bold tracking-wider">
+                             <div className="text-[9px] text-slate-500 mt-2 uppercase font-bold tracking-wider">
                                  {((parseFloat(ordMc) || 0) * (parseFloat(ordSpecWeight) || 0) / 100).toFixed(1)} Quintali Totali
                              </div>
                          </div>
@@ -627,7 +626,7 @@ export default function Trasporto({ showToast }: Props) {
                          {/* Add to List Button */}
                          <button 
                             onClick={addOrdItem}
-                            className="w-full mt-4 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 font-bold py-3 rounded-xl border border-indigo-500/30 transition-all flex justify-center items-center gap-2 no-print"
+                            className="w-full mt-4 bg-orange-600/20 hover:bg-orange-600/40 text-orange-300 font-bold py-3 rounded-xl border border-orange-500/30 transition-all flex justify-center items-center gap-2 no-print text-sm"
                          >
                              <i className="fa-solid fa-plus-circle"></i> Aggiungi al Riepilogo
                          </button>
@@ -637,24 +636,24 @@ export default function Trasporto({ showToast }: Props) {
                              <div className="mt-6 border-t border-white/10 pt-4 animate-fade-in">
                                  <div className="flex justify-between items-center mb-3">
                                      <h4 className="text-xs font-bold text-slate-300 uppercase">Riepilogo Conteggi</h4>
-                                     <button onClick={() => setOrdList([])} className="text-[10px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
+                                     <button onClick={() => setOrdList([])} className="text-[9px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
                                  </div>
                                  <div className="space-y-2 max-h-60 overflow-auto custom-scrollbar mb-4">
                                      {ordList.map((item) => (
                                          <div key={item.id} className="bg-black/20 p-3 rounded-lg flex justify-between items-center border border-white/5">
                                              <div>
                                                  <div className="text-xs font-bold text-white">{item.typeLabel}</div>
-                                                 <div className="text-[10px] text-slate-500">{item.details}</div>
+                                                 <div className="text-[9px] text-slate-500">{item.details}</div>
                                              </div>
                                              <div className="flex items-center gap-3">
-                                                 <span className="font-mono text-sm text-indigo-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                                 <span className="font-mono text-sm text-orange-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
                                                  <button onClick={() => removeListItem('ord', item.id)} className="text-slate-600 hover:text-red-400 transition-colors no-print"><i className="fa-solid fa-trash-can text-xs"></i></button>
                                              </div>
                                          </div>
                                      ))}
                                  </div>
-                                 <div className="bg-indigo-500/10 p-4 rounded-xl border border-indigo-500/20 flex justify-between items-center">
-                                     <span className="text-xs font-bold text-indigo-400 uppercase">Totale Complessivo</span>
+                                 <div className="bg-orange-500/10 p-4 rounded-xl border border-orange-500/20 flex justify-between items-center">
+                                     <span className="text-xs font-bold text-orange-400 uppercase">Totale Complessivo</span>
                                      <span className="text-xl font-bold text-white font-mono">€ {ordList.reduce((acc, i) => acc + i.cost, 0).toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
                                  </div>
                              </div>
@@ -666,12 +665,12 @@ export default function Trasporto({ showToast }: Props) {
                 <div className="lg:col-span-7">
                     <div className="glass-panel rounded-2xl overflow-hidden border border-white/10 h-full max-h-[800px] flex flex-col">
                         <div className="bg-white/5 p-4 border-b border-white/10 flex justify-between items-center">
-                             <h3 className="text-sm font-bold text-slate-300 uppercase tracking-widest">Tabella Prezzi (€/qle)</h3>
-                             <span className="text-[10px] text-slate-500 bg-black/20 px-2 py-1 rounded">Stabilimento</span>
+                             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Tabella Prezzi (€/qle)</h3>
+                             <span className="text-[9px] text-slate-500 bg-black/20 px-2 py-1 rounded">Stabilimento</span>
                         </div>
                         <div className="overflow-auto flex-grow custom-scrollbar">
-                            <table className="w-full text-center text-sm">
-                                <thead className="text-[10px] text-slate-500 uppercase bg-black/20 sticky top-0 z-10 font-bold">
+                            <table className="w-full text-center text-xs">
+                                <thead className="text-[9px] text-slate-500 uppercase bg-black/20 sticky top-0 z-10 font-bold">
                                     <tr>
                                         <th className="p-3 border-b border-white/10 bg-slate-900">Km</th>
                                         <th className="p-3 border-b border-white/10 bg-slate-900">Normali</th>
@@ -683,13 +682,13 @@ export default function Trasporto({ showToast }: Props) {
                                 </thead>
                                 <tbody className="divide-y divide-white/5 text-slate-300 font-mono">
                                     {ORDINARI_ROWS.map((r) => (
-                                        <tr key={r.km} className={`${r.km === ordKm ? 'bg-indigo-500/20 text-white' : 'hover:bg-white/5'}`}>
+                                        <tr key={r.km} className={`${r.km === ordKm ? 'bg-orange-500/20 text-white' : 'hover:bg-white/5'}`}>
                                             <td className="p-3 font-bold text-slate-400">{r.km}</td>
-                                            <td className={`p-3 ${ordType === 'norm' && r.km === ordKm ? 'text-indigo-400 font-bold' : ''}`}>{r.norm.toFixed(2)} €</td>
-                                            <td className={`p-3 ${ordType === 'p240' && r.km === ordKm ? 'text-indigo-400 font-bold' : ''}`}>{r.p240.toFixed(2)} €</td>
-                                            <td className={`p-3 ${ordType === 'p300' && r.km === ordKm ? 'text-indigo-400 font-bold' : ''}`}>{r.p300.toFixed(2)} €</td>
-                                            <td className={`p-3 ${ordType === 'p320' && r.km === ordKm ? 'text-indigo-400 font-bold' : ''}`}>{r.p320.toFixed(2)} €</td>
-                                            <td className={`p-3 ${ordType === 'p350' && r.km === ordKm ? 'text-indigo-400 font-bold' : ''}`}>{r.p350.toFixed(2)} €</td>
+                                            <td className={`p-3 ${ordType === 'norm' && r.km === ordKm ? 'text-orange-400 font-bold' : ''}`}>{r.norm.toFixed(2)} €</td>
+                                            <td className={`p-3 ${ordType === 'p240' && r.km === ordKm ? 'text-orange-400 font-bold' : ''}`}>{r.p240.toFixed(2)} €</td>
+                                            <td className={`p-3 ${ordType === 'p300' && r.km === ordKm ? 'text-orange-400 font-bold' : ''}`}>{r.p300.toFixed(2)} €</td>
+                                            <td className={`p-3 ${ordType === 'p320' && r.km === ordKm ? 'text-orange-400 font-bold' : ''}`}>{r.p320.toFixed(2)} €</td>
+                                            <td className={`p-3 ${ordType === 'p350' && r.km === ordKm ? 'text-orange-400 font-bold' : ''}`}>{r.p350.toFixed(2)} €</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -705,21 +704,21 @@ export default function Trasporto({ showToast }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
                 {/* CALCOLATORE */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-red-500 print-break-inside">
-                         <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                             <i className="fa-solid fa-calculator text-red-500"></i> Calcolo Eccezionali
+                    <div className="glass-panel rounded-2xl p-8 sticky top-24 border-t-4 border-orange-700 print-break-inside">
+                         <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                             <i className="fa-solid fa-calculator text-orange-700"></i> Calcolo Eccezionali
                          </h3>
                          
                          <div className="space-y-6">
                             {/* MC Input */}
                             <div className="relative">
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Volume Totale</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Volume Totale</label>
                                 <div className="relative">
                                     <input 
                                         type="number" 
                                         value={excMc} 
                                         onChange={(e) => setExcMc(e.target.value)} 
-                                        className="w-full glass-input rounded-xl p-4 pl-4 text-white font-mono text-2xl outline-none focus:border-red-500/50" 
+                                        className="w-full glass-input rounded-xl p-4 pl-4 text-white font-mono text-xl outline-none focus:border-orange-500/50" 
                                         placeholder="0"
                                     />
                                     <span className="absolute right-4 top-5 text-sm text-slate-500 font-bold">mc</span>
@@ -728,12 +727,12 @@ export default function Trasporto({ showToast }: Props) {
 
                             {/* Select Km */}
                             <div>
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Fascia Stabilimento</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Fascia Stabilimento</label>
                                 <div className="relative">
                                     <select 
                                         value={excKm} 
                                         onChange={(e) => setExcKm(parseInt(e.target.value))} 
-                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none"
+                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none text-sm"
                                     >
                                         {ECCEZIONALI_ROWS.map(r => (
                                             <option key={r.km} value={r.km} className="bg-slate-800">Km {r.km}</option>
@@ -745,12 +744,12 @@ export default function Trasporto({ showToast }: Props) {
 
                              {/* Select Type */}
                             <div>
-                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Tipologia Elemento</label>
+                                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Tipologia Elemento</label>
                                 <div className="relative">
                                     <select 
                                         value={excType} 
                                         onChange={(e) => setExcType(e.target.value as EccezionaliType)} 
-                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none"
+                                        className="w-full glass-input rounded-xl p-3 text-white appearance-none cursor-pointer outline-none text-sm"
                                     >
                                         <option value="u16" className="bg-slate-800">Fino a 16 metri</option>
                                         <option value="u19" className="bg-slate-800">Fino a 19 metri</option>
@@ -768,8 +767,8 @@ export default function Trasporto({ showToast }: Props) {
                             {/* Specific Weight (Conversion) */}
                             <div className="bg-white/5 p-4 rounded-xl">
                                 <div className="flex justify-between items-center mb-2">
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Peso Specifico</label>
-                                    <span className="text-[10px] text-slate-600">(Default CLS: 2500)</span>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Peso Specifico</label>
+                                    <span className="text-[9px] text-slate-600">(Default CLS: 2500)</span>
                                 </div>
                                 <div className="relative">
                                     <input 
@@ -779,18 +778,18 @@ export default function Trasporto({ showToast }: Props) {
                                         className="w-full glass-input rounded-lg p-2 text-center text-sm text-slate-300 outline-none" 
                                         placeholder="2500"
                                     />
-                                    <span className="absolute right-3 top-2 text-[10px] text-slate-500">kg/mc</span>
+                                    <span className="absolute right-3 top-2 text-[9px] text-slate-500">kg/mc</span>
                                 </div>
                             </div>
                          </div>
                          
                          {/* Result Box */}
-                         <div className="mt-8 bg-gradient-to-br from-red-900/50 to-slate-900/50 border border-red-500/30 p-6 rounded-2xl text-center">
-                             <div className="text-[10px] text-red-400 font-bold uppercase tracking-wider mb-2">Tariffa Applicata: {excRate} €/qle</div>
-                             <div className="text-4xl font-bold text-white font-mono cursor-pointer hover:scale-105 transition-transform" onClick={() => copy(excTotalCost.toFixed(2))}>
+                         <div className="mt-8 bg-gradient-to-br from-orange-900/50 to-slate-900/50 border border-orange-500/30 p-6 rounded-2xl text-center">
+                             <div className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-2">Tariffa Applicata: {excRate} €/qle</div>
+                             <div className="text-3xl font-bold text-white font-mono cursor-pointer hover:scale-105 transition-transform" onClick={() => copy(excTotalCost.toFixed(2))}>
                                  € {excTotalCost.toLocaleString('it-IT', {minimumFractionDigits: 2})}
                              </div>
-                             <div className="text-[10px] text-slate-500 mt-2 uppercase font-bold tracking-wider">
+                             <div className="text-[9px] text-slate-500 mt-2 uppercase font-bold tracking-wider">
                                  {((parseFloat(excMc) || 0) * (parseFloat(excSpecWeight) || 0) / 100).toFixed(1)} Quintali Totali
                              </div>
                          </div>
@@ -798,7 +797,7 @@ export default function Trasporto({ showToast }: Props) {
                          {/* Add to List Button */}
                          <button 
                             onClick={addExcItem}
-                            className="w-full mt-4 bg-red-600/20 hover:bg-red-600/40 text-red-300 font-bold py-3 rounded-xl border border-red-500/30 transition-all flex justify-center items-center gap-2 no-print"
+                            className="w-full mt-4 bg-orange-700/20 hover:bg-orange-700/40 text-orange-300 font-bold py-3 rounded-xl border border-orange-700/30 transition-all flex justify-center items-center gap-2 no-print text-sm"
                          >
                              <i className="fa-solid fa-plus-circle"></i> Aggiungi al Riepilogo
                          </button>
@@ -808,24 +807,24 @@ export default function Trasporto({ showToast }: Props) {
                              <div className="mt-6 border-t border-white/10 pt-4 animate-fade-in">
                                  <div className="flex justify-between items-center mb-3">
                                      <h4 className="text-xs font-bold text-slate-300 uppercase">Riepilogo Conteggi</h4>
-                                     <button onClick={() => setExcList([])} className="text-[10px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
+                                     <button onClick={() => setExcList([])} className="text-[9px] text-red-400 hover:text-red-300 uppercase font-bold no-print">Svuota</button>
                                  </div>
                                  <div className="space-y-2 max-h-60 overflow-auto custom-scrollbar mb-4">
                                      {excList.map((item) => (
                                          <div key={item.id} className="bg-black/20 p-3 rounded-lg flex justify-between items-center border border-white/5">
                                              <div>
                                                  <div className="text-xs font-bold text-white">{item.typeLabel}</div>
-                                                 <div className="text-[10px] text-slate-500">{item.details}</div>
+                                                 <div className="text-[9px] text-slate-500">{item.details}</div>
                                              </div>
                                              <div className="flex items-center gap-3">
-                                                 <span className="font-mono text-sm text-red-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
+                                                 <span className="font-mono text-sm text-orange-300">€ {item.cost.toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
                                                  <button onClick={() => removeListItem('exc', item.id)} className="text-slate-600 hover:text-red-400 transition-colors no-print"><i className="fa-solid fa-trash-can text-xs"></i></button>
                                              </div>
                                          </div>
                                      ))}
                                  </div>
-                                 <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/20 flex justify-between items-center">
-                                     <span className="text-xs font-bold text-red-400 uppercase">Totale Complessivo</span>
+                                 <div className="bg-orange-700/10 p-4 rounded-xl border border-orange-700/20 flex justify-between items-center">
+                                     <span className="text-xs font-bold text-orange-400 uppercase">Totale Complessivo</span>
                                      <span className="text-xl font-bold text-white font-mono">€ {excList.reduce((acc, i) => acc + i.cost, 0).toLocaleString('it-IT', {minimumFractionDigits: 2})}</span>
                                  </div>
                              </div>
@@ -837,32 +836,32 @@ export default function Trasporto({ showToast }: Props) {
                 <div className="lg:col-span-7">
                     <div className="glass-panel rounded-2xl overflow-hidden border border-white/10 h-full max-h-[800px] flex flex-col">
                         <div className="bg-white/5 p-4 border-b border-white/10 flex justify-between items-center">
-                             <h3 className="text-sm font-bold text-slate-300 uppercase tracking-widest">Listino Eccezionali (€/qle)</h3>
-                             <span className="text-[10px] text-slate-500 bg-black/20 px-2 py-1 rounded">Stabilimento</span>
+                             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Tabella Prezzi Eccezionali (€/qle)</h3>
+                             <span className="text-[9px] text-slate-500 bg-black/20 px-2 py-1 rounded">Stabilimento</span>
                         </div>
                         <div className="overflow-auto flex-grow custom-scrollbar">
-                            <table className="w-full text-center text-sm">
-                                <thead className="text-[10px] text-slate-500 uppercase bg-black/20 sticky top-0 z-10 font-bold">
+                            <table className="w-full text-center text-xs">
+                                <thead className="text-[9px] text-slate-500 uppercase bg-black/20 sticky top-0 z-10 font-bold">
                                     <tr>
                                         <th className="p-3 border-b border-white/10 bg-slate-900">Km</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Fino 16</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Fino 19</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Fino 23</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Fino 27</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Fino 31</th>
-                                        <th className="p-3 border-b border-white/10 bg-slate-900 whitespace-nowrap">Oltre 31</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">U16</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">U19</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">U23</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">U27</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">U31</th>
+                                        <th className="p-3 border-b border-white/10 bg-slate-900">O31</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5 text-slate-300 font-mono">
                                     {ECCEZIONALI_ROWS.map((r) => (
-                                        <tr key={r.km} className={`${r.km === excKm ? 'bg-red-500/20 text-white' : 'hover:bg-white/5'}`}>
+                                        <tr key={r.km} className={`${r.km === excKm ? 'bg-orange-700/20 text-white' : 'hover:bg-white/5'}`}>
                                             <td className="p-3 font-bold text-slate-400">{r.km}</td>
-                                            <td className={`p-3 ${excType === 'u16' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.u16.toFixed(2)} €</td>
-                                            <td className={`p-3 ${excType === 'u19' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.u19.toFixed(2)} €</td>
-                                            <td className={`p-3 ${excType === 'u23' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.u23.toFixed(2)} €</td>
-                                            <td className={`p-3 ${excType === 'u27' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.u27.toFixed(2)} €</td>
-                                            <td className={`p-3 ${excType === 'u31' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.u31.toFixed(2)} €</td>
-                                            <td className={`p-3 ${excType === 'o31' && r.km === excKm ? 'text-red-400 font-bold' : ''}`}>{r.o31.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'u16' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.u16.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'u19' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.u19.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'u23' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.u23.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'u27' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.u27.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'u31' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.u31.toFixed(2)} €</td>
+                                            <td className={`p-3 ${excType === 'o31' && r.km === excKm ? 'text-orange-400 font-bold' : ''}`}>{r.o31.toFixed(2)} €</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -872,27 +871,6 @@ export default function Trasporto({ showToast }: Props) {
                 </div>
             </div>
         )}
-
-      {/* LEGENDA TECNICA */}
-      <div className="mt-10 border-t border-white/10 pt-6 no-print">
-          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Info size={14} /> Specifiche Tecniche & Guida
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] text-slate-400">
-              <div>
-                  <strong className="text-slate-300 block mb-1">Funzionalità Principali</strong>
-                  Preventivazione dettagliata dei costi di trasporto per cantieri. Supporta il calcolo logistico (viaggi, attese), trasporti ordinari (pannelli, manufatti standard) ed eccezionali (travi lunghe).
-              </div>
-              <div>
-                  <strong className="text-slate-300 block mb-1">Modalità d'Uso</strong>
-                  Scegli la modalità (Logistica/Ordinari/Eccezionali). Inserisci distanza e volume. Il sistema applica le tariffe tabellari basate su peso e ingombro.
-              </div>
-              <div>
-                  <strong className="text-slate-300 block mb-1">Riferimenti</strong>
-                  Le tabelle costi sono basate su tariffe medie di mercato per autotrasporto conto terzi, indicizzate su base chilometrica e tipologia di mezzo (bilico standard vs eccezionale).
-              </div>
-          </div>
-      </div>
     </div>
   );
 }

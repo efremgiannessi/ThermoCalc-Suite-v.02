@@ -196,7 +196,7 @@ export default function Idraulica({ showToast }: Props) {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 no-print">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span className="bg-cyan-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-cyan-500 border border-cyan-500/20">
+                <span className="bg-orange-500/20 w-10 h-10 rounded-xl flex items-center justify-center text-orange-500 border border-orange-500/20">
                     <Droplets size={20} />
                 </span>
                 Ingegneria Idraulica
@@ -205,19 +205,19 @@ export default function Idraulica({ showToast }: Props) {
             <div className="bg-black/20 p-1 rounded-xl flex border border-white/10 overflow-x-auto">
                 <button 
                     onClick={() => setActiveTab('sizing')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'sizing' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'sizing' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Ruler size={14} /> Dimensionamento
                 </button>
                 <button 
                     onClick={() => setActiveTab('drop')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'drop' ? 'bg-red-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'drop' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <TrendingDown size={14} /> Perdite Carico
                 </button>
                 <button 
                     onClick={() => setActiveTab('pumps')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'pumps' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'pumps' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     <Zap size={14} /> Pompe
                 </button>
@@ -225,11 +225,11 @@ export default function Idraulica({ showToast }: Props) {
         </div>
 
         {/* --- COMMON INPUTS --- */}
-        <div className="glass-panel rounded-2xl p-6 border-cyan-500/10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="glass-panel rounded-2xl p-6 border-orange-500/10 grid grid-cols-1 md:grid-cols-2 gap-6">
              <div className="relative group">
                 <label className="industrial-label">Portata di Progetto (Q)</label>
                 <div className="flex gap-2 items-center">
-                    <input type="number" value={flow} onChange={e=>setFlow(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-xl outline-none focus:border-cyan-500/50 text-white" placeholder="0"/>
+                    <input type="number" value={flow} onChange={e=>setFlow(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-lg outline-none focus:border-orange-500/50 text-white" placeholder="0"/>
                     <span className="text-xs font-bold text-slate-500 w-12 text-center">m³/h</span>
                 </div>
                 <div className="mt-1 text-[9px] text-slate-500 text-right">
@@ -241,7 +241,7 @@ export default function Idraulica({ showToast }: Props) {
                 <div>
                     <label className="industrial-label flex justify-between">
                         <span>Materiale Tubazione</span>
-                        <span className="text-cyan-500 font-mono">C={PIPE_DB[material].roughness}</span>
+                        <span className="text-orange-500 font-mono">C={PIPE_DB[material].roughness}</span>
                     </label>
                     <select 
                         value={material} 
@@ -249,7 +249,7 @@ export default function Idraulica({ showToast }: Props) {
                             setMaterial(e.target.value as MaterialKey);
                             setDropPipeIdx(0); // Reset index on material change
                         }}
-                        className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer"
+                        className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer text-sm"
                     >
                         {Object.entries(PIPE_DB).map(([k, v]) => (
                             <option key={k} value={k} className="bg-app-panel">{v.name}</option>
@@ -264,7 +264,7 @@ export default function Idraulica({ showToast }: Props) {
                     <select 
                         value={fluidIdx} 
                         onChange={e => setFluidIdx(parseInt(e.target.value))}
-                        className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer"
+                        className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer text-sm"
                     >
                         {FLUIDS.map((f, i) => (
                             <option key={f.id} value={i} className="bg-app-panel">{f.name} ({f.density} kg/m³)</option>
@@ -278,12 +278,12 @@ export default function Idraulica({ showToast }: Props) {
         {activeTab === 'sizing' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
                 <div className="lg:col-span-4 glass-panel rounded-2xl p-6 border-white/5">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Parametri Velocità</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Parametri Velocità</h3>
                     
                     <label className="industrial-label">Velocità Target (m/s)</label>
-                    <input type="number" value={targetV} onChange={e=>setTargetV(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-lg text-white mb-4" />
+                    <input type="number" value={targetV} onChange={e=>setTargetV(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-base text-white mb-4" />
                     
-                    <div className="bg-white/5 rounded-xl p-4 text-[10px] text-slate-400 space-y-2">
+                    <div className="bg-white/5 rounded-xl p-4 text-[9px] text-slate-400 space-y-2">
                         <div className="flex justify-between"><span>Aspirazione Pompe</span><span className="text-white">0.5 - 1.5 m/s</span></div>
                         <div className="flex justify-between"><span>Mandata Acqua</span><span className="text-white">1.5 - 3.0 m/s</span></div>
                         <div className="flex justify-between"><span>Acqua Calda / Vapore</span><span className="text-white">2.0 - 4.0 m/s</span></div>
@@ -291,30 +291,30 @@ export default function Idraulica({ showToast }: Props) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-8 glass-panel rounded-2xl p-6 bg-cyan-900/10 border-cyan-500/20">
-                     <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Database size={14}/> Suggerimenti Database</h3>
+                <div className="lg:col-span-8 glass-panel rounded-2xl p-6 bg-orange-900/10 border-orange-500/20">
+                     <h3 className="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Database size={14}/> Suggerimenti Database</h3>
                      <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="text-[10px] text-slate-500 uppercase border-b border-white/10">
+                                <tr className="text-[9px] text-slate-500 uppercase border-b border-white/10">
                                     <th className="pb-2">DN / Label</th>
                                     <th className="pb-2 text-right">Ø Interno</th>
                                     <th className="pb-2 text-right">Velocità Reale</th>
                                     <th className="pb-2 text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-sm">
+                            <tbody className="text-xs">
                                 {sizingResults.map((r, i) => (
-                                    <tr key={i} className={`border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors ${i === 0 ? 'bg-emerald-500/10' : ''}`}>
+                                    <tr key={i} className={`border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors ${i === 0 ? 'bg-orange-500/10' : ''}`}>
                                         <td className="py-3 font-bold text-white pl-2">
-                                            {r.label} <span className="text-xs font-normal text-slate-500 ml-1">DN{r.dn}</span>
+                                            {r.label} <span className="text-[10px] font-normal text-slate-500 ml-1">DN{r.dn}</span>
                                         </td>
                                         <td className="py-3 text-right font-mono text-slate-300">{r.id.toFixed(1)} mm</td>
-                                        <td className={`py-3 text-right font-mono font-bold ${r.v > 3 ? 'text-red-400' : (r.v > 2 ? 'text-amber-400' : 'text-emerald-400')}`}>
+                                        <td className={`py-3 text-right font-mono font-bold ${r.v > 3 ? 'text-red-400' : (r.v > 2 ? 'text-orange-400' : 'text-emerald-400')}`}>
                                             {r.v.toFixed(2)} m/s
                                         </td>
                                         <td className="py-3 text-center">
-                                            {i === 0 && <span className="text-[9px] bg-emerald-500 text-black font-bold px-2 py-0.5 rounded-full uppercase">Best Match</span>}
+                                            {i === 0 && <span className="text-[8px] bg-orange-500 text-black font-bold px-2 py-0.5 rounded-full uppercase">Best Match</span>}
                                         </td>
                                     </tr>
                                 ))}
@@ -328,8 +328,8 @@ export default function Idraulica({ showToast }: Props) {
         {/* --- DROP TAB --- */}
         {activeTab === 'drop' && (
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
-                <div className="glass-panel rounded-2xl p-6 border-red-500/10">
-                    <h3 className="text-sm font-bold text-red-500 uppercase tracking-widest mb-4">Dettagli Condotta</h3>
+                <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Dettagli Condotta</h3>
                     
                     <div className="space-y-4">
                         <div>
@@ -337,7 +337,7 @@ export default function Idraulica({ showToast }: Props) {
                             <select 
                                 value={dropPipeIdx} 
                                 onChange={e => setDropPipeIdx(parseInt(e.target.value))}
-                                className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer"
+                                className="w-full glass-input rounded-xl p-3 text-white outline-none cursor-pointer text-sm"
                             >
                                 {PIPE_DB[material].sizes.map((s, i) => (
                                     <option key={i} value={i} className="bg-app-panel">
@@ -348,31 +348,31 @@ export default function Idraulica({ showToast }: Props) {
                         </div>
                         <div>
                             <label className="industrial-label">Lunghezza Tratta (m)</label>
-                            <input type="number" value={length} onChange={e=>setLength(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white"/>
+                            <input type="number" value={length} onChange={e=>setLength(e.target.value)} className="w-full glass-input rounded-xl p-3 font-mono text-white text-sm"/>
                         </div>
                     </div>
                     
                     <div className="mt-6 bg-white/5 p-4 rounded-xl flex justify-between items-center">
-                        <span className="text-xs text-slate-400 uppercase font-bold">Velocità Fluido</span>
+                        <span className="text-[10px] text-slate-400 uppercase font-bold">Velocità Fluido</span>
                         <span className="font-mono text-white font-bold">{headLoss.v.toFixed(2)} m/s</span>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <div className="glass-panel rounded-2xl p-8 text-center bg-red-950/20 border-red-500/20 flex-1 flex flex-col justify-center" onClick={()=>copy(headLoss.bar.toFixed(3))}>
-                        <span className="industrial-label text-red-500 !mb-2 flex items-center justify-center gap-2"><TrendingDown size={14}/> Perdita di Carico Totale</span>
-                        <div className="text-5xl font-black text-white font-mono">{headLoss.bar.toFixed(3)} <span className="text-xl text-slate-500">bar</span></div>
-                        <div className="text-xs text-red-300/60 mt-2 font-mono">≈ {(headLoss.bar * 10.197).toFixed(2)} m.c.a.</div>
+                    <div className="glass-panel rounded-2xl p-8 text-center bg-orange-900/20 border-orange-500/20 flex-1 flex flex-col justify-center" onClick={()=>copy(headLoss.bar.toFixed(3))}>
+                        <span className="industrial-label text-orange-500 !mb-2 flex items-center justify-center gap-2"><TrendingDown size={14}/> Perdita di Carico Totale</span>
+                        <div className="text-4xl font-black text-white font-mono">{headLoss.bar.toFixed(3)} <span className="text-lg text-slate-500">bar</span></div>
+                        <div className="text-xs text-orange-300/60 mt-2 font-mono">≈ {(headLoss.bar * 10.197).toFixed(2)} m.c.a.</div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                          <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
                              <div className="text-[9px] text-slate-500 uppercase font-bold mb-1">Perdita Specifica</div>
-                             <div className="text-lg font-mono text-slate-300">{(headLoss.mca / parseFloat(length) * 100).toFixed(1)} cm/m</div>
+                             <div className="text-base font-mono text-slate-300">{(headLoss.mca / parseFloat(length) * 100).toFixed(1)} cm/m</div>
                          </div>
                          <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
                              <div className="text-[9px] text-slate-500 uppercase font-bold mb-1">Formula</div>
-                             <div className="text-lg font-mono text-slate-300">Hazen-W.</div>
+                             <div className="text-base font-mono text-slate-300">Hazen-W.</div>
                          </div>
                     </div>
                 </div>
@@ -382,35 +382,35 @@ export default function Idraulica({ showToast }: Props) {
         {/* --- PUMPS TAB --- */}
         {activeTab === 'pumps' && (
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
-                 <div className="glass-panel rounded-2xl p-6 border-indigo-500/10">
-                    <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-4">Specifiche Pompa</h3>
+                 <div className="glass-panel rounded-2xl p-6 border-orange-500/10">
+                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Specifiche Pompa</h3>
                     <div className="space-y-4">
                         <div>
                              <label className="industrial-label">Prevalenza Totale (H)</label>
                              <div className="flex gap-2 items-center">
-                                <input type="number" value={pumpH} onChange={e=>setPumpH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white" />
-                                <span className="text-xs font-bold text-slate-500 w-8 text-center">m</span>
+                                <input type="number" value={pumpH} onChange={e=>setPumpH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white text-sm" />
+                                <span className="text-[10px] font-bold text-slate-500 w-8 text-center">m</span>
                              </div>
                         </div>
                         <div>
                              <label className="industrial-label">Rendimento (η)</label>
-                             <input type="number" value={pumpEff} onChange={e=>setPumpEff(e.target.value)} step="0.01" max="1" className="w-full glass-input rounded-xl p-3 text-white" placeholder="0.75"/>
+                             <input type="number" value={pumpEff} onChange={e=>setPumpEff(e.target.value)} step="0.01" max="1" className="w-full glass-input rounded-xl p-3 text-white text-sm" placeholder="0.75"/>
                         </div>
-                        <div className="bg-indigo-500/10 p-4 rounded-xl text-xs text-indigo-300 mt-4 border border-indigo-500/20">
+                        <div className="bg-orange-500/10 p-4 rounded-xl text-[10px] text-orange-300 mt-4 border border-orange-500/20">
                             Densità Fluido: <strong>{FLUIDS[fluidIdx].density} kg/m³</strong>
                         </div>
                     </div>
                  </div>
 
                  <div className="flex flex-col gap-4">
-                     <div className="glass-panel rounded-2xl p-8 text-center bg-indigo-900/10 border-indigo-500/20 flex-1 flex flex-col justify-center" onClick={()=>copy(pumpRes.shaftKw.toFixed(2))}>
-                         <span className="industrial-label text-indigo-400 !mb-2 flex items-center justify-center gap-2"><Zap size={14}/> Potenza all'Asse</span>
-                         <div className="text-5xl font-black text-white font-mono">{pumpRes.shaftKw.toFixed(2)} <span className="text-xl text-slate-500">kW</span></div>
-                         <div className="text-xs text-indigo-300/60 mt-2 font-mono">≈ {(pumpRes.shaftKw * 1.341).toFixed(2)} HP</div>
+                     <div className="glass-panel rounded-2xl p-8 text-center bg-orange-900/10 border-orange-500/20 flex-1 flex flex-col justify-center" onClick={()=>copy(pumpRes.shaftKw.toFixed(2))}>
+                         <span className="industrial-label text-orange-400 !mb-2 flex items-center justify-center gap-2"><Zap size={14}/> Potenza all'Asse</span>
+                         <div className="text-4xl font-black text-white font-mono">{pumpRes.shaftKw.toFixed(2)} <span className="text-lg text-slate-500">kW</span></div>
+                         <div className="text-xs text-orange-300/60 mt-2 font-mono">≈ {(pumpRes.shaftKw * 1.341).toFixed(2)} HP</div>
                      </div>
                      <div className="glass-panel rounded-2xl p-4 text-center border border-white/5">
                          <span className="industrial-label text-slate-500">Potenza Idraulica (No Perdite)</span>
-                         <div className="text-xl font-bold text-slate-300 font-mono">{pumpRes.hydKw.toFixed(2)} kW</div>
+                         <div className="text-lg font-bold text-slate-300 font-mono">{pumpRes.hydKw.toFixed(2)} kW</div>
                      </div>
                  </div>
              </div>

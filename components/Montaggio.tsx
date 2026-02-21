@@ -191,9 +191,6 @@ export default function Montaggio({ showToast }: Props) {
     // Giorni piattaforma = giorni gru + offset specifico
     const finalPlatDays = Math.max(0, finalCraneDays + (parseFloat(platOffset) || 0));
 
-    // Media elementi al giorno
-    // const avgElementsPerDay = finalCraneDays > 0 ? totalPieces / finalCraneDays : 0;
-
     // Tariffe
     const dailyCrane = parseFloat(dailyCraneCost) || 0;
     const dailyPlatform = parseFloat(dailyPlatformCost) || 0;
@@ -271,13 +268,13 @@ export default function Montaggio({ showToast }: Props) {
                 </button>
                 <button 
                     onClick={() => setMode('capriata')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'capriata' ? 'bg-indigo-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'capriata' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     Capriata
                 </button>
                 <button 
                     onClick={() => setMode('costi')}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'costi' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all whitespace-nowrap ${mode === 'costi' ? 'bg-orange-700 text-white shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                 >
                     Costo Montaggio
                 </button>
@@ -300,29 +297,29 @@ export default function Montaggio({ showToast }: Props) {
                 <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Alare</h3>
                 <div className="space-y-5">
                     <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-orange-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>A - Altezza Interna (m)</span></label>
+                        <label className="flex justify-between text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>A - Altezza Interna (m)</span></label>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold border border-orange-500/30">A</div>
                             <input type="number" value={tegA} onChange={(e) => setTegA(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-orange-500/50"/>
                         </div>
                     </div>
                     <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-cyan-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>D - Lunghezza Max (m)</span></label>
+                        <label className="flex justify-between text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>D - Lunghezza Max (m)</span></label>
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center font-bold border border-cyan-500/30">D</div>
-                            <input type="number" value={tegD} onChange={(e) => setTegD(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-cyan-500/50"/>
+                            <div className="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold border border-orange-500/30">D</div>
+                            <input type="number" value={tegD} onChange={(e) => setTegD(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-orange-500/50"/>
                         </div>
                     </div>
                     <div className="relative group">
-                        <label className="flex justify-between text-[11px] text-purple-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>H Braccio / Sbraccio (m)</span></label>
+                        <label className="flex justify-between text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-2 ml-1"><span>H Braccio / Sbraccio (m)</span></label>
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center font-bold border border-purple-500/30">H</div>
-                            <input type="number" value={tegH} onChange={(e) => setTegH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-purple-500/50"/>
+                            <div className="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold border border-orange-500/30">H</div>
+                            <input type="number" value={tegH} onChange={(e) => setTegH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono text-lg outline-none focus:border-orange-500/50"/>
                         </div>
                     </div>
                 </div>
                 <div className="mt-8 pt-6 border-t border-white/5">
-                    <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Coefficiente Peso (QI)</label>
+                    <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block ml-1">Coefficiente Peso (QI)</label>
                     <div className="flex items-center gap-3">
                         <input type="number" value={tegQI} onChange={(e) => setTegQI(e.target.value)} className="w-full bg-slate-900/40 border border-white/10 rounded-xl p-3 text-slate-300 font-mono text-center outline-none"/>
                         <span className="text-sm font-bold text-slate-500">QI</span>
@@ -341,26 +338,26 @@ export default function Montaggio({ showToast }: Props) {
                         <line x1="40" y1="150" x2="360" y2="150" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
                         <line x1="40" y1="230" x2="40" y2="150" stroke="#fb923c" strokeWidth="1" markerEnd="url(#arrow)" />
                         <text x="30" y="190" fill="#fb923c" fontSize="12" fontWeight="bold" textAnchor="end">A</text>
-                        <line x1="40" y1="40" x2="360" y2="40" stroke="#22d3ee" strokeWidth="1" />
-                        <line x1="40" y1="35" x2="40" y2="45" stroke="#22d3ee" strokeWidth="1" />
-                        <line x1="360" y1="35" x2="360" y2="45" stroke="#22d3ee" strokeWidth="1" />
+                        <line x1="40" y1="40" x2="360" y2="40" stroke="#f97316" strokeWidth="1" />
+                        <line x1="40" y1="35" x2="40" y2="45" stroke="#f97316" strokeWidth="1" />
+                        <line x1="360" y1="35" x2="360" y2="45" stroke="#f97316" strokeWidth="1" />
                         {/* Spostato a sinistra per evitare sovrapposizione */}
-                        <text x="100" y="30" fill="#22d3ee" fontSize="12" fontWeight="bold" textAnchor="middle">Lunghezza Max (D)</text>
+                        <text x="100" y="30" fill="#f97316" fontSize="12" fontWeight="bold" textAnchor="middle">Lunghezza Max (D)</text>
                         
-                        <line x1="200" y1="50" x2="200" y2="10" stroke="#c084fc" strokeWidth="2" strokeDasharray="4 2" />
-                        <circle cx="200" cy="10" r="4" fill="#c084fc" />
-                        <text x="210" y="20" fill="#c084fc" fontSize="10" fontWeight="bold">H Braccio</text>
+                        <line x1="200" y1="50" x2="200" y2="10" stroke="#f97316" strokeWidth="2" strokeDasharray="4 2" />
+                        <circle cx="200" cy="10" r="4" fill="#f97316" />
+                        <text x="210" y="20" fill="#f97316" fontSize="10" fontWeight="bold">H Braccio</text>
                     </svg>
                 </div>
 
                 {/* Risultati Tegolo */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="bg-orange-500/10 border border-orange-500/20 p-4 rounded-xl text-center cursor-pointer hover:bg-orange-500/20 transition-colors" onClick={() => copy(tegResH)}>
-                        <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
+                        <span className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
                         <div className="text-3xl font-black text-white font-mono">{tegResH} <span className="text-sm font-sans text-slate-400">m</span></div>
                     </div>
                     <div className="bg-slate-800/50 border border-white/5 p-4 rounded-xl text-center cursor-pointer hover:bg-white/5 transition-colors" onClick={() => copy(tegResW)}>
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
+                        <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
                         <div className="text-3xl font-black text-white font-mono">{tegResW} <span className="text-sm font-sans text-slate-400">q.li</span></div>
                     </div>
                 </div>
@@ -375,30 +372,30 @@ export default function Montaggio({ showToast }: Props) {
                     <h3 className="text-lg font-bold text-white mb-4 border-b border-white/5 pb-2">Parametri Capriata</h3>
                     <div className="grid grid-cols-2 gap-6">
                         <div>
-                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">A - Alt. Interna (m)</label>
+                            <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">A - Alt. Interna (m)</label>
                             <input type="number" value={capA} onChange={(e) => setCapA(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
                         </div>
                         <div>
-                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">B - Alt. Colmo (m)</label>
+                            <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">B - Alt. Colmo (m)</label>
                             <input type="number" value={capB} onChange={(e) => setCapB(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
                         </div>
                         <div>
-                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">C - Alt. Imbrago (m)</label>
+                            <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">C - Alt. Imbrago (m)</label>
                             <input type="number" value={capC} onChange={(e) => setCapC(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
                         </div>
                         <div>
-                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">H - Sbraccio (m)</label>
+                            <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-2 block">H - Sbraccio (m)</label>
                             <input type="number" value={capH} onChange={(e) => setCapH(e.target.value)} className="w-full glass-input rounded-xl p-3 text-white font-mono outline-none"/>
                         </div>
                     </div>
-                    <div className="bg-indigo-500/10 p-4 rounded-xl border border-indigo-500/20 space-y-4">
+                    <div className="bg-orange-500/10 p-4 rounded-xl border border-orange-500/20 space-y-4">
                         <div>
-                            <label className="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-1 block">Lunghezza Trave (m)</label>
-                            <input type="number" value={capL} onChange={(e) => setCapL(e.target.value)} className="w-full bg-slate-900/50 border border-indigo-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
+                            <label className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Lunghezza Trave (m)</label>
+                            <input type="number" value={capL} onChange={(e) => setCapL(e.target.value)} className="w-full bg-slate-900/50 border border-orange-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
                         </div>
                         <div>
-                            <label className="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-1 block">Coeff. Peso (QI)</label>
-                            <input type="number" value={capQI} onChange={(e) => setCapQI(e.target.value)} className="w-full bg-slate-900/50 border border-indigo-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
+                            <label className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Coeff. Peso (QI)</label>
+                            <input type="number" value={capQI} onChange={(e) => setCapQI(e.target.value)} className="w-full bg-slate-900/50 border border-orange-500/30 rounded-lg p-2 text-white font-mono text-center outline-none"/>
                         </div>
                     </div>
                 </div>
@@ -413,12 +410,12 @@ export default function Montaggio({ showToast }: Props) {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl text-center cursor-pointer hover:bg-indigo-500/20 transition-colors" onClick={() => copy(capResH)}>
-                            <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
+                        <div className="bg-orange-500/10 border border-orange-500/20 p-4 rounded-xl text-center cursor-pointer hover:bg-orange-500/20 transition-colors" onClick={() => copy(capResH)}>
+                            <span className="text-[9px] text-orange-400 font-bold uppercase tracking-wider mb-1 block">Altezza Gancio (H)</span>
                             <div className="text-3xl font-black text-white font-mono">{capResH} <span className="text-sm font-sans text-slate-400">m</span></div>
                         </div>
                         <div className="bg-slate-800/50 border border-white/5 p-4 rounded-xl text-center cursor-pointer hover:bg-white/5 transition-colors" onClick={() => copy(capResW)}>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
+                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1 block">Peso Totale</span>
                             <div className="text-3xl font-black text-white font-mono">{capResW} <span className="text-sm font-sans text-slate-400">q.li</span></div>
                         </div>
                     </div>
@@ -442,13 +439,13 @@ export default function Montaggio({ showToast }: Props) {
                                         <div key={item.id} className="grid grid-cols-12 gap-4 items-center p-3 hover:bg-white/5 rounded-lg transition-colors">
                                             <div className="col-span-5 md:col-span-6">
                                                 <div className="text-sm font-bold text-slate-200">{item.name}</div>
-                                                <div className="text-[10px] text-slate-500">{item.detail}</div>
+                                                <div className="text-[9px] text-slate-500">{item.detail}</div>
                                                 <div className="text-[9px] text-orange-500/70 mt-0.5">{item.crit}</div>
                                             </div>
                                             <div className="col-span-3 md:col-span-2 text-center">
                                                 <button 
                                                     onClick={() => toggleXL(item.id)} 
-                                                    className={`text-[9px] font-bold px-2 py-1 rounded border transition-all ${isXL[item.id] ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}
+                                                    className={`text-[8px] font-bold px-2 py-1 rounded border transition-all ${isXL[item.id] ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}
                                                 >
                                                     {isXL[item.id] ? 'XL / Lento' : 'Standard'}
                                                 </button>
@@ -462,7 +459,7 @@ export default function Montaggio({ showToast }: Props) {
                                                     placeholder="Q.tà" 
                                                     value={quantities[item.id] || ''} 
                                                     onChange={(e) => updateQty(item.id, e.target.value)}
-                                                    className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-center text-white font-mono outline-none focus:border-emerald-500/50"
+                                                    className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-center text-white font-mono outline-none focus:border-orange-500/50 text-sm"
                                                 />
                                             </div>
                                         </div>
@@ -474,27 +471,27 @@ export default function Montaggio({ showToast }: Props) {
 
                     {/* SIDEBAR RIEPILOGO */}
                     <div className="lg:col-span-4 space-y-6">
-                        <div className="glass-panel rounded-2xl p-6 sticky top-6 border-t-4 border-emerald-500 print-break-inside">
+                        <div className="glass-panel rounded-2xl p-6 sticky top-6 border-t-4 border-orange-500 print-break-inside">
                             <h3 className="text-lg font-bold text-white mb-6">Totale Preventivo</h3>
                             
                             <div className="space-y-4 mb-6">
                                 <div className="bg-white/5 p-3 rounded-xl">
-                                    <div className="flex justify-between text-[10px] text-slate-400 uppercase font-bold mb-1">
+                                    <div className="flex justify-between text-[9px] text-slate-400 uppercase font-bold mb-1">
                                         <span>Giorni Gru</span>
                                         <span>{costResults.days} gg</span>
                                     </div>
                                     <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                                        <div className="bg-emerald-500 h-full" style={{width: '100%'}}></div>
+                                        <div className="bg-orange-500 h-full" style={{width: '100%'}}></div>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
                                     <div className="w-1/2">
                                         <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Extra Gru (gg)</label>
-                                        <input type="number" value={manualOffset} onChange={e=>setManualOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center"/>
+                                        <input type="number" value={manualOffset} onChange={e=>setManualOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center text-sm"/>
                                     </div>
                                     <div className="w-1/2">
                                         <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Extra Piattaf. (gg)</label>
-                                        <input type="number" value={platOffset} onChange={e=>setPlatOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center"/>
+                                        <input type="number" value={platOffset} onChange={e=>setPlatOffset(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center text-sm"/>
                                     </div>
                                 </div>
                             </div>
@@ -518,9 +515,9 @@ export default function Montaggio({ showToast }: Props) {
                                 </div>
                             </div>
 
-                            <div className="mt-6 pt-4 border-t border-white/10 bg-emerald-900/10 -mx-6 px-6 pb-2">
+                            <div className="mt-6 pt-4 border-t border-white/10 bg-orange-900/10 -mx-6 px-6 pb-2">
                                 <div className="flex justify-between items-end mb-2">
-                                    <span className="text-sm font-bold text-emerald-400 uppercase">Totale</span>
+                                    <span className="text-sm font-bold text-orange-400 uppercase">Totale</span>
                                     <span className="text-3xl font-black text-white font-mono cursor-pointer" onClick={() => copy(costResults.total.toFixed(2))}>€ {costResults.total.toLocaleString()}</span>
                                 </div>
                                 <div className="text-right text-[10px] text-slate-500 font-mono">
@@ -530,16 +527,16 @@ export default function Montaggio({ showToast }: Props) {
                             
                             <div className="mt-4">
                                 <label className="text-[9px] text-slate-500 uppercase font-bold block mb-1">Superficie Cantiere (mq)</label>
-                                <input type="number" value={surface} onChange={e=>setSurface(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center mb-2" placeholder="Opzionale"/>
+                                <input type="number" value={surface} onChange={e=>setSurface(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white text-center mb-2 text-sm" placeholder="Opzionale"/>
                                 {parseFloat(surface) > 0 && (
-                                    <div className="text-center text-xs font-bold text-emerald-400 bg-emerald-900/20 py-2 rounded-lg border border-emerald-500/20">
+                                    <div className="text-center text-xs font-bold text-orange-400 bg-orange-900/20 py-2 rounded-lg border border-orange-500/20">
                                         € {costResults.perSqm.toFixed(2)} / mq
                                     </div>
                                 )}
                             </div>
                         </div>
                         
-                        <div className="glass-panel rounded-2xl p-4 border border-white/5 text-[10px] text-slate-500 space-y-2">
+                        <div className="glass-panel rounded-2xl p-4 border border-white/5 text-[9px] text-slate-500 space-y-2">
                             <div className="flex justify-between"><span>Costo Gru</span><span className="text-slate-300">€ {dailyCraneCost}/gg</span></div>
                             <div className="flex justify-between"><span>Costo Piattaforma</span><span className="text-slate-300">€ {dailyPlatformCost}/gg</span></div>
                             <div className="flex justify-between"><span>Trasferta Squadra</span><span className="text-slate-300">€ 250/gg</span></div>

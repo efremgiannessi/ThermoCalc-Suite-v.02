@@ -1,21 +1,23 @@
 
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-// Fix for __dirname in ESM context
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
-  base: './', // Necessario per il deploy su Aruba e percorsi relativi
+  plugins: [react(), tailwindcss()],
+  base: './',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
     outDir: 'dist',
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 1600,
   }
 })
